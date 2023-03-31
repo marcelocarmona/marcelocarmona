@@ -1,0 +1,168 @@
+---
+title: Angular 1.5 lifecycle hooks
+date: '2016-08-08'
+tags: ['Angularjs', 'Javascript']
+summary: 'Use of Angular 1.5 component lifecycle hooks, including $onInit, $postLink, $onChanges, and $onDestroy'
+draft: false
+---
+
+In angular 1.5 the components have a well-defined lifecycle and by means of cycle hooks they allow us to hook functions that help to modify their behavior, we are going to see the roles that each of these hooks have and why you should use them, it is very important to understand them since we are thinking of a component-based application. The examples are going to be written in ES6, so if you still have not started using Angularjs with ES6 I recommend a good repo that could serve as a boilerplate <a href="https://github.com/angularclass/NG6-starter" target="_blank" rel="noopener"> https://github.com/angularclass/NG6-starter</a>
+
+# $onInit
+
+It is a property predefined by angular that is exposed in the controller of the component to which we can assign a function
+
+```javascript
+class ComponentController {
+  $onInit() {
+    this.var1 = 'var1'
+    this.var2 = 'var2'
+  }
+}
+```
+
+It is used for controller initialization code.
+This function is called only once, once all the bindings of the component have been established and before they are established in their children.
+Angular 2 has the ngOnInit method which will serve us for the Angular 1.x transition.
+
+## require
+
+Previously with the directives, we used the "requires" for the methods of other directives and its syntax allowed us to use a string or matrix (you can look for it in the API documentation)<a href="https://docs.angularjs.org/api/ng/service/$compile" target="_blank" rel="noopener">https://docs.angularjs.org/api/ng/service/$compile</a>).
+With the use of components we will be able to use "require" using a string.
+
+```javascript
+import template from './myComponent.template.html'
+import controller from './myComponent.controller'
+
+const myComponent = {
+  require: '^^anotherComponent',
+  template,
+  controller,
+  bindings: {
+    input: '<',
+    onAction: '&',
+  },
+}
+
+export default myComponent
+```
+
+When using require it is possible to access the controller from a child component, for example:
+
+```html
+<myList>
+  <myItem title="Item 1"> contents 1 </myItem>
+  <myItem title="Item 2"> contents 2 </myItem>
+  <myItem title="Item 3"> contents 3 </myItem>
+</myList>
+```
+
+In this case, MyItem is a good example of use since
+
+```javascript
+import template from './myList.template.html'
+import controller from './myList.controller'
+
+const myList = {
+  transclude: true,
+  template,
+  controller,
+}
+
+export default myList
+```
+
+```javascript
+import template from './myItem.template.html'
+import controller from './myItem.controller'
+
+const myItem = {
+  bindings: {
+    title: '<',
+  },
+  require: '^^myList',
+  transclude: true,
+  template,
+  controller,
+}
+
+export default myItem
+```
+
+```javascript
+class myItemController {
+  $onInit() {
+    // we will be able to access the myList controller
+    this.myList.foo()
+  }
+}
+
+export default myItemController
+```
+
+# $postLink
+
+Called after the element of this controller and its children have been linked. Similar to the post-link function, this hook can be used to configure DOM event handlers and manipulate the DOM.
+
+```javascript
+class myComponente {
+
+  $postLink() {
+    ...
+  }
+}
+
+export default myComponente;
+```
+
+# $onChanges
+
+This hook is the most important thanks to it allows us to use a one-way data flow architecture with angular 1.5.x. What you have to keep in mind is that this method will be executed every time you modify an input of the component. That is, the input is defined in bindings: `{...}`. Either by `<` (one-way data binding) or '@' (for evaluated DOM attribute values). It is also executed when the component is initialized and as a parameter it receives a changes object.
+
+```javascript
+class myComponente {
+  $onChanges(changes) {
+    if (changes.name) {
+      this.user = changes.user.currentValue
+    }
+  }
+}
+
+export default myComponente
+```
+
+Now we are going to clone the data that comes to us so that the value received by the component is "immutable" and which means that we can not modify the variable from within this component.
+
+```javascript
+class myComponente {
+  $onChanges(changes) {
+    if (changes.name) {
+      this.user = angular.copy(changes.user.currentValue)
+    }
+  }
+}
+
+export default myComponente
+```
+
+# $onDestroy
+
+It's basically to do something when the scope of the component is destroyed before we used it something like
+
+```javascript
+$scope.$on('$destroy', function () {
+  // destroy event
+})
+```
+
+Now we can write it like this
+
+```javascript
+class myComponente {
+  $onDestroy() {
+    // the scope of the component is destroyed
+  }
+}
+
+export default myComponente
+```
