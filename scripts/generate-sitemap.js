@@ -50,7 +50,7 @@ const siteMetadata = require('../data/siteMetadata')
                 ) {
                   return
                 }
-                console.log(page)
+
                 return `
                         <url>
                             <loc>${siteMetadata.siteUrl}${route}</loc>
