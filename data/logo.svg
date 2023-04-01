@@ -1,29 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="344.5639097744361 330.27819548872174 111.73684210526318 91.21804511278197" width="53.87" height="43.61">
-   <defs>
-      <path d="M453.3 331.28L453.3 359.85L388.64 418.5L388.64 388.42L453.3 331.28Z" id="aFZf6T5ED"></path>
-      <linearGradient id="gradientb2ThqnP5Op" gradientUnits="userSpaceOnUse" x1="420.97" y1="331.28" x2="420.97" y2="418.5">
-         <stop style="stop-color: #06b6d4;stop-opacity: 1" offset="0%"></stop>
-         <stop style="stop-color: #67e8f9;stop-opacity: 1" offset="100%"></stop>
-      </linearGradient>
-      <path d="M410.23 331.28L410.23 359.85L345.56 418.5L345.56 388.42L410.23 331.28Z" id="a9fehgwfM"></path>
-      <linearGradient id="gradientk1wNV9Ostb" gradientUnits="userSpaceOnUse" x1="377.89" y1="331.28" x2="377.89" y2="418.5">
-         <stop style="stop-color: #06b6d4;stop-opacity: 1" offset="0%"></stop>
-         <stop style="stop-color: #67e8f9;stop-opacity: 1" offset="100%"></stop>
-      </linearGradient>
-      <path d="M410.23 331.28L410.23 359.85L345.56 418.5L345.56 388.42L410.23 331.28Z" id="a9fehgwfM"></path>
-      <linearGradient id="gradientk1wNV9Ostb" gradientUnits="userSpaceOnUse" x1="677.89" y1="331.28" x2="377.89" y2="418.5">
-         <stop style="stop-color: #06b6d4;stop-opacity: 1" offset="0%"></stop>
-         <stop style="stop-color: #67e8f9;stop-opacity: 1" offset="100%"></stop>
-      </linearGradient>
-   </defs>
-   <g>
-      <g>
-         <use xlink:href="#aFZf6T5ED" opacity="1" fill="url(#gradientb2ThqnP5Op)"></use>
-      </g>
-      <g>
-         <use xlink:href="#a9fehgwfM" opacity="1" fill="url(#gradientk1wNV9Ostb)"></use>
-      </g>
-   </g>
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="171.359 141.815 169.58 166.408" xmlns="http://www.w3.org/2000/svg" width="53.87" height="43.61">
+  <path fill="#5791CD" opacity="1.000000" stroke="none" d="M 263.707 149.646 C 288.157 162.293 306.029 181.951 321.965 203.767 C 329.437 213.996 335.647 224.96 338.339 237.671 C 341.072 250.581 337.101 260.581 326.675 268.294 C 318.073 274.658 308.464 278.799 298.577 282.289 C 277.334 289.79 255.96 296.877 234.247 302.807 C 226.256 304.99 218.105 306.272 209.85 304.57 C 196.921 301.906 188.756 292.991 183.29 281.438 C 168.023 249.163 171.645 217.847 188.84 187.562 C 195.263 176.248 202.948 165.953 212.765 157.412 C 227.147 144.9 242.86 140.762 260.726 148.431 C 261.601 148.807 262.498 149.131 263.707 149.646 Z" style=""/>
+  <path fill="#FCFDFE" opacity="1.000000" stroke="none" d="M 54.108 102 C 54.108 85.845 54.23 70.188 54.021 54.536 C 53.971 50.742 55.1 49.529 58.82 49.827 C 64.762 50.304 71.85 47.726 76.387 50.818 C 80.686 53.747 83.335 60.046 86.134 65.141 C 90.458 73.014 93.82 81.347 98.119 89.234 C 98.613 90.139 99.194 90.54 99.966 89.472 C 103.936 82.179 106.264 75.267 110.185 68.038 C 112.882 63.067 116.762 58.542 119.233 53.461 C 120.599 50.651 122.421 49.674 125.485 49.819 C 130.47 50.054 135.476 49.974 140.47 49.849 C 143.019 49.785 143.985 50.661 143.978 53.295 C 143.907 77.776 143.903 102.258 143.982 126.739 C 143.991 129.464 142.886 130.145 140.415 130.077 C 135.755 129.948 131.073 129.798 126.432 130.116 C 122.63 130.376 122.106 128.661 122.148 125.43 C 122.302 113.614 122.209 101.795 122.209 88.881 C 117.875 94.46 115.015 99.835 112.6 105.242 C 109.499 112.187 105.301 115.129 97.41 114.366 C 92.438 113.885 89.262 113.02 87.03 108.179 C 84.08 101.783 80.235 95.799 75.757 89.916 C 75.757 101.316 75.507 112.725 75.875 124.113 C 76.031 128.946 74.668 130.692 69.828 130.099 C 64.771 129.48 58.164 132.217 54.971 128.96 C 52.022 125.952 54.289 119.45 54.133 114.49 C 54.007 110.497 54.108 106.497 54.108 102 Z" transform="matrix(1, 0, 0, 1, 154.720963, 136.119614)"/>
 </svg>
