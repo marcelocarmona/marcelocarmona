@@ -5,7 +5,7 @@ const siteMetadata = {
   description: 'Marcelo Carmona - Full Stack Developer',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://marcelocarmona.vercel.app',
+  siteUrl: 'https://marcelocarmona.com',
   siteRepo: 'https://github.com/marcelocarmona/marcelocarmona',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
