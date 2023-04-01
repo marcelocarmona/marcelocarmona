@@ -4,6 +4,11 @@ import { getAllFilesFrontMatter } from '@/lib/mdx'
 import ListLayout from '@/layouts/ListLayout'
 import { POSTS_PER_PAGE } from '../../blog'
 
+// async function getAllFilesFrontMatterWithoutEsLang() {
+//   // remove spanish posts
+//   return (await getAllFilesFrontMatter('blog')).filter((p) => p?.lang !== 'es')
+// }
+
 export async function getStaticPaths() {
   const totalPosts = await getAllFilesFrontMatter('blog')
   const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE)
