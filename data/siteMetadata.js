@@ -4,7 +4,7 @@ const siteMetadata = {
   headerTitle: 'Marcelo Carmona',
   description: 'Marcelo Carmona - Full Stack Developer',
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'dark', // system, dark or light
   siteUrl: 'https://marcelocarmona.com',
   siteRepo: 'https://github.com/marcelocarmona/marcelocarmona',
   siteLogo: '/static/images/logo.png',
