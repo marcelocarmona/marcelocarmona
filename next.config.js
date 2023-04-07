@@ -70,6 +70,16 @@ module.exports = withBundleAnalyzer({
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: '/cv',
+        destination: 'https://www.linkedin.com/in/carmonamarcelo',
+        permanent: false,
+        basePath: false,
+      },
+    ]
+  },
   webpack: (config, { dev, isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
