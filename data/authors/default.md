@@ -1,8 +1,8 @@
 ---
 name: Marcelo Carmona
 avatar: /static/images/marcelo.jpg
-occupation: Professor of Atmospheric Science
-company: Stanford University
+occupation: Software engineer
+company: marcelocarmona.com
 email: marcelo@marcelocarmona.com
 twitter: 'https://twitter.com/carmonamarcelo'
 linkedin: 'https://www.linkedin.com/in/carmonamarcelo'
