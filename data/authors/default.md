@@ -9,7 +9,7 @@ linkedin: 'https://www.linkedin.com/in/carmonamarcelo'
 github: 'https://github.com/marcelocarmona'
 ---
 
-Hello there, I'm Marcelo Carmona, a passionate full-stack web developer currently residing in the beautiful city of San Francisco. With several years of experience under my belt, I take pride in creating web solutions that help people solve real-world problems.
+Hello there, I'm Marcelo Carmona, a passionate full-stack web developer currently residing in the city of San Francisco. With several years of experience under my belt, I take pride in creating web solutions that help people solve real-world problems.
 
 As someone who values knowledge sharing, I enjoy discussing programming concepts with others. Currently, I work as a Tech Lead.
 
