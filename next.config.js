@@ -5,13 +5,14 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app marcelocarmona-com.disqus.com www.googletagmanager.com www.google-analytics.com;
-  style-src 'self' 'unsafe-inline';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app marcelocarmona-com.disqus.com www.googletagmanager.com www.google-analytics.com https://static.cloudflareinsights.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src * blob: data:;
   media-src 'none';
   connect-src *;
   font-src 'self';
-  frame-src giscus.app disqus.com www.youtube.com codesandbox.io
+  frame-src giscus.app disqus.com www.youtube.com codesandbox.io;
+  worker-src 'self' blob:
 `
 
 const securityHeaders = [
@@ -100,10 +101,9 @@ module.exports = withBundleAnalyzer({
   },
 })
 
-
 // Injected content via Sentry wizard below
 
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require('@sentry/nextjs')
 
 module.exports = withSentryConfig(
   module.exports,
@@ -113,8 +113,8 @@ module.exports = withSentryConfig(
 
     // Suppresses source map uploading logs during build
     silent: true,
-    org: "marcelo-carmona",
-    project: "marcelocarmona",
+    org: 'marcelo-carmona',
+    project: 'marcelocarmona',
   },
   {
     // For all available options, see:
@@ -129,7 +129,7 @@ module.exports = withSentryConfig(
     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. (increases server load)
     // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
     // side errors will fail.
-    tunnelRoute: "/monitoring",
+    tunnelRoute: '/monitoring',
 
     // Hides source maps from generated client bundles
     hideSourceMaps: true,
@@ -143,4 +143,4 @@ module.exports = withSentryConfig(
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
   }
-);
+)
