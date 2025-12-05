@@ -95,6 +95,8 @@ module.exports = withBundleAnalyzer({
         'react-dom/test-utils': 'preact/test-utils',
         'react-dom': 'preact/compat',
       })
+      // Disable eval-source-map in production to comply with CSP
+      config.devtool = false
     }
 
     return config
