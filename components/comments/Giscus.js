@@ -18,6 +18,9 @@ const Giscus = () => {
   const LoadComments = useCallback(() => {
     setEnabledLoadComments(false)
 
+    const giscusConfig = siteMetadata?.comment?.giscusConfig
+    if (!giscusConfig) return
+
     const {
       repo,
       repositoryId,
@@ -28,7 +31,7 @@ const Giscus = () => {
       metadata,
       inputPosition,
       lang,
-    } = siteMetadata?.comment?.giscusConfig
+    } = giscusConfig
 
     const script = document.createElement('script')
     script.src = 'https://giscus.app/client.js'
