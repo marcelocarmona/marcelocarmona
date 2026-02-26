@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import { useMemo } from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
-import { YouTube, CodeSandbox } from 'mdx-embed'
+import { YouTube, CodeSandbox } from '@/components/MdxEmbed'
 import Image from './Image'
 import CustomLink from './Link'
 import TOCInline from './TOCInline'
