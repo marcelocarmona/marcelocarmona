@@ -28,7 +28,6 @@
     "gray-matter": "^4.0.2",
     "image-size": "1.0.0",
     "mdx-bundler": "^8.0.0",
-    "mdx-embed": "^1.1.2",
     "next": "^15.5.7",
     "next-themes": "^0.0.14",
     "postcss": "^8.4.21",
