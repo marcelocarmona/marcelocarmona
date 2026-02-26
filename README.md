@@ -24,7 +24,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 ## Extend / Customize
 
@@ -50,9 +50,9 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 `components/MDXComponents.js` - pass your own JSX code or React component by specifying it over here. You can then call them directly in the `.mdx` or `.md` file. By default, a custom link and image component is passed.
 
-`layouts` - main templates used in pages.
+`layouts` - main templates used by MDX content.
 
-`pages` - pages to route to. Read the [Next.js documentation](https://nextjs.org/docs) for more information.
+`app` - routes and API endpoints. Read the [Next.js App Router documentation](https://nextjs.org/docs/app) for more information.
 
 `next.config.js` - configuration related to Next.js. You need to adapt the Content Security Policy if you want to load scripts, images etc. from other domains.
 

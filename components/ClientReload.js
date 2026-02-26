@@ -1,23 +1,25 @@
+'use client'
+
 import { useEffect } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/navigation'
 
 /**
  * Client-side complement to next-remote-watch
- * Re-triggers getStaticProps when watched mdx files change
+ * Re-triggers route refresh when watched mdx files change
  *
  */
 export const ClientReload = () => {
+  const router = useRouter()
+
   // Exclude socket.io from prod bundle
   useEffect(() => {
     import('socket.io-client').then((module) => {
       const socket = module.io()
-      socket.on('reload', (data) => {
-        Router.replace(Router.asPath, undefined, {
-          scroll: false,
-        })
+      socket.on('reload', () => {
+        router.refresh()
       })
     })
-  }, [])
+  }, [router])
 
   return null
 }

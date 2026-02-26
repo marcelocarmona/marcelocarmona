@@ -1,7 +1,6 @@
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
-import { BlogSEO } from '@/components/SEO'
 import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
@@ -13,15 +12,10 @@ const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${
 const postDateTemplate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
 export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
-  const { slug, fileName, date, title, images, tags } = frontMatter
+  const { fileName, date, title, tags } = frontMatter
 
   return (
     <SectionContainer>
-      <BlogSEO
-        url={`${siteMetadata.siteUrl}/blog/${slug}`}
-        authorDetails={authorDetails}
-        {...frontMatter}
-      />
       <ScrollTopAndComment />
       <article>
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
