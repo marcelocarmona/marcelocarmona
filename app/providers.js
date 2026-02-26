@@ -11,7 +11,7 @@ const isSocket = process.env.SOCKET
 
 export default function Providers({ children }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" disableTransitionOnChange>
       <MDXEmbedProvider>
         {isDevelopment && isSocket && <ClientReload />}
         <Analytics />
