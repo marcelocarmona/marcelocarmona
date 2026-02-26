@@ -1,8 +1,10 @@
 import * as Sentry from '@sentry/nextjs'
 
-const dsn = 'https://0f5a7719db8578beb4bfc17eb4a27171@o196174.ingest.us.sentry.io/4507049833988096'
+const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN
 
 export async function register() {
+  if (!dsn) return
+
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     Sentry.init({
       dsn,
