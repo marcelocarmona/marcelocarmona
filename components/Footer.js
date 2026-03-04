@@ -12,6 +12,14 @@ export default function Footer() {
           <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size="6" />
           <SocialIcon kind="twitter" href={siteMetadata.twitter} size="6" />
         </div>
+        <div className="mb-3 text-sm font-medium">
+          <Link
+            href="/book"
+            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+          >
+            Book a call
+          </Link>
+        </div>
         <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
           <div>{`© ${new Date().getFullYear()}`}</div>
           <div>{` • `}</div>

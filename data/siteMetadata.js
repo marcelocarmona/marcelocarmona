@@ -10,6 +10,7 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
+  calCom: 'https://cal.com/marcelocarmona',
   email: 'marcelo@marcelocarmona.com',
   github: 'https://github.com/marcelocarmona',
   twitter: 'https://twitter.com/carmonamarcelo',
