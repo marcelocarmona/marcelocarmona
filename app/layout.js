@@ -1,4 +1,4 @@
-import '@fontsource/inter/variable-full.css'
+import '@fontsource/inter/index.css'
 import 'katex/dist/katex.css'
 import '@/css/giscus.css'
 import '@/css/prism.css'
@@ -63,7 +63,10 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
+      <body
+        className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white"
+        suppressHydrationWarning
+      >
         <SeoSchema data={websiteSchema} />
         <Providers>
           <LayoutWrapper>{children}</LayoutWrapper>
