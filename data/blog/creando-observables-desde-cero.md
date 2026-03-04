@@ -2,6 +2,7 @@
 title: Creando observables desde cero
 lang: es
 date: '2017-10-12'
+translationKey: rxjs-observable-scratch
 tags: ['Rxjs', 'JavaScript']
 ---
 

@@ -5,10 +5,10 @@ import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
 export const metadata = {
-  title: `Tags - ${siteMetadata.author}`,
-  description: 'Things I blog about',
+  title: `Tags ES - ${siteMetadata.author}`,
+  description: 'Temas sobre los que escribo en espanol',
   alternates: {
-    canonical: '/tags',
+    canonical: '/es/tags',
     languages: {
       'en-US': '/tags',
       'es-ES': '/es/tags',
@@ -17,8 +17,8 @@ export const metadata = {
   },
 }
 
-export default async function TagsPage() {
-  const tags = await getAllTags('blog', { locale: 'en' })
+export default async function SpanishTagsPage() {
+  const tags = await getAllTags('blog', { locale: 'es' })
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
 
   return (
@@ -34,7 +34,7 @@ export default async function TagsPage() {
           <div key={tag} className="mb-2 mr-5 mt-2">
             <Tag text={tag} />
             <Link
-              href={`/tags/${kebabCase(tag)}`}
+              href={`/es/tags/${kebabCase(tag)}`}
               className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
             >
               {` (${tags[tag]})`}

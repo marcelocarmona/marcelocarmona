@@ -6,6 +6,7 @@ import '@/css/tailwind.css'
 
 import siteMetadata from '@/data/siteMetadata'
 import LayoutWrapper from '@/components/LayoutWrapper'
+import SeoSchema from '@/components/SeoSchema'
 import Providers from './providers'
 
 export const metadata = {
@@ -16,7 +17,11 @@ export const metadata = {
   },
   description: siteMetadata.description,
   alternates: {
-    canonical: '/',
+    languages: {
+      'en-US': '/',
+      'es-ES': '/es',
+      'x-default': '/',
+    },
     types: {
       'application/rss+xml': '/feed.xml',
     },
@@ -34,9 +39,32 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${siteMetadata.siteUrl}/#website`,
+        url: siteMetadata.siteUrl,
+        name: siteMetadata.title,
+        description: siteMetadata.description,
+        inLanguage: 'en-US',
+      },
+      {
+        '@type': 'Person',
+        '@id': `${siteMetadata.siteUrl}/#person`,
+        name: siteMetadata.author,
+        url: siteMetadata.siteUrl,
+        email: siteMetadata.email,
+        sameAs: [siteMetadata.github, siteMetadata.twitter, siteMetadata.linkedin].filter(Boolean),
+      },
+    ],
+  }
+
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
+        <SeoSchema data={websiteSchema} />
         <Providers>
           <LayoutWrapper>{children}</LayoutWrapper>
         </Providers>

@@ -62,7 +62,7 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 Frontmatter follows [Hugo's standards](https://gohugo.io/content-management/front-matter/).
 
-Currently 7 fields are supported.
+Currently 8 fields are supported.
 
 ```
 title (required)
@@ -75,6 +75,7 @@ images (optional, if none provided defaults to socialBanner in siteMetadata conf
 authors (optional list which should correspond to the file names in `data/authors`. Uses `default` if none is specified)
 layout (optional list which should correspond to the file names in `data/layouts`)
 canonicalUrl (optional, canonical url for the post for SEO)
+translationKey (optional, pair EN/ES versions of the same article for hreflang)
 ```
 
 Here's an example of a post's frontmatter:

@@ -3,6 +3,7 @@ title: Entendiendo React.Suspense
 author: Marcelo Carmona
 lang: es
 date: '2018-12-04'
+translationKey: react-suspense
 tags: ['React', 'JavaScript']
 ---
 

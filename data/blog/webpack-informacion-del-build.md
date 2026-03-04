@@ -2,6 +2,7 @@
 title: Webpack building progress information
 lang: es
 date: 2016-09-05
+translationKey: webpack-progress
 tags: ['Webpack', 'Javascript']
 ---
 
@@ -71,20 +72,20 @@ Para ver mas información sobre la configuración se puede ver el proyecto en <a
 Como dije anteriormente me parece muy buena la propuesta de tener un dashboard para obtener información relevante de nuestros proyectos.
 Acá dejo algunos tweets que se escribieron en el momento de su lanzamiento
 
-<blockquote class="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Up on the blog: <a href="https://twitter.com/ken_wheeler">@ken_wheeler</a> introduces Webpack Dashboard, a CLI dashboard for your Webpack-dev-server <a href="https://t.co/1jD1Q8lWRn">https://t.co/1jD1Q8lWRn</a></p>&mdash; Formidable (@FormidableLabs) <a href="https://twitter.com/FormidableLabs/status/765208945543610368">15 de agosto de 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote className="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Up on the blog: <a href="https://twitter.com/ken_wheeler">@ken_wheeler</a> introduces Webpack Dashboard, a CLI dashboard for your Webpack-dev-server <a href="https://t.co/1jD1Q8lWRn">https://t.co/1jD1Q8lWRn</a></p>&mdash; Formidable (@FormidableLabs) <a href="https://twitter.com/FormidableLabs/status/765208945543610368">15 de agosto de 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charSet="utf-8"></script>
 <br /><br />
 
-<blockquote class="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Excited to announce the first turbo alpha version of webpack-dashboard is now released! <a href="https://t.co/OnYvgwHmXC">https://t.co/OnYvgwHmXC</a> <a href="https://t.co/tATG2TMoNj">pic.twitter.com/tATG2TMoNj</a></p>&mdash; Ken Wheeler (@ken_wheeler) <a href="https://twitter.com/ken_wheeler/status/764896872771321856">14 de agosto de 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote className="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Excited to announce the first turbo alpha version of webpack-dashboard is now released! <a href="https://t.co/OnYvgwHmXC">https://t.co/OnYvgwHmXC</a> <a href="https://t.co/tATG2TMoNj">pic.twitter.com/tATG2TMoNj</a></p>&mdash; Ken Wheeler (@ken_wheeler) <a href="https://twitter.com/ken_wheeler/status/764896872771321856">14 de agosto de 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charSet="utf-8"></script>
 <br /><br />
 
-<blockquote class="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Built me a webpack console dashboard, with progress, status, build logs and browser console. I&#39;m tired. <a href="https://t.co/uoOz81Nf3M">pic.twitter.com/uoOz81Nf3M</a></p>&mdash; Ken Wheeler (@ken_wheeler) <a href="https://twitter.com/ken_wheeler/status/764580469677711360">13 de agosto de 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote className="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Built me a webpack console dashboard, with progress, status, build logs and browser console. I&#39;m tired. <a href="https://t.co/uoOz81Nf3M">pic.twitter.com/uoOz81Nf3M</a></p>&mdash; Ken Wheeler (@ken_wheeler) <a href="https://twitter.com/ken_wheeler/status/764580469677711360">13 de agosto de 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charSet="utf-8"></script>
 <br /><br />
 
-<blockquote class="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Webpack Dashboard: 3k stars in 2 days. Huge demand for better UX in dev tools. Take note! <a href="https://t.co/QLY6qrODZK">https://t.co/QLY6qrODZK</a> <a href="https://t.co/AgRWA9o8TM">pic.twitter.com/AgRWA9o8TM</a></p>&mdash; Dan Abramov (@dan_abramov) <a href="https://twitter.com/dan_abramov/status/765575479302774784">16 de agosto de 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote className="twitter-tweet" data-lang="es"><p lang="en" dir="ltr">Webpack Dashboard: 3k stars in 2 days. Huge demand for better UX in dev tools. Take note! <a href="https://t.co/QLY6qrODZK">https://t.co/QLY6qrODZK</a> <a href="https://t.co/AgRWA9o8TM">pic.twitter.com/AgRWA9o8TM</a></p>&mdash; Dan Abramov (@dan_abramov) <a href="https://twitter.com/dan_abramov/status/765575479302774784">16 de agosto de 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charSet="utf-8"></script>
 
 <br /><br />
 

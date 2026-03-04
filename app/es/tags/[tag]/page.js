@@ -5,38 +5,39 @@ import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
 export async function generateStaticParams() {
-  const tags = await getAllTags('blog', { locale: 'en' })
+  const tags = await getAllTags('blog', { locale: 'es' })
   return Object.keys(tags).map((tag) => ({ tag }))
 }
 
 export async function generateMetadata({ params }) {
   const { tag } = await params
-  const spanishTags = await getAllTags('blog', { locale: 'es' })
-  const hasSpanishVersion = Object.prototype.hasOwnProperty.call(spanishTags, tag)
+  const englishTags = await getAllTags('blog', { locale: 'en' })
+  const hasEnglishVersion = Object.prototype.hasOwnProperty.call(englishTags, tag)
   const languageAlternates = {
-    'en-US': `/tags/${tag}`,
-    'x-default': `/tags/${tag}`,
+    'es-ES': `/es/tags/${tag}`,
+    'x-default': `/es/tags/${tag}`,
   }
-  if (hasSpanishVersion) {
-    languageAlternates['es-ES'] = `/es/tags/${tag}`
+  if (hasEnglishVersion) {
+    languageAlternates['en-US'] = `/tags/${tag}`
+    languageAlternates['x-default'] = `/tags/${tag}`
   }
 
   return {
     title: `${tag} - ${siteMetadata.author}`,
     description: `${tag} tags - ${siteMetadata.author}`,
     alternates: {
-      canonical: `/tags/${tag}`,
+      canonical: `/es/tags/${tag}`,
       languages: languageAlternates,
       types: {
-        'application/rss+xml': `/tags/${tag}/feed.xml`,
+        'application/rss+xml': `/es/tags/${tag}/feed.xml`,
       },
     },
   }
 }
 
-export default async function TagPage({ params }) {
+export default async function SpanishTagPage({ params }) {
   const { tag } = await params
-  const allPosts = await getAllFilesFrontMatter('blog', { locale: 'en' })
+  const allPosts = await getAllFilesFrontMatter('blog', { locale: 'es' })
   const posts = allPosts.filter(
     (post) => post.draft !== true && post.tags.map((postTag) => kebabCase(postTag)).includes(tag)
   )

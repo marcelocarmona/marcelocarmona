@@ -4,6 +4,11 @@ import PageTitle from '@/components/PageTitle'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import siteMetadata from '@/data/siteMetadata'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
+import {
+  buildLanguageAlternates,
+  getRelatedPosts,
+  getTranslationsForPost,
+} from '@/lib/post-relations'
 
 const DEFAULT_LAYOUT = 'PostLayout'
 
@@ -32,21 +37,35 @@ export async function generateMetadata({ params }) {
 
   const post = await getFileBySlug('blog', slug)
   const frontMatter = post.frontMatter
+  const allPosts = await getAllFilesFrontMatter('blog')
+  const languageAlternates = buildLanguageAlternates(allPosts, frontMatter)
+  const translatedPosts = getTranslationsForPost(allPosts, frontMatter)
+  const openGraphLocale = frontMatter.locale === 'es' ? 'es_ES' : 'en_US'
+  const openGraphAlternateLocales = translatedPosts.map((translatedPost) =>
+    translatedPost.locale === 'es' ? 'es_ES' : 'en_US'
+  )
   const image = frontMatter.images?.[0] || siteMetadata.socialBanner
   const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
+  const alternates = {
+    canonical: frontMatter.canonicalUrl || `/${frontMatter.slug}`,
+  }
+
+  if (Object.keys(languageAlternates).length > 0) {
+    alternates.languages = languageAlternates
+  }
 
   return {
     title: frontMatter.title,
     description: frontMatter.summary || siteMetadata.description,
-    alternates: {
-      canonical: frontMatter.canonicalUrl || `/${frontMatter.slug}`,
-    },
+    alternates,
     openGraph: {
       title: frontMatter.title,
       description: frontMatter.summary || siteMetadata.description,
       type: 'article',
       url: `${siteMetadata.siteUrl}/${frontMatter.slug}`,
       images: [imageUrl],
+      locale: openGraphLocale,
+      alternateLocale: openGraphAlternateLocales,
       publishedTime: frontMatter.date || undefined,
       modifiedTime: frontMatter.lastmod || frontMatter.date || undefined,
     },
@@ -69,15 +88,12 @@ export default async function BlogPostPage({ params }) {
     notFound()
   }
 
-  const allPosts = await getAllFilesFrontMatter('blog')
   const slug = slugParts.join('/')
-  const postIndex = allPosts.findIndex((post) => formatSlug(post.slug) === slug)
-  if (postIndex === -1) {
+  const knownSlugs = getFiles('blog').map((postFile) => formatSlug(postFile))
+  if (!knownSlugs.includes(slug)) {
     notFound()
   }
 
-  const prev = allPosts[postIndex + 1] || null
-  const next = allPosts[postIndex - 1] || null
   const post = await getFileBySlug('blog', slug)
   const authorList = post.frontMatter.authors || ['default']
   const authorDetails = await Promise.all(
@@ -99,6 +115,23 @@ export default async function BlogPostPage({ params }) {
     )
   }
 
+  const allPosts = await getAllFilesFrontMatter('blog')
+  const localePosts = allPosts.filter((postItem) => postItem.locale === frontMatter.locale)
+  const postIndex = localePosts.findIndex((postItem) => formatSlug(postItem.slug) === slug)
+  if (postIndex === -1) {
+    notFound()
+  }
+
+  const prev = localePosts[postIndex + 1] || null
+  const next = localePosts[postIndex - 1] || null
+  const relatedPosts = getRelatedPosts(allPosts, frontMatter, 3)
+  const languageVersions = getTranslationsForPost(allPosts, frontMatter).map((translatedPost) => ({
+    href: `/${translatedPost.slug}`,
+    title: translatedPost.title,
+    locale: translatedPost.locale,
+    languageLabel: translatedPost.locale === 'es' ? 'Español' : 'English',
+  }))
+
   return (
     <MDXLayoutRenderer
       layout={frontMatter.layout || DEFAULT_LAYOUT}
@@ -108,6 +141,8 @@ export default async function BlogPostPage({ params }) {
       authorDetails={authorDetails}
       prev={prev}
       next={next}
+      relatedPosts={relatedPosts}
+      languageVersions={languageVersions}
     />
   )
 }

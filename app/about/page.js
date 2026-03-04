@@ -7,6 +7,9 @@ const DEFAULT_LAYOUT = 'AuthorLayout'
 export const metadata = {
   title: `About - ${siteMetadata.author}`,
   description: `About me - ${siteMetadata.author}`,
+  alternates: {
+    canonical: '/about',
+  },
 }
 
 export default async function AboutPage() {

@@ -4,20 +4,23 @@ import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
 export const metadata = {
-  title: `Blog - ${siteMetadata.author}`,
-  description: siteMetadata.description,
+  title: `Blog ES - ${siteMetadata.author}`,
+  description: 'Articulos en espanol sobre desarrollo web.',
   alternates: {
-    canonical: '/blog',
+    canonical: '/es/blog',
     languages: {
       'en-US': '/blog',
       'es-ES': '/es/blog',
       'x-default': '/blog',
     },
+    types: {
+      'application/rss+xml': '/es/feed.xml',
+    },
   },
 }
 
-export default async function BlogPage() {
-  const posts = await getAllFilesFrontMatter('blog', { locale: 'en' })
+export default async function SpanishBlogPage() {
+  const posts = await getAllFilesFrontMatter('blog', { locale: 'es' })
   const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE)
   const pagination = {
     currentPage: 1,
@@ -29,7 +32,7 @@ export default async function BlogPage() {
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="All Posts"
+      title="Todos los Articulos"
     />
   )
 }

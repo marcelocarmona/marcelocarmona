@@ -2,6 +2,7 @@
 title: Angular 1.5 metodos del ciclo de vida
 lang: es
 date: '2016-08-08'
+translationKey: angular-lifecycle-hooks
 tags: ['Angularjs', 'JavaScript']
 ---
 

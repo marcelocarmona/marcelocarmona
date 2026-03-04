@@ -9,39 +9,39 @@ export async function generateMetadata({ params }) {
   const { page } = await params
   const parsedPage = parseInt(page, 10)
   const pageNumber = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage
-  const canonicalPath = pageNumber <= 1 ? '/blog' : `/blog/page/${pageNumber}`
-  const spanishPath = pageNumber <= 1 ? '/es/blog' : `/es/blog/page/${pageNumber}`
+  const canonicalPath = pageNumber <= 1 ? '/es/blog' : `/es/blog/page/${pageNumber}`
+  const englishPath = pageNumber <= 1 ? '/blog' : `/blog/page/${pageNumber}`
 
   return {
-    title: `Blog - ${siteMetadata.author}`,
-    description: siteMetadata.description,
+    title: `Blog ES - ${siteMetadata.author}`,
+    description: 'Articulos en espanol sobre desarrollo web.',
     alternates: {
       canonical: canonicalPath,
       languages: {
-        'en-US': canonicalPath,
-        'es-ES': spanishPath,
-        'x-default': canonicalPath,
+        'en-US': englishPath,
+        'es-ES': canonicalPath,
+        'x-default': englishPath,
       },
     },
   }
 }
 
 export async function generateStaticParams() {
-  const totalPosts = await getAllFilesFrontMatter('blog', { locale: 'en' })
+  const totalPosts = await getAllFilesFrontMatter('blog', { locale: 'es' })
   const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE)
   return Array.from({ length: totalPages }, (_, i) => ({
     page: (i + 1).toString(),
   }))
 }
 
-export default async function BlogPaginationPage({ params }) {
+export default async function SpanishBlogPaginationPage({ params }) {
   const { page } = await params
   const pageNumber = parseInt(page, 10)
   if (Number.isNaN(pageNumber) || pageNumber < 1) {
     notFound()
   }
 
-  const posts = await getAllFilesFrontMatter('blog', { locale: 'en' })
+  const posts = await getAllFilesFrontMatter('blog', { locale: 'es' })
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE)
   if (pageNumber > totalPages) {
     notFound()
@@ -61,7 +61,7 @@ export default async function BlogPaginationPage({ params }) {
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
-      title="All Posts"
+      title="Todos los Articulos"
     />
   )
 }

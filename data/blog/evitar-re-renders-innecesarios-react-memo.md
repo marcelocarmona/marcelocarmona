@@ -2,6 +2,7 @@
 title: Evitar re-renders innecesarios con React.memo
 lang: es
 date: '2019-11-21'
+translationKey: react-memo
 tags: ['React', 'JavaScript']
 ---
 

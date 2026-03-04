@@ -5,6 +5,9 @@ import siteMetadata from '@/data/siteMetadata'
 export const metadata = {
   title: `Projects - ${siteMetadata.author}`,
   description: siteMetadata.description,
+  alternates: {
+    canonical: '/projects',
+  },
 }
 
 export default function ProjectsPage() {

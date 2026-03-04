@@ -2,6 +2,7 @@
 title: Parseo y formateo en Angularjs
 lang: es
 date: '2015-10-16'
+translationKey: angular-parsers-formatters
 tags: ['Angularjs', 'JavaScript']
 ---
 

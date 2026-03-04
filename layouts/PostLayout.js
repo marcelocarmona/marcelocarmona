@@ -5,19 +5,85 @@ import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/comments'
+import SeoSchema from '@/components/SeoSchema'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 
 const postDateTemplate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
-export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
+export default function PostLayout({
+  frontMatter,
+  authorDetails,
+  next,
+  prev,
+  relatedPosts = [],
+  languageVersions = [],
+  children,
+}) {
   const { fileName, date, title, tags } = frontMatter
+  const image = frontMatter.images?.[0] || siteMetadata.socialBanner
+  const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
+  const blogPath = frontMatter.locale === 'es' ? '/es/blog' : '/blog'
+  const pageUrl = frontMatter.canonicalUrl
+    ? frontMatter.canonicalUrl.startsWith('http')
+      ? frontMatter.canonicalUrl
+      : `${siteMetadata.siteUrl}${frontMatter.canonicalUrl}`
+    : `${siteMetadata.siteUrl}/${frontMatter.slug}`
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: frontMatter.summary || siteMetadata.description,
+    datePublished: date,
+    dateModified: frontMatter.lastmod || date,
+    image: [imageUrl],
+    mainEntityOfPage: pageUrl,
+    inLanguage: frontMatter.locale === 'es' ? 'es-ES' : 'en-US',
+    author: authorDetails.map((author) => ({
+      '@type': 'Person',
+      name: author.name,
+      url: author.github || author.linkedin || author.twitter || siteMetadata.siteUrl,
+    })),
+    publisher: {
+      '@type': 'Person',
+      name: siteMetadata.author,
+      url: siteMetadata.siteUrl,
+    },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteMetadata.siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${siteMetadata.siteUrl}${blogPath}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title,
+        item: pageUrl,
+      },
+    ],
+  }
 
   return (
     <SectionContainer>
       <ScrollTopAndComment />
       <article>
+        <SeoSchema data={articleSchema} />
+        <SeoSchema data={breadcrumbSchema} />
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
           <header className="pt-6 xl:pb-6">
             <div className="space-y-1 text-center">
@@ -96,6 +162,44 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                     </div>
                   </div>
                 )}
+                {languageVersions.length > 0 && (
+                  <div className="py-4 xl:py-8">
+                    <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                      Also available in
+                    </h2>
+                    <ul className="space-y-2">
+                      {languageVersions.map((post) => (
+                        <li key={post.href}>
+                          <Link
+                            href={post.href}
+                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                          >
+                            {post.languageLabel}: {post.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {relatedPosts.length > 0 && (
+                  <div className="py-4 xl:py-8">
+                    <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                      Related Articles
+                    </h2>
+                    <ul className="space-y-2">
+                      {relatedPosts.map((post) => (
+                        <li key={post.slug}>
+                          <Link
+                            href={`/${post.slug}`}
+                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                          >
+                            {post.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 {(next || prev) && (
                   <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
                     {prev && (
@@ -123,7 +227,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
               </div>
               <div className="pt-4 xl:pt-8">
                 <Link
-                  href="/blog"
+                  href={blogPath}
                   className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                 >
                   &larr; Back to the blog

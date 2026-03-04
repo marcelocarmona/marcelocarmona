@@ -4,7 +4,7 @@ import { getAllFilesFrontMatter } from '@/lib/mdx'
 export const runtime = 'nodejs'
 
 export async function GET() {
-  const posts = await getAllFilesFrontMatter('blog')
+  const posts = await getAllFilesFrontMatter('blog', { locale: 'en' })
   const rss = generateRss(posts)
 
   return new Response(rss, {
