@@ -5,76 +5,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import siteMetadata from '@/data/siteMetadata'
 import { logEvent } from '@/components/analytics/GoogleAnalytics'
 import Link from '@/components/Link'
+import { mountCalInline, normalizeCalLink } from '@/lib/integrations/cal'
 
-const CAL_SCRIPT_SRC = 'https://app.cal.com/embed/embed.js'
-const CAL_ORIGIN = 'https://cal.com'
 const CAL_CONTAINER_ID = 'cal-booking-inline'
-const CAL_INIT_ACTION = 'init'
-
-const normalizeCalLink = (calUrl) => {
-  if (!calUrl) return ''
-
-  try {
-    const parsedUrl = new URL(calUrl)
-    return parsedUrl.pathname.replace(/^\/+|\/+$/g, '')
-  } catch {
-    return calUrl.replace(/^https?:\/\/(www\.)?cal\.com\//i, '').replace(/^\/+|\/+$/g, '')
-  }
-}
-
-const ensureCalLoader = () => {
-  if (typeof window === 'undefined') return null
-
-  if (typeof window.Cal === 'function') {
-    return window.Cal
-  }
-
-  ;((C, A, L) => {
-    const queuePush = (api, args) => {
-      api.q.push(args)
-    }
-
-    const d = C.document
-    C.Cal =
-      C.Cal ||
-      function () {
-        const cal = C.Cal
-        const args = arguments
-
-        if (!cal.loaded) {
-          cal.ns = {}
-          cal.q = cal.q || []
-
-          const scriptElement = d.createElement('script')
-          scriptElement.src = A
-          scriptElement.async = true
-          d.head.appendChild(scriptElement)
-          cal.loaded = true
-        }
-
-        if (args[0] === L) {
-          const api = function () {
-            queuePush(api, arguments)
-          }
-          const namespace = args[1]
-          api.q = api.q || []
-
-          if (typeof namespace === 'string') {
-            cal.ns[namespace] = cal.ns[namespace] || api
-            queuePush(cal.ns[namespace], args)
-            queuePush(cal, ['initNamespace', namespace])
-          } else {
-            queuePush(cal, args)
-          }
-          return
-        }
-
-        queuePush(cal, args)
-      }
-  })(window, CAL_SCRIPT_SRC, CAL_INIT_ACTION)
-
-  return window.Cal
-}
 
 export default function CalBookingEmbed({ calUrl = siteMetadata.calCom }) {
   const [hasEmbedError, setHasEmbedError] = useState(false)
@@ -88,36 +21,17 @@ export default function CalBookingEmbed({ calUrl = siteMetadata.calCom }) {
       return
     }
 
-    const Cal = ensureCalLoader()
-    if (!Cal || typeof Cal !== 'function') {
-      setHasEmbedError(true)
-      return
-    }
-
     try {
       setHasEmbedError(false)
-      Cal('init', { origin: CAL_ORIGIN })
-      Cal('inline', {
+      mountCalInline({
         calLink,
         elementOrSelector: `#${CAL_CONTAINER_ID}`,
-        config: {
-          layout: 'month_view',
-        },
-      })
-      Cal('ui', {
-        hideEventTypeDetails: false,
         layout: 'month_view',
         theme: 'auto',
-      })
-      Cal('on', {
-        action: 'bookerReady',
-        callback: () => {
+        onReady: () => {
           logEvent('cal_embed_ready', 'cal.com', calLink)
         },
-      })
-      Cal('on', {
-        action: 'bookingSuccessfulV2',
-        callback: () => {
+        onBookingSuccess: () => {
           logEvent('cal_booking_success', 'cal.com', calLink, 1)
         },
       })
