@@ -2,6 +2,8 @@ import Link from '@/components/Link'
 import NewsletterForm from '@/components/NewsletterForm'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
+import { getBlogPath, getFeedPath, getHomePath } from '@/lib/i18n/routes'
+import { getUiCopy } from '@/lib/i18n/ui'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 
@@ -11,20 +13,21 @@ export const metadata = {
   title: `Inicio - ${siteMetadata.author}`,
   description: 'Articulos en espanol sobre desarrollo web y software.',
   alternates: {
-    canonical: '/es',
+    canonical: getHomePath('es'),
     languages: {
-      'en-US': '/',
-      'es-ES': '/es',
-      'x-default': '/',
+      'en-US': getHomePath('en'),
+      'es-ES': getHomePath('es'),
+      'x-default': getHomePath('en'),
     },
     types: {
-      'application/rss+xml': '/es/feed.xml',
+      'application/rss+xml': getFeedPath('es'),
     },
   },
 }
 
 export default async function SpanishHomePage() {
   const posts = await getAllFilesFrontMatter('blog', { locale: 'es' })
+  const { list } = getUiCopy('es')
 
   return (
     <>
@@ -38,7 +41,7 @@ export default async function SpanishHomePage() {
           </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-          {!posts.length && 'No posts found.'}
+          {!posts.length && list.noPostsFound}
           {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
             const { slug, date, title, summary, tags } = frontMatter
             return (
@@ -46,9 +49,9 @@ export default async function SpanishHomePage() {
                 <article>
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl>
-                      <dt className="sr-only">Published on</dt>
+                      <dt className="sr-only">{list.publishedOn}</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                        <time dateTime={date}>{formatDate(date)}</time>
+                        <time dateTime={date}>{formatDate(date, 'es')}</time>
                       </dd>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
@@ -61,7 +64,7 @@ export default async function SpanishHomePage() {
                           </h2>
                           <div className="flex flex-wrap">
                             {tags.map((tag) => (
-                              <Tag key={tag} text={tag} />
+                              <Tag key={tag} locale="es" text={tag} />
                             ))}
                           </div>
                         </div>
@@ -89,7 +92,7 @@ export default async function SpanishHomePage() {
       {posts.length > MAX_DISPLAY && (
         <div className="flex justify-end text-base font-medium leading-6">
           <Link
-            href="/es/blog"
+            href={getBlogPath('es')}
             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
             aria-label="all posts"
           >

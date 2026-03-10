@@ -1,25 +1,27 @@
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
+import { getUiCopy } from '@/lib/i18n/ui'
 import formatDate from '@/lib/utils/formatDate'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
   const { date, title } = frontMatter
+  const { post: postUi } = getUiCopy(frontMatter.locale)
 
   return (
     <SectionContainer>
-      <ScrollTopAndComment />
+      <ScrollTopAndComment locale={frontMatter.locale} />
       <article>
         <div>
           <header>
             <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
               <dl>
                 <div>
-                  <dt className="sr-only">Published on</dt>
+                  <dt className="sr-only">{postUi.publishedOn}</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>{formatDate(date)}</time>
+                    <time dateTime={date}>{formatDate(date, frontMatter.locale)}</time>
                   </dd>
                 </div>
               </dl>

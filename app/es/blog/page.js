@@ -1,5 +1,6 @@
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
+import { getBlogPath, getFeedPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
@@ -7,14 +8,14 @@ export const metadata = {
   title: `Blog ES - ${siteMetadata.author}`,
   description: 'Articulos en espanol sobre desarrollo web.',
   alternates: {
-    canonical: '/es/blog',
+    canonical: getBlogPath('es'),
     languages: {
-      'en-US': '/blog',
-      'es-ES': '/es/blog',
-      'x-default': '/blog',
+      'en-US': getBlogPath('en'),
+      'es-ES': getBlogPath('es'),
+      'x-default': getBlogPath('en'),
     },
     types: {
-      'application/rss+xml': '/es/feed.xml',
+      'application/rss+xml': getFeedPath('es'),
     },
   },
 }
@@ -31,6 +32,7 @@ export default async function SpanishBlogPage() {
     <ListLayout
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
+      locale="es"
       pagination={pagination}
       title="Todos los Articulos"
     />

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import PageTitle from '@/components/PageTitle'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import siteMetadata from '@/data/siteMetadata'
+import { getLanguageLabel } from '@/lib/i18n/config'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
 import {
   buildLanguageAlternates,
@@ -129,7 +130,7 @@ export default async function BlogPostPage({ params }) {
     href: `/${translatedPost.slug}`,
     title: translatedPost.title,
     locale: translatedPost.locale,
-    languageLabel: translatedPost.locale === 'es' ? 'Español' : 'English',
+    languageLabel: getLanguageLabel(translatedPost.locale),
   }))
 
   return (

@@ -7,6 +7,7 @@ import '@/css/tailwind.css'
 import siteMetadata from '@/data/siteMetadata'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import SeoSchema from '@/components/SeoSchema'
+import { getAllFilesFrontMatter } from '@/lib/mdx'
 import Providers from './providers'
 
 export const metadata = {
@@ -38,7 +39,13 @@ export const metadata = {
   manifest: '/static/favicons/site.webmanifest',
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const posts = await getAllFilesFrontMatter('blog')
+  const postLocaleMap = posts.reduce((acc, post) => {
+    acc[post.slug] = post.locale
+    return acc
+  }, {})
+
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -69,7 +76,7 @@ export default function RootLayout({ children }) {
       >
         <SeoSchema data={websiteSchema} />
         <Providers>
-          <LayoutWrapper>{children}</LayoutWrapper>
+          <LayoutWrapper postLocaleMap={postLocaleMap}>{children}</LayoutWrapper>
         </Providers>
       </body>
     </html>

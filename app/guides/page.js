@@ -1,5 +1,6 @@
 import Link from '@/components/Link'
 import siteMetadata from '@/data/siteMetadata'
+import { getTagPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import kebabCase from '@/lib/utils/kebabCase'
 
@@ -62,7 +63,7 @@ export default async function GuidesPage() {
       <div className="grid gap-8 md:grid-cols-2">
         {GUIDE_CLUSTERS.map((cluster) => {
           const clusterPosts = getClusterPosts(posts, cluster)
-          const tagPath = `/tags/${kebabCase(cluster.primaryTag)}`
+          const tagPath = getTagPath('en', kebabCase(cluster.primaryTag))
 
           return (
             <section

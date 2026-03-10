@@ -1,8 +1,12 @@
-import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
+import Link from './Link'
+import { getBookPath } from '@/lib/i18n/routes'
+import { getUiCopy } from '@/lib/i18n/ui'
 
-export default function Footer() {
+export default function Footer({ locale = 'en' }) {
+  const { footer } = getUiCopy(locale)
+
   return (
     <footer>
       <div className="mt-16 flex flex-col items-center">
@@ -14,10 +18,10 @@ export default function Footer() {
         </div>
         <div className="mb-3 text-sm font-medium">
           <Link
-            href="/book"
+            href={getBookPath(locale)}
             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
           >
-            Book a call
+            {footer.bookCall}
           </Link>
         </div>
         <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">

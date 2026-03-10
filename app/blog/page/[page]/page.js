@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
+import { getBlogPagePath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
@@ -9,8 +10,8 @@ export async function generateMetadata({ params }) {
   const { page } = await params
   const parsedPage = parseInt(page, 10)
   const pageNumber = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage
-  const canonicalPath = pageNumber <= 1 ? '/blog' : `/blog/page/${pageNumber}`
-  const spanishPath = pageNumber <= 1 ? '/es/blog' : `/es/blog/page/${pageNumber}`
+  const canonicalPath = getBlogPagePath('en', pageNumber)
+  const spanishPath = getBlogPagePath('es', pageNumber)
 
   return {
     title: `Blog - ${siteMetadata.author}`,
@@ -60,6 +61,7 @@ export default async function BlogPaginationPage({ params }) {
     <ListLayout
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
+      locale="en"
       pagination={pagination}
       title="All Posts"
     />

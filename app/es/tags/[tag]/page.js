@@ -1,5 +1,6 @@
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
+import { getTagPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
@@ -14,22 +15,22 @@ export async function generateMetadata({ params }) {
   const englishTags = await getAllTags('blog', { locale: 'en' })
   const hasEnglishVersion = Object.prototype.hasOwnProperty.call(englishTags, tag)
   const languageAlternates = {
-    'es-ES': `/es/tags/${tag}`,
-    'x-default': `/es/tags/${tag}`,
+    'es-ES': getTagPath('es', tag),
+    'x-default': getTagPath('es', tag),
   }
   if (hasEnglishVersion) {
-    languageAlternates['en-US'] = `/tags/${tag}`
-    languageAlternates['x-default'] = `/tags/${tag}`
+    languageAlternates['en-US'] = getTagPath('en', tag)
+    languageAlternates['x-default'] = getTagPath('en', tag)
   }
 
   return {
     title: `${tag} - ${siteMetadata.author}`,
     description: `${tag} tags - ${siteMetadata.author}`,
     alternates: {
-      canonical: `/es/tags/${tag}`,
+      canonical: getTagPath('es', tag),
       languages: languageAlternates,
       types: {
-        'application/rss+xml': `/es/tags/${tag}/feed.xml`,
+        'application/rss+xml': `${getTagPath('es', tag)}/feed.xml`,
       },
     },
   }
@@ -43,5 +44,5 @@ export default async function SpanishTagPage({ params }) {
   )
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
 
-  return <ListLayout posts={posts} title={title} />
+  return <ListLayout locale="es" posts={posts} title={title} />
 }

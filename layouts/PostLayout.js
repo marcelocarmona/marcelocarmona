@@ -7,6 +7,9 @@ import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/comments'
 import SeoSchema from '@/components/SeoSchema'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import { getBlogPath } from '@/lib/i18n/routes'
+import { getUiCopy } from '@/lib/i18n/ui'
+import formatDate from '@/lib/utils/formatDate'
 
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 
@@ -22,9 +25,10 @@ export default function PostLayout({
   children,
 }) {
   const { fileName, date, title, tags } = frontMatter
+  const { post: postUi } = getUiCopy(frontMatter.locale)
   const image = frontMatter.images?.[0] || siteMetadata.socialBanner
   const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
-  const blogPath = frontMatter.locale === 'es' ? '/es/blog' : '/blog'
+  const blogPath = getBlogPath(frontMatter.locale)
   const pageUrl = frontMatter.canonicalUrl
     ? frontMatter.canonicalUrl.startsWith('http')
       ? frontMatter.canonicalUrl
@@ -60,13 +64,13 @@ export default function PostLayout({
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Home',
+        name: postUi.homeLabel,
         item: siteMetadata.siteUrl,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Blog',
+        name: postUi.blogLabel,
         item: `${siteMetadata.siteUrl}${blogPath}`,
       },
       {
@@ -80,7 +84,7 @@ export default function PostLayout({
 
   return (
     <SectionContainer>
-      <ScrollTopAndComment />
+      <ScrollTopAndComment locale={frontMatter.locale} />
       <article>
         <SeoSchema data={articleSchema} />
         <SeoSchema data={breadcrumbSchema} />
@@ -89,10 +93,10 @@ export default function PostLayout({
             <div className="space-y-1 text-center">
               <dl className="space-y-10">
                 <div>
-                  <dt className="sr-only">Published on</dt>
+                  <dt className="sr-only">{postUi.publishedOn}</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
+                      {formatDate(date, frontMatter.locale, postDateTemplate)}
                     </time>
                   </dd>
                 </div>
@@ -107,7 +111,7 @@ export default function PostLayout({
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
             <dl className="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
-              <dt className="sr-only">Authors</dt>
+              <dt className="sr-only">{postUi.authors}</dt>
               <dd>
                 <ul className="flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
                   {authorDetails.map((author) => (
@@ -122,9 +126,9 @@ export default function PostLayout({
                         />
                       )}
                       <dl className="whitespace-nowrap text-sm font-medium leading-5">
-                        <dt className="sr-only">Name</dt>
+                        <dt className="sr-only">{postUi.name}</dt>
                         <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                        <dt className="sr-only">Twitter</dt>
+                        <dt className="sr-only">{postUi.twitter}</dt>
                         <dd>
                           {author.twitter && (
                             <Link
@@ -144,7 +148,7 @@ export default function PostLayout({
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pb-8 pt-10 dark:prose-dark">{children}</div>
               <div className="pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
-                <Link href={editUrl(fileName)}>{'View on GitHub'}</Link>
+                <Link href={editUrl(fileName)}>{postUi.viewOnGitHub}</Link>
               </div>
               <Comments frontMatter={frontMatter} />
             </div>
@@ -153,11 +157,11 @@ export default function PostLayout({
                 {tags && (
                   <div className="py-4 xl:py-8">
                     <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                      Tags
+                      {postUi.tags}
                     </h2>
                     <div className="flex flex-wrap">
                       {tags.map((tag) => (
-                        <Tag key={tag} text={tag} />
+                        <Tag key={tag} locale={frontMatter.locale} text={tag} />
                       ))}
                     </div>
                   </div>
@@ -165,7 +169,7 @@ export default function PostLayout({
                 {languageVersions.length > 0 && (
                   <div className="py-4 xl:py-8">
                     <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                      Also available in
+                      {postUi.translations}
                     </h2>
                     <ul className="space-y-2">
                       {languageVersions.map((post) => (
@@ -184,7 +188,7 @@ export default function PostLayout({
                 {relatedPosts.length > 0 && (
                   <div className="py-4 xl:py-8">
                     <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                      Related Articles
+                      {postUi.relatedArticles}
                     </h2>
                     <ul className="space-y-2">
                       {relatedPosts.map((post) => (
@@ -205,7 +209,7 @@ export default function PostLayout({
                     {prev && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Previous Article
+                          {postUi.previousArticle}
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
                           <Link href={`/${prev.slug}`}>{prev.title}</Link>
@@ -215,7 +219,7 @@ export default function PostLayout({
                     {next && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Next Article
+                          {postUi.nextArticle}
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
                           <Link href={`/${next.slug}`}>{next.title}</Link>
@@ -230,7 +234,7 @@ export default function PostLayout({
                   href={blogPath}
                   className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                 >
-                  &larr; Back to the blog
+                  &larr; {postUi.backToBlog}
                 </Link>
               </div>
             </footer>

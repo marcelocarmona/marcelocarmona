@@ -1,5 +1,6 @@
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
+import { getBlogPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
@@ -7,11 +8,11 @@ export const metadata = {
   title: `Blog - ${siteMetadata.author}`,
   description: siteMetadata.description,
   alternates: {
-    canonical: '/blog',
+    canonical: getBlogPath('en'),
     languages: {
-      'en-US': '/blog',
-      'es-ES': '/es/blog',
-      'x-default': '/blog',
+      'en-US': getBlogPath('en'),
+      'es-ES': getBlogPath('es'),
+      'x-default': getBlogPath('en'),
     },
   },
 }
@@ -28,6 +29,7 @@ export default async function BlogPage() {
     <ListLayout
       posts={posts}
       initialDisplayPosts={initialDisplayPosts}
+      locale="en"
       pagination={pagination}
       title="All Posts"
     />

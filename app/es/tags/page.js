@@ -1,6 +1,7 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
+import { getTagsPath } from '@/lib/i18n/routes'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
@@ -8,11 +9,11 @@ export const metadata = {
   title: `Tags ES - ${siteMetadata.author}`,
   description: 'Temas sobre los que escribo en espanol',
   alternates: {
-    canonical: '/es/tags',
+    canonical: getTagsPath('es'),
     languages: {
-      'en-US': '/tags',
-      'es-ES': '/es/tags',
-      'x-default': '/tags',
+      'en-US': getTagsPath('en'),
+      'es-ES': getTagsPath('es'),
+      'x-default': getTagsPath('en'),
     },
   },
 }
@@ -32,9 +33,9 @@ export default async function SpanishTagsPage() {
         {Object.keys(tags).length === 0 && 'No tags found.'}
         {sortedTags.map((tag) => (
           <div key={tag} className="mb-2 mr-5 mt-2">
-            <Tag text={tag} />
+            <Tag locale="es" text={tag} />
             <Link
-              href={`/es/tags/${kebabCase(tag)}`}
+              href={`${getTagsPath('es')}/${kebabCase(tag)}`}
               className="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
             >
               {` (${tags[tag]})`}
