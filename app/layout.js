@@ -71,7 +71,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white"
+        className="min-h-screen antialiased selection:bg-primary-200 selection:text-primary-950 dark:selection:bg-primary-700 dark:selection:text-white"
         suppressHydrationWarning
       >
         <SeoSchema data={websiteSchema} />

@@ -2,6 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --page-bg: 244 240 232;
+  --page-bg-accent: 168 208 201;
+  --page-bg-wash: 244 222 194;
+  --page-surface: 255 252 246;
+  --page-surface-strong: 255 255 255;
+  --page-border: 28 37 54;
+  --page-ink: 24 32 47;
+  --page-muted: 86 97 114;
+}
+
+.dark {
+  --page-bg: 11 17 27;
+  --page-bg-accent: 20 105 97;
+  --page-bg-wash: 86 65 41;
+  --page-surface: 17 24 39;
+  --page-surface-strong: 23 33 51;
+  --page-border: 148 163 184;
+  --page-ink: 240 245 249;
+  --page-muted: 160 174 192;
+}
+
+html {
+  background-color: rgb(var(--page-bg));
+}
+
+body {
+  color: rgb(var(--page-ink));
+  background-color: rgb(var(--page-bg));
+  background-image:
+    radial-gradient(circle at top left, rgb(var(--page-bg-accent) / 0.18), transparent 26%),
+    radial-gradient(circle at 85% 12%, rgb(var(--page-bg-wash) / 0.4), transparent 24%);
+}
+
+.display-title {
+  @apply font-display tracking-tight;
+}
+
+.eyebrow {
+  @apply text-xs font-semibold uppercase tracking-[0.24em] text-primary-700 dark:text-primary-300;
+}
+
+.surface-card {
+  background: linear-gradient(
+    180deg,
+    rgb(var(--page-surface-strong) / 0.95),
+    rgb(var(--page-surface) / 0.88)
+  );
+  border: 1px solid rgb(var(--page-border) / 0.1);
+  box-shadow:
+    0 18px 48px -32px rgb(15 23 42 / 0.35),
+    inset 0 1px 0 rgb(255 255 255 / 0.45);
+  backdrop-filter: blur(14px);
+}
+
+.surface-divider {
+  border-color: rgb(var(--page-border) / 0.1);
+}
+
+.muted-copy {
+  color: rgb(var(--page-muted));
+}
+
 .task-list-item::before {
   @apply hidden;
 }
@@ -21,5 +84,7 @@
 /* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-  transition: background-color 600000s 0s, color 600000s 0s;
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
 }

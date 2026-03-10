@@ -23,6 +23,13 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        display: [
+          'Iowan Old Style',
+          'Palatino Linotype',
+          'Book Antiqua',
+          'Times New Roman',
+          'serif',
+        ],
       },
       colors: {
         primary: colors.teal,
