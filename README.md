@@ -1,117 +1,116 @@
-![tailwind-nextjs-banner](/public/static/images/twitter-card.png)
+# marcelocarmona.com
 
-# Marcelocarmona.com website
+Personal website and blog for Marcelo Carmona, built with Next.js, Tailwind CSS, and MD/MDX content.
 
-## Installation
+The site currently includes:
+
+- English and Spanish routes
+- Blog, guides, projects, tags, and about pages
+- A Cal.com booking page at `/book`
+- Vercel Analytics and Speed Insights in production
+
+## Stack
+
+- Next.js 16
+- React 19
+- Tailwind CSS 3
+- MDX via `mdx-bundler`
+- Giscus comments
+- Optional Sentry and newsletter integrations
+
+## Requirements
+
+- Node.js `24.x`
+- npm
+
+## Local development
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-## Development
-
-First, run the development server:
-
-```bash
-npm start
-```
-
-or
+Start the standard development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Start development with extra watching for content changes in `data/`:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-## Extend / Customize
-
-`data/siteMetadata.js` - contains most of the site related information which should be modified for a user's need.
-
-`data/authors/default.md` - default author information (required). Additional authors can be added as files in `data/authors`.
-
-`data/projectsData.js` - data used to generate styled card on the projects page.
-
-`data/headerNavLinks.js` - navigation links.
-
-`data/logo.svg` - replace with your own logo.
-
-`data/blog` - replace with your own blog posts.
-
-`public/static` - store assets such as images and favicons.
-
-`tailwind.config.js` and `css/tailwind.css` - contain the tailwind stylesheet which can be modified to change the overall look and feel of the site.
-
-`css/prism.css` - controls the styles associated with the code blocks. Feel free to customize it and use your preferred prismjs theme e.g. [prism themes](https://github.com/PrismJS/prism-themes).
-
-`components/social-icons` - to add other icons, simply copy an svg file from [Simple Icons](https://simpleicons.org/) and map them in `index.js`. Other icons use [heroicons](https://heroicons.com/).
-
-`components/MDXComponents.js` - pass your own JSX code or React component by specifying it over here. You can then call them directly in the `.mdx` or `.md` file. By default, a custom link and image component is passed.
-
-`layouts` - main templates used by MDX content.
-
-`app` - routes and API endpoints. Read the [Next.js App Router documentation](https://nextjs.org/docs/app) for more information.
-
-`next.config.js` - configuration related to Next.js. You need to adapt the Content Security Policy if you want to load scripts, images etc. from other domains.
-
-## Post
-
-### Frontmatter
-
-Frontmatter follows [Hugo's standards](https://gohugo.io/content-management/front-matter/).
-
-Currently 8 fields are supported.
-
-```
-title (required)
-date (required)
-tags (required, can be empty array)
-lastmod (optional)
-draft (optional)
-summary (optional)
-images (optional, if none provided defaults to socialBanner in siteMetadata config)
-authors (optional list which should correspond to the file names in `data/authors`. Uses `default` if none is specified)
-layout (optional list which should correspond to the file names in `data/layouts`)
-canonicalUrl (optional, canonical url for the post for SEO)
-translationKey (optional, pair EN/ES versions of the same article for hreflang)
+```bash
+npm start
 ```
 
-Here's an example of a post's frontmatter:
+Build and serve production locally:
 
+```bash
+npm run build
+npm run serve
 ```
+
+The app runs at `http://localhost:3000`.
+
+## Environment variables
+
+Use `.env.example` as a starting point for `.env.local`.
+
+Most variables are optional and only needed if you want to enable:
+
+- Giscus, Utterances, or Disqus comments
+- Sentry
+- Newsletter provider API routes
+
+If you are only editing content, layout, or styles, you can usually leave them unset.
+
+## Where to edit
+
+- `data/siteMetadata.js`: site metadata, social links, analytics, comments, newsletter settings
+- `data/blog/`: blog posts in `.md` or `.mdx`
+- `data/authors/default.md`: author profile
+- `data/projectsData.js`: projects page data
+- `data/headerNavLinks.js`: navigation links
+- `data/ui/`: localized UI copy
+- `app/`: routes, metadata, feeds, robots, sitemap
+- `components/`: shared UI, embeds, analytics, and comments
+- `layouts/`: post and list layouts
+- `public/static/`: images and favicons
+- `css/tailwind.css` and `tailwind.config.js`: theme and styling
+
+## Writing posts
+
+Posts live in `data/blog/` and can use `.md` or `.mdx`.
+
+Typical frontmatter:
+
+```md
 ---
-title: 'Introducing Tailwind Nexjs Starter Blog'
-date: '2021-01-12'
-lastmod: '2021-01-18'
-tags: ['next-js', 'tailwind', 'guide']
+title: 'My Post'
+date: '2026-03-25'
+tags: ['Next.js', 'MDX']
+summary: 'Short description'
 draft: false
-summary: 'Looking for a performant, out of the box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.'
-images: ['/static/images/canada/mountains.jpg', '/static/images/canada/toronto.jpg']
-authors: ['default', 'sparrowhawk']
+lang: en
+translationKey: my-post
 layout: PostLayout
-canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/introducing-tailwind-nextjs-starter-blog
 ---
 ```
 
-### Compose
+Notes:
 
-Run `node ./scripts/compose.js` to bootstrap a new post.
+- `lang` defaults to English. Use `lang: es` for Spanish posts.
+- Use the same `translationKey` to pair English and Spanish versions of the same article.
+- `summary`, `draft`, `layout`, `images`, `authors`, and `canonicalUrl` are optional.
 
-Follow the interactive prompt to generate a post with pre-filled front matter.
+To scaffold a new post:
 
-## Deploy
+```bash
+node ./scripts/compose.js
+```
 
-**Vercel**  
-The easiest way to deploy the template is to use the [Vercel Platform](https://vercel.com) from the creators of Next.js. Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deployment
 
-**Netlify**
-[Netlify](https://www.netlify.com/)’s Next.js runtime configures enables key Next.js functionality on your website without the need for additional configurations. Netlify generates serverless functions that will handle Next.js functionalities such as server-side rendered (SSR) pages, incremental static regeneration (ISR), `next/images`, etc.
+This repository is set up for Vercel.
 
-See [Next.js on Netlify](https://docs.netlify.com/integrations/frameworks/next-js/overview/#next-js-runtime) for suggested configuration values and more details.
-
-**GitHub Pages / Firebase etc.**  
-As the template uses `next/image` for image optimization, additional configurations have to be made to deploy on other popular static hosting websites like [Firebase](https://firebase.google.com/) or [GitHub Pages](https://pages.github.com/). An alternative image optimization provider such as Imgix, Cloudinary or Akamai has to be used. Alternatively, replace the `next/image` component with a standard `<img>` tag. See [`next/image` documentation](https://nextjs.org/docs/basic-features/image-optimization) for more details.
-
-The API routes used in the newsletter component cannot be used in a static site export. You will need to use a form API endpoint provider and substitute the route in the newsletter component accordingly. Other hosting platforms such as Netlify also offer alternative solutions - please refer to their docs for more information.
+If you add new third-party scripts or providers, review `next.config.js` and update the Content Security Policy as needed.
