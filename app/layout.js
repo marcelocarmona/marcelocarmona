@@ -4,6 +4,7 @@ import '@/css/giscus.css'
 import '@/css/prism.css'
 import '@/css/tailwind.css'
 
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import siteMetadata from '@/data/siteMetadata'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import SeoSchema from '@/components/SeoSchema'
@@ -78,6 +79,9 @@ export default async function RootLayout({ children }) {
         <Providers>
           <LayoutWrapper postLocaleMap={postLocaleMap}>{children}</LayoutWrapper>
         </Providers>
+        {process.env.NODE_ENV === 'production' && siteMetadata.analytics.vercelSpeedInsights && (
+          <SpeedInsights />
+        )}
       </body>
     </html>
   )
