@@ -1,6 +1,6 @@
 # marcelocarmona.com
 
-Personal website and blog for Marcelo Carmona, built with Next.js, Tailwind CSS, and MD/MDX content.
+Personal website and blog, built with Next.js, Tailwind CSS, and MD/MDX content.
 
 The site currently includes:
 
