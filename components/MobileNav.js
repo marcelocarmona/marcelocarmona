@@ -24,7 +24,7 @@ const MobileNav = ({ locale = 'en' }) => {
     <div className="sm:hidden">
       <button
         type="button"
-        className="ml-1 mr-1 h-8 w-8 rounded py-1"
+        className="ml-1 mr-1 h-8 w-8 rounded-sm py-1"
         aria-label="Toggle Menu"
         onClick={onToggleNav}
       >
@@ -49,7 +49,7 @@ const MobileNav = ({ locale = 'en' }) => {
         <div className="flex justify-end">
           <button
             type="button"
-            className="mr-5 mt-11 h-8 w-8 rounded"
+            className="mr-5 mt-11 h-8 w-8 rounded-sm"
             aria-label="Toggle Menu"
             onClick={onToggleNav}
           >
