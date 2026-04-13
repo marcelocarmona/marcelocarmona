@@ -6,7 +6,7 @@ export const YouTube = ({ youTubeId, title = 'YouTube video' }) => {
   if (!youTubeId) return null
 
   return (
-    <div className="relative my-6 overflow-hidden rounded-lg pt-9/16">
+    <div className="relative my-6 aspect-video overflow-hidden rounded-lg">
       <iframe
         title={title}
         src={`https://www.youtube.com/embed/${youTubeId}`}

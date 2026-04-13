@@ -1,8 +1,6 @@
 import '@fontsource/inter/index.css'
 import 'katex/dist/katex.css'
-import '@/css/giscus.css'
-import '@/css/prism.css'
-import '@/css/tailwind.css'
+import '@/css/app.css'
 
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import siteMetadata from '@/data/siteMetadata'

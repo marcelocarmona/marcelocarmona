@@ -1,6 +1,17 @@
 @import 'tailwindcss';
 @config "../tailwind.config.js";
 
+@theme {
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif;
+  --leading-11: 2.75rem;
+  --leading-12: 3rem;
+  --leading-13: 3.25rem;
+  --leading-14: 3.5rem;
+}
+
 :root {
   --page-bg: 244 240 232;
   --page-bg-accent: 168 208 201;
@@ -35,15 +46,25 @@ body {
     radial-gradient(circle at 85% 12%, rgb(var(--page-bg-wash) / 0.4), transparent 24%);
 }
 
-.display-title {
-  @apply font-display tracking-tight;
+@utility display-title {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-tight);
 }
 
-.eyebrow {
-  @apply text-xs font-semibold uppercase tracking-[0.24em] text-primary-700 dark:text-primary-300;
+@utility eyebrow {
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--color-primary-700);
+
+  @variant dark {
+    color: var(--color-primary-300);
+  }
 }
 
-.surface-card {
+@utility surface-card {
   background: linear-gradient(
     180deg,
     rgb(var(--page-surface-strong) / 0.95),
@@ -56,11 +77,11 @@ body {
   backdrop-filter: blur(14px);
 }
 
-.surface-divider {
+@utility surface-divider {
   border-color: rgb(var(--page-border) / 0.1);
 }
 
-.muted-copy {
+@utility muted-copy {
   color: rgb(var(--page-muted));
 }
 
