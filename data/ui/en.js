@@ -32,6 +32,18 @@ const enUi = {
     translations: 'Also available in',
     viewOnGitHub: 'View on GitHub',
   },
+  video: {
+    articleEyebrow: 'Video overview',
+    articleHelper: 'A concise video version of this article.',
+    articleLabel: 'Article',
+    backToArticle: 'Back to article',
+    homeLabel: 'Home',
+    readArticle: 'Read the full article',
+    translations: 'Also available in',
+    watchOnYouTube: 'Watch on YouTube',
+    watchPageCta: 'Watch the video',
+    watchPageLabel: 'Video',
+  },
   scroll: {
     toComment: 'Scroll To Comment',
     toTop: 'Scroll To Top',

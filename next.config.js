@@ -60,6 +60,9 @@ const securityHeaders = [
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: 'i.ytimg.com' }],
+  },
   async headers() {
     return [
       {

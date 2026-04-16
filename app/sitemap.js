@@ -37,6 +37,12 @@ export default async function sitemap() {
     route: `/${post.slug}`,
     lastModified: post.lastmod || post.date || undefined,
   }))
+  const watchPageRoutes = posts
+    .filter((post) => post.video?.watchPagePath)
+    .map((post) => ({
+      route: post.video.watchPagePath,
+      lastModified: post.lastmod || post.date || undefined,
+    }))
 
   const englishTagSet = new Set()
   const spanishTagSet = new Set()
@@ -72,6 +78,7 @@ export default async function sitemap() {
   blogPaginationRoutes.forEach((route) => addRoute({ route }))
   spanishBlogPaginationRoutes.forEach((route) => addRoute({ route }))
   blogPostRoutes.forEach(addRoute)
+  watchPageRoutes.forEach(addRoute)
   tagRoutes.forEach(addRoute)
   spanishTagRoutes.forEach(addRoute)
 

@@ -2,14 +2,16 @@ import React from 'react'
 
 export const MDXEmbedProvider = ({ children }) => children
 
-export const YouTube = ({ youTubeId, title = 'YouTube video' }) => {
+export const YouTubePlayer = ({ youTubeId, title = 'YouTube video' }) => {
   if (!youTubeId) return null
+
+  const embedUrl = `https://www.youtube.com/embed/${youTubeId}`
 
   return (
     <div className="relative my-6 aspect-video overflow-hidden rounded-lg">
       <iframe
         title={title}
-        src={`https://www.youtube.com/embed/${youTubeId}`}
+        src={embedUrl}
         className="absolute inset-0 h-full w-full"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen

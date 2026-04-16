@@ -32,6 +32,18 @@ const esUi = {
     translations: 'Tambien disponible en',
     viewOnGitHub: 'Ver en GitHub',
   },
+  video: {
+    articleEyebrow: 'Resumen en video',
+    articleHelper: 'Una version breve en video de este articulo.',
+    articleLabel: 'Articulo',
+    backToArticle: 'Volver al articulo',
+    homeLabel: 'Inicio',
+    readArticle: 'Leer el articulo completo',
+    translations: 'Tambien disponible en',
+    watchOnYouTube: 'Ver en YouTube',
+    watchPageCta: 'Ver el video',
+    watchPageLabel: 'Video',
+  },
   scroll: {
     toComment: 'Ir a comentarios',
     toTop: 'Ir arriba',

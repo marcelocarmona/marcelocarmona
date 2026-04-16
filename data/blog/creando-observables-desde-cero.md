@@ -4,12 +4,14 @@ lang: es
 date: '2017-10-12'
 translationKey: rxjs-observable-scratch
 tags: ['Rxjs', 'JavaScript']
+summary: 'Te muestro como construir una version pequena de una libreria similar a RxJS desde cero.'
+video:
+  youtubeId: XiIkG9lAr5Q
+  thumbnailUrl: https://i.ytimg.com/vi/XiIkG9lAr5Q/maxresdefault.jpg
 ---
 
 Una buena forma de entender Rxjs es implementado algo similar y mas simple desde 0.
 Voy a mostrar como componer funciones al estilo como lo hace la librería Rxjs.
-
-<YouTube youTubeId="XiIkG9lAr5Q" />
 
 Vamos a ver diferentes tipos de callbacks con los cuales nos podemos encontrar
 

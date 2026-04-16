@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
-import { YouTube, CodeSandbox } from '@/components/MdxEmbed'
+import { CodeSandbox } from '@/components/MdxEmbed'
 import AuthorLayout from '@/layouts/AuthorLayout'
 import PostLayout from '@/layouts/PostLayout'
 import PostSimple from '@/layouts/PostSimple'
@@ -18,8 +18,7 @@ const Layouts = {
   PostSimple,
 }
 
-export const MDXComponents = {
-  YouTube,
+const BaseMDXComponents = {
   CodeSandbox,
   Image,
   TOCInline,
@@ -35,5 +34,5 @@ export const MDXComponents = {
 export const MDXLayoutRenderer = ({ layout, mdxSource, ...rest }) => {
   const MDXLayout = useMemo(() => getMDXComponent(mdxSource), [mdxSource])
 
-  return <MDXLayout layout={layout} components={MDXComponents} {...rest} />
+  return <MDXLayout layout={layout} components={BaseMDXComponents} {...rest} />
 }
