@@ -68,7 +68,12 @@ export default async function RootLayout({ children }) {
   }
 
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="scroll-smooth"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body
         className="min-h-screen antialiased selection:bg-primary-200 selection:text-primary-950 dark:selection:bg-primary-700 dark:selection:text-white"
         suppressHydrationWarning
