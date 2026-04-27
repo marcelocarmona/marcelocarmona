@@ -13,7 +13,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
   return (
     <SectionContainer>
       <ScrollTopAndComment locale={frontMatter.locale} />
-      <article>
+      <article lang={frontMatter.locale || 'en'}>
         <div>
           <header>
             <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">

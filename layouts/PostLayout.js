@@ -86,7 +86,7 @@ export default function PostLayout({
   return (
     <SectionContainer>
       <ScrollTopAndComment locale={frontMatter.locale} />
-      <article>
+      <article lang={frontMatter.locale || 'en'}>
         <SeoSchema data={articleSchema} />
         <SeoSchema data={breadcrumbSchema} />
         <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">

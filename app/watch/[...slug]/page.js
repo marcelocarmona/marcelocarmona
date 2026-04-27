@@ -188,7 +188,7 @@ export default async function WatchPage({ params }) {
 
   return (
     <SectionContainer>
-      <article className="mx-auto max-w-4xl py-10">
+      <article lang={frontMatter.locale || 'en'} className="mx-auto max-w-4xl py-10">
         <SeoSchema data={videoSchema} />
         <SeoSchema data={breadcrumbSchema} />
         <div className="space-y-8">

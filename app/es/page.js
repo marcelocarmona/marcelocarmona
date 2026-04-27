@@ -32,7 +32,7 @@ export default async function SpanishHomePage() {
 
   return (
     <>
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div lang="es" className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             React, Next.js y arquitectura frontend
@@ -47,7 +47,7 @@ export default async function SpanishHomePage() {
             const { slug, date, title, summary, tags } = frontMatter
             return (
               <li key={slug} className="py-12">
-                <article>
+                <article lang="es">
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl>
                       <dt className="sr-only">{list.publishedOn}</dt>
@@ -77,7 +77,7 @@ export default async function SpanishHomePage() {
                         <Link
                           href={`/${slug}`}
                           className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                          aria-label={`Read "${title}"`}
+                          aria-label={`Leer "${title}"`}
                         >
                           Leer mas &rarr;
                         </Link>
@@ -95,7 +95,7 @@ export default async function SpanishHomePage() {
           <Link
             href={getBlogPath('es')}
             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label="all posts"
+            aria-label="todos los articulos"
           >
             Ver todos &rarr;
           </Link>
