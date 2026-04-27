@@ -12,6 +12,8 @@
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build --webpack",
     "lint": "eslint --fix --ext .js,.jsx app components lib layouts scripts",
+    "lint:check": "eslint --ext .js,.jsx app components lib layouts scripts tests",
+    "test": "vitest run",
     "prepare": "husky"
   },
   "dependencies": {
@@ -59,7 +61,8 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.7.3",
     "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3"
+    "socket.io-client": "^4.8.3",
+    "vitest": "^4.1.5"
   },
   "lint-staged": {
     "*.+(js|jsx|ts|tsx)": [
