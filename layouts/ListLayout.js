@@ -4,6 +4,7 @@ import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import { useState } from 'react'
 import Pagination from '@/components/Pagination'
+import { getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
 import formatDate from '@/lib/utils/formatDate'
 
@@ -72,7 +73,10 @@ export default function ListLayout({
                   <div className="space-y-3 xl:col-span-3">
                     <div>
                       <h3 className="text-2xl font-bold leading-8 tracking-tight">
-                        <Link href={`/${slug}`} className="text-gray-900 dark:text-gray-100">
+                        <Link
+                          href={getPostPath(locale, slug)}
+                          className="text-gray-900 dark:text-gray-100"
+                        >
                           {title}
                         </Link>
                       </h3>

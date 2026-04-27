@@ -8,7 +8,7 @@ import Comments from '@/components/comments'
 import SeoSchema from '@/components/SeoSchema'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import VideoPreviewCard from '@/components/VideoPreviewCard'
-import { getBlogPath } from '@/lib/i18n/routes'
+import { getBlogPath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
 import formatDate from '@/lib/utils/formatDate'
 
@@ -34,7 +34,7 @@ export default function PostLayout({
     ? frontMatter.canonicalUrl.startsWith('http')
       ? frontMatter.canonicalUrl
       : `${siteMetadata.siteUrl}${frontMatter.canonicalUrl}`
-    : `${siteMetadata.siteUrl}/${frontMatter.slug}`
+    : `${siteMetadata.siteUrl}${getPostPath(frontMatter)}`
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -198,7 +198,7 @@ export default function PostLayout({
                       {relatedPosts.map((post) => (
                         <li key={post.slug}>
                           <Link
-                            href={`/${post.slug}`}
+                            href={getPostPath(post)}
                             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                           >
                             {post.title}
@@ -216,7 +216,9 @@ export default function PostLayout({
                           {postUi.previousArticle}
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${prev.slug}`}>{prev.title}</Link>
+                          <Link href={getPostPath(frontMatter.locale, prev.slug)}>
+                            {prev.title}
+                          </Link>
                         </div>
                       </div>
                     )}
@@ -226,7 +228,9 @@ export default function PostLayout({
                           {postUi.nextArticle}
                         </h2>
                         <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${next.slug}`}>{next.title}</Link>
+                          <Link href={getPostPath(frontMatter.locale, next.slug)}>
+                            {next.title}
+                          </Link>
                         </div>
                       </div>
                     )}

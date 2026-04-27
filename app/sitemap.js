@@ -1,4 +1,5 @@
 import siteMetadata from '@/data/siteMetadata'
+import { getPostPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 import kebabCase from '@/lib/utils/kebabCase'
@@ -33,7 +34,7 @@ export default async function sitemap() {
   const blogPaginationRoutes = getPaginationRoutes('/blog', englishTotalPages)
   const spanishBlogPaginationRoutes = getPaginationRoutes('/es/blog', spanishTotalPages)
   const blogPostRoutes = posts.map((post) => ({
-    route: `/${post.slug}`,
+    route: getPostPath(post),
     lastModified: post.lastmod || post.date || undefined,
   }))
   const watchPageRoutes = posts

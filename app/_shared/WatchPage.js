@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 
 import Link from '@/components/Link'
 import { YouTubePlayer } from '@/components/MdxEmbed'
@@ -7,6 +7,7 @@ import SectionContainer from '@/components/SectionContainer'
 import SeoSchema from '@/components/SeoSchema'
 import siteMetadata from '@/data/siteMetadata'
 import { getLanguageLabel } from '@/lib/i18n/config'
+import { getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug } from '@/lib/mdx'
 import { getTranslationsForPost } from '@/lib/post-relations'
@@ -41,7 +42,7 @@ function toOpenGraphLocale(locale) {
   return locale === 'es' ? 'es_ES' : 'en_US'
 }
 
-function getResolvedVideoPost(slugParts, posts) {
+function getSlugFromParts(slugParts) {
   if (
     !Array.isArray(slugParts) ||
     slugParts.length === 0 ||
@@ -50,25 +51,46 @@ function getResolvedVideoPost(slugParts, posts) {
     return null
   }
 
-  const slug = slugParts.join('/')
+  return slugParts.join('/')
+}
+
+function getResolvedVideoPost(slugParts, posts) {
+  const slug = getSlugFromParts(slugParts)
+
+  if (!slug) {
+    return null
+  }
+
   return posts.find((post) => formatSlug(post.slug) === slug && post.video?.watchPagePath) || null
 }
 
-export async function generateStaticParams() {
-  const posts = await getAllFilesFrontMatter('blog')
+export async function generateWatchStaticParams(locale) {
+  const posts = await getAllFilesFrontMatter('blog', { locale })
 
   return getVideoPosts(posts).map((post) => ({
     slug: formatSlug(post.slug).split('/'),
   }))
 }
 
-export async function generateMetadata({ params }) {
+export async function generateWatchMetadata({ params }, locale) {
   const { slug: slugParts } = await params
   const allPosts = await getAllFilesFrontMatter('blog')
   const post = getResolvedVideoPost(slugParts, allPosts)
 
   if (!post) {
     return {}
+  }
+
+  if (post.locale !== locale) {
+    return {
+      alternates: {
+        canonical: post.video.watchPagePath,
+      },
+      robots: {
+        index: false,
+        follow: true,
+      },
+    }
   }
 
   const frontMatter = (await getFileBySlug('blog', post.slug)).frontMatter
@@ -112,13 +134,17 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function WatchPage({ params }) {
+export default async function WatchPage({ params, locale = 'en' }) {
   const { slug: slugParts } = await params
   const allPosts = await getAllFilesFrontMatter('blog')
   const post = getResolvedVideoPost(slugParts, allPosts)
 
   if (!post) {
     notFound()
+  }
+
+  if (post.locale !== locale) {
+    permanentRedirect(post.video.watchPagePath)
   }
 
   const { frontMatter } = await getFileBySlug('blog', post.slug)
@@ -129,7 +155,8 @@ export default async function WatchPage({ params }) {
   }
 
   const pageUrl = `${siteMetadata.siteUrl}${video.watchPagePath}`
-  const articleUrl = `${siteMetadata.siteUrl}/${frontMatter.slug}`
+  const articlePath = getPostPath(frontMatter)
+  const articleUrl = `${siteMetadata.siteUrl}${articlePath}`
   const { video: videoUi } = getUiCopy(frontMatter.locale)
   const languageVersions = getTranslationsForPost(allPosts, frontMatter)
     .filter((translatedPost) => translatedPost.video?.watchPagePath)
@@ -194,7 +221,7 @@ export default async function WatchPage({ params }) {
         <div className="space-y-8">
           <div className="space-y-4">
             <Link
-              href={`/${frontMatter.slug}`}
+              href={articlePath}
               className="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
             >
               &larr; {videoUi.backToArticle}
@@ -226,7 +253,7 @@ export default async function WatchPage({ params }) {
 
           <div className="flex flex-wrap gap-3">
             <Link
-              href={`/${frontMatter.slug}`}
+              href={articlePath}
               className="inline-flex items-center rounded-full bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-500"
             >
               {videoUi.readArticle}

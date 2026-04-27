@@ -2,7 +2,7 @@ import Link from '@/components/Link'
 import NewsletterForm from '@/components/NewsletterForm'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { getBlogPath, getFeedPath, getHomePath } from '@/lib/i18n/routes'
+import { getBlogPath, getFeedPath, getHomePath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
@@ -10,34 +10,35 @@ import formatDate from '@/lib/utils/formatDate'
 const MAX_DISPLAY = 5
 
 export const metadata = {
-  title: 'React, Next.js, and Frontend Engineering',
-  description: siteMetadata.description,
+  title: 'React, Next.js y arquitectura frontend',
+  description:
+    'Articulos en espanol sobre React, Next.js, rendimiento web y arquitectura frontend.',
   alternates: {
-    canonical: getHomePath('en'),
+    canonical: getHomePath('es'),
     languages: {
       'en-US': getHomePath('en'),
       'es-ES': getHomePath('es'),
       'x-default': getHomePath('en'),
     },
     types: {
-      'application/rss+xml': getFeedPath('en'),
+      'application/rss+xml': getFeedPath('es'),
     },
   },
 }
 
-export default async function HomePage() {
-  const posts = await getAllFilesFrontMatter('blog', { locale: 'en' })
-  const { list } = getUiCopy('en')
+export default async function SpanishHomePage() {
+  const posts = await getAllFilesFrontMatter('blog', { locale: 'es' })
+  const { list } = getUiCopy('es')
 
   return (
     <>
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div lang="es" className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-          <h1 className="display-title text-3xl font-extrabold leading-9 text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            React, Next.js, and Frontend Engineering
+          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+            React, Next.js y arquitectura frontend
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            Notes on React, Next.js, frontend performance, and software architecture.
+            Articulos en espanol sobre React, Next.js, rendimiento web y arquitectura de software.
           </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -46,25 +47,28 @@ export default async function HomePage() {
             const { slug, date, title, summary, tags } = frontMatter
             return (
               <li key={slug} className="py-12">
-                <article>
+                <article lang="es">
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl>
                       <dt className="sr-only">{list.publishedOn}</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                        <time dateTime={date}>{formatDate(date, 'en')}</time>
+                        <time dateTime={date}>{formatDate(date, 'es')}</time>
                       </dd>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
                       <div className="space-y-6">
                         <div>
                           <h2 className="text-2xl font-bold leading-8 tracking-tight">
-                            <Link href={`/${slug}`} className="text-gray-900 dark:text-gray-100">
+                            <Link
+                              href={getPostPath('es', slug)}
+                              className="text-gray-900 dark:text-gray-100"
+                            >
                               {title}
                             </Link>
                           </h2>
                           <div className="flex flex-wrap">
                             {tags.map((tag) => (
-                              <Tag key={tag} locale="en" text={tag} />
+                              <Tag key={tag} locale="es" text={tag} />
                             ))}
                           </div>
                         </div>
@@ -74,11 +78,11 @@ export default async function HomePage() {
                       </div>
                       <div className="text-base font-medium leading-6">
                         <Link
-                          href={`/${slug}`}
+                          href={getPostPath('es', slug)}
                           className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                          aria-label={`Read "${title}"`}
+                          aria-label={`Leer "${title}"`}
                         >
-                          Read more &rarr;
+                          Leer mas &rarr;
                         </Link>
                       </div>
                     </div>
@@ -92,11 +96,11 @@ export default async function HomePage() {
       {posts.length > MAX_DISPLAY && (
         <div className="flex justify-end text-base font-medium leading-6">
           <Link
-            href={getBlogPath('en')}
+            href={getBlogPath('es')}
             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label="all posts"
+            aria-label="todos los articulos"
           >
-            All Posts &rarr;
+            Ver todos &rarr;
           </Link>
         </div>
       )}

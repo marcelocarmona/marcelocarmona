@@ -1,10 +1,11 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 
 import PageTitle from '@/components/PageTitle'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import siteMetadata from '@/data/siteMetadata'
 import { getLanguageLabel } from '@/lib/i18n/config'
-import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
+import { getPostPath } from '@/lib/i18n/routes'
+import { formatSlug, getAllFilesFrontMatter, getFileBySlug } from '@/lib/mdx'
 import {
   buildLanguageAlternates,
   getRelatedPosts,
@@ -13,32 +14,59 @@ import {
 
 const DEFAULT_LAYOUT = 'PostLayout'
 
-export async function generateStaticParams() {
-  const posts = getFiles('blog')
-  return posts.map((post) => ({
-    slug: formatSlug(post).split('/'),
-  }))
-}
-
-export async function generateMetadata({ params }) {
-  const { slug: slugParts } = await params
+function getSlugFromParts(slugParts) {
   if (
     !Array.isArray(slugParts) ||
     slugParts.length === 0 ||
     slugParts.some((part) => part[0] === '.')
   ) {
+    return null
+  }
+
+  return slugParts.join('/')
+}
+
+function findPostBySlug(posts, slug) {
+  return posts.find((post) => formatSlug(post.slug) === slug) || null
+}
+
+export async function generateBlogPostStaticParams(locale) {
+  const posts = await getAllFilesFrontMatter('blog', { locale })
+
+  return posts.map((post) => ({
+    slug: formatSlug(post.slug).split('/'),
+  }))
+}
+
+export async function generateBlogPostMetadata({ params }, locale) {
+  const { slug: slugParts } = await params
+  const slug = getSlugFromParts(slugParts)
+
+  if (!slug) {
     return {}
   }
 
-  const slug = slugParts.join('/')
-  const knownSlugs = getFiles('blog').map((post) => formatSlug(post))
-  if (!knownSlugs.includes(slug)) {
+  const allPosts = await getAllFilesFrontMatter('blog')
+  const postSummary = findPostBySlug(allPosts, slug)
+
+  if (!postSummary) {
     return {}
+  }
+
+  if (postSummary.locale !== locale) {
+    return {
+      alternates: {
+        canonical: getPostPath(postSummary),
+      },
+      robots: {
+        index: false,
+        follow: true,
+      },
+    }
   }
 
   const post = await getFileBySlug('blog', slug)
   const frontMatter = post.frontMatter
-  const allPosts = await getAllFilesFrontMatter('blog')
   const languageAlternates = buildLanguageAlternates(allPosts, frontMatter)
   const translatedPosts = getTranslationsForPost(allPosts, frontMatter)
   const openGraphLocale = frontMatter.locale === 'es' ? 'es_ES' : 'en_US'
@@ -47,8 +75,9 @@ export async function generateMetadata({ params }) {
   )
   const image = frontMatter.images?.[0] || siteMetadata.socialBanner
   const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
+  const canonicalPath = frontMatter.canonicalUrl || getPostPath(frontMatter)
   const alternates = {
-    canonical: frontMatter.canonicalUrl || `/${frontMatter.slug}`,
+    canonical: canonicalPath,
   }
 
   if (Object.keys(languageAlternates).length > 0) {
@@ -63,7 +92,7 @@ export async function generateMetadata({ params }) {
       title: frontMatter.title,
       description: frontMatter.summary || siteMetadata.description,
       type: 'article',
-      url: `${siteMetadata.siteUrl}/${frontMatter.slug}`,
+      url: `${siteMetadata.siteUrl}${getPostPath(frontMatter)}`,
       images: [imageUrl],
       locale: openGraphLocale,
       alternateLocale: openGraphAlternateLocales,
@@ -79,20 +108,23 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function BlogPostPage({ params }) {
+export default async function BlogPostPage({ params, locale = 'en' }) {
   const { slug: slugParts } = await params
-  if (
-    !Array.isArray(slugParts) ||
-    slugParts.length === 0 ||
-    slugParts.some((part) => part[0] === '.')
-  ) {
+  const slug = getSlugFromParts(slugParts)
+
+  if (!slug) {
     notFound()
   }
 
-  const slug = slugParts.join('/')
-  const knownSlugs = getFiles('blog').map((postFile) => formatSlug(postFile))
-  if (!knownSlugs.includes(slug)) {
+  const allPosts = await getAllFilesFrontMatter('blog')
+  const postSummary = findPostBySlug(allPosts, slug)
+
+  if (!postSummary) {
     notFound()
+  }
+
+  if (postSummary.locale !== locale) {
+    permanentRedirect(getPostPath(postSummary))
   }
 
   const post = await getFileBySlug('blog', slug)
@@ -116,7 +148,6 @@ export default async function BlogPostPage({ params }) {
     )
   }
 
-  const allPosts = await getAllFilesFrontMatter('blog')
   const localePosts = allPosts.filter((postItem) => postItem.locale === frontMatter.locale)
   const postIndex = localePosts.findIndex((postItem) => formatSlug(postItem.slug) === slug)
   if (postIndex === -1) {
@@ -127,7 +158,7 @@ export default async function BlogPostPage({ params }) {
   const next = localePosts[postIndex - 1] || null
   const relatedPosts = getRelatedPosts(allPosts, frontMatter, 3)
   const languageVersions = getTranslationsForPost(allPosts, frontMatter).map((translatedPost) => ({
-    href: `/${translatedPost.slug}`,
+    href: getPostPath(translatedPost),
     title: translatedPost.title,
     locale: translatedPost.locale,
     languageLabel: getLanguageLabel(translatedPost.locale),

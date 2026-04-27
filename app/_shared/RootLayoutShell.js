@@ -1,12 +1,20 @@
-import '@fontsource/inter/index.css'
-import '@/css/app.css'
-
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import siteMetadata from '@/data/siteMetadata'
+
 import LayoutWrapper from '@/components/LayoutWrapper'
 import SeoSchema from '@/components/SeoSchema'
+import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
-import Providers from './providers'
+import Providers from '../providers'
+
+const htmlLanguage = {
+  en: 'en',
+  es: 'es',
+}
+
+const schemaLanguage = {
+  en: 'en-US',
+  es: 'es-ES',
+}
 
 export const metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
@@ -37,12 +45,13 @@ export const metadata = {
   manifest: '/static/favicons/site.webmanifest',
 }
 
-export default async function RootLayout({ children }) {
+export default async function RootLayoutShell({ children, locale = 'en' }) {
   const posts = await getAllFilesFrontMatter('blog')
   const postLocaleMap = posts.reduce((acc, post) => {
     acc[post.slug] = post.locale
     return acc
   }, {})
+  const resolvedLocale = htmlLanguage[locale] ? locale : 'en'
 
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -53,7 +62,7 @@ export default async function RootLayout({ children }) {
         url: siteMetadata.siteUrl,
         name: siteMetadata.title,
         description: siteMetadata.description,
-        inLanguage: 'en-US',
+        inLanguage: schemaLanguage[resolvedLocale],
       },
       {
         '@type': 'Person',
@@ -68,7 +77,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html
-      lang="en"
+      lang={htmlLanguage[resolvedLocale]}
       className="scroll-smooth"
       data-scroll-behavior="smooth"
       suppressHydrationWarning

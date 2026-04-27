@@ -1,6 +1,6 @@
 import Link from '@/components/Link'
 import siteMetadata from '@/data/siteMetadata'
-import { getTagPath } from '@/lib/i18n/routes'
+import { getPostPath, getTagPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import kebabCase from '@/lib/utils/kebabCase'
 
@@ -79,7 +79,7 @@ export default async function GuidesPage() {
                 {clusterPosts.map((post) => (
                   <li key={post.slug}>
                     <Link
-                      href={`/${post.slug}`}
+                      href={getPostPath(post)}
                       className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                     >
                       {post.title}
