@@ -5,8 +5,8 @@ import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
 export const metadata = {
-  title: `Blog ES - ${siteMetadata.author}`,
-  description: 'Articulos en espanol sobre desarrollo web.',
+  title: 'Blog en espanol',
+  description: `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`,
   alternates: {
     canonical: getBlogPath('es'),
     languages: {

@@ -23,8 +23,8 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${tag} - ${siteMetadata.author}`,
-    description: `${tag} tags - ${siteMetadata.author}`,
+    title: tag,
+    description: `Posts tagged ${tag} by ${siteMetadata.author}`,
     alternates: {
       canonical: getTagPath('en', tag),
       languages: languageAlternates,

@@ -1,12 +1,11 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
 import { getTagsPath } from '@/lib/i18n/routes'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
 export const metadata = {
-  title: `Tags ES - ${siteMetadata.author}`,
+  title: 'Tags en espanol',
   description: 'Temas sobre los que escribo en espanol',
   alternates: {
     canonical: getTagsPath('es'),

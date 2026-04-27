@@ -1,39 +1,155 @@
 ---
-title: 'How to comment in React JSX'
+title: 'How to Comment in React, JSX, and TSX'
 date: '2016-10-06'
+lastmod: '2026-04-26'
 translationKey: react-jsx-comments
-tags: ['React', 'Javascript']
-summary: 'JSX does not support HTML comments, so comments must be written in JavaScript using curly brackets, and can be single-line or multi-line.'
+tags: ['React', 'Javascript', 'Typescript']
+summary: 'Learn how to write comments in React, JSX, and TSX, including single-line comments, multi-line comments, and how to comment out JSX blocks correctly.'
 draft: false
 ---
 
-The way that we can make comments in React is a little weird, and when we search information is difficult to find it.
-It is not possible to use HTML comments inside of JSX
+If you searched for `react comment`, `jsx comments`, `reactjs comment`, or `how to comment in TSX`, the answer is the same: inside JSX or TSX you need to use JavaScript comments wrapped in curly braces.
+
+## How to comment in React JSX
+
+It is not possible to use HTML comments inside JSX because JSX is JavaScript syntax that compiles to JavaScript function calls.
+
+```jsx
+function Example() {
+  return (
+    <div>
+      <!-- This does not work -->
+      <p>Hello</p>
+    </div>
+  )
+}
+```
+
+To write a React comment inside JSX, use a JavaScript block comment inside curly braces:
+
+```jsx
+function Example() {
+  return (
+    <div>
+      {/* This works */}
+      <p>Hello</p>
+    </div>
+  )
+}
+```
+
+## Single-line JSX comments
+
+Use the same syntax even for a single-line JSX comment:
+
+```jsx
+return (
+  <section>
+    {/* Rendered only when the user is logged in */}
+    <Dashboard />
+  </section>
+)
+```
+
+## Multi-line React comments
+
+React comments can also span multiple lines:
+
+```jsx
+return (
+  <section>
+    {/*
+      Explain why this branch exists,
+      or temporarily describe the UI below.
+    */}
+    <Dashboard />
+  </section>
+)
+```
+
+## How to comment out React code
+
+If you want to comment out React code or temporarily disable a component, wrap the JSX in a comment:
+
+```jsx
+return (
+  <main>
+    {/* <Sidebar /> */}
+    <Content />
+  </main>
+)
+```
+
+For a larger block:
+
+```jsx
+return (
+  <main>
+    {/*
+    <Sidebar />
+    <Filters />
+    <Recommendations />
+    */}
+    <Content />
+  </main>
+)
+```
+
+## How to comment in TSX
+
+TSX uses the same comment syntax as JSX. If you are writing React with TypeScript, use curly braces plus a JavaScript block comment:
+
+```tsx
+type Props = {
+  title: string
+}
+
+export function Header({ title }: Props) {
+  return (
+    <header>
+      {/* TSX comment */}
+      <h1>{title}</h1>
+    </header>
+  )
+}
+```
+
+## Common mistakes
+
+The most common mistake is trying to use HTML comments inside JSX:
 
 ```html
-render() { return (
-<div>
-  <!-- this does not work -->
-</div>
-) }
+<!-- Wrong inside JSX -->
 ```
 
-It is necessary to use comments in Javascript but for that we will need to use the curly brackets in the following way:
+Another common mistake is trying to use `//` directly inside JSX markup:
 
-```javascript
-{
-  /* A JSX comment */
-}
+```jsx
+return (
+  <div>
+    // Wrong inside JSX
+    <p>Hello</p>
+  </div>
+)
 ```
 
-And multiline
+`//` works in regular JavaScript outside the returned JSX, but not directly inside the markup:
 
-```javascript
-{
-  /* 
-    A multiline JSX
-    JSX
-    comment
-*/
-}
+```jsx
+// This is fine
+const title = 'Hello'
+
+return <h1>{title}</h1>
 ```
+
+## Quick answer
+
+- React comments inside JSX: `{/* comment */}`
+- JSX comments: `{/* comment */}`
+- TSX comments: `{/* comment */}`
+- Comment out React code: `{/* <Component /> */}`
+
+## Related React articles
+
+- [How to Avoid Unnecessary Re-renders with React.memo](/avoid-unnecessary-re-renders-react-memo)
+- [Understanding React Suspense](/understanding-react-suspense)

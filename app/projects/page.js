@@ -3,7 +3,7 @@ import projectsData from '@/data/projectsData'
 import siteMetadata from '@/data/siteMetadata'
 
 export const metadata = {
-  title: `Projects - ${siteMetadata.author}`,
+  title: 'Projects',
   description: siteMetadata.description,
   alternates: {
     canonical: '/projects',

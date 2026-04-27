@@ -1,40 +1,155 @@
 ---
-title: ¿Cómo comentar JSX en React?
+title: '¿Cómo comentar en React, JSX y TSX?'
 lang: es
 date: '2016-10-06'
+lastmod: '2026-04-26'
 translationKey: react-jsx-comments
-tags: ['React', 'Javascript']
+tags: ['React', 'Javascript', 'Typescript']
+summary: 'Aprende cómo escribir comentarios en React, JSX y TSX, incluyendo comentarios de una línea, multilínea y cómo comentar bloques de JSX correctamente.'
 ---
 
-La manera de hacer comentarios en react es un poco rara y cuando se busca información de cómo se hace es un poco dificil de encontrar.
-No se puede usar comentarios HTML adéntro de JSX
+Si llegaste aquí buscando `comentario react`, `comentarios en JSX` o `cómo comentar en TSX`, la respuesta corta es la misma: dentro de JSX o TSX necesitas usar comentarios de JavaScript envueltos en llaves.
 
-```javascript
-render() {
+## Cómo comentar en React JSX
+
+No se pueden usar comentarios HTML dentro de JSX porque JSX es sintaxis de JavaScript que luego se transforma en llamadas de JavaScript.
+
+```jsx
+function Example() {
   return (
     <div>
       <!-- Esto no funciona -->
+      <p>Hola</p>
     </div>
   )
 }
 ```
 
-Es necesario usar comentarios en Javascript pero para eso vamos a necesitar usar las llaves de la siguiente manera:
+Para escribir un comentario en React dentro de JSX, usa un comentario de JavaScript dentro de llaves:
 
-```javascript
-{
-  /* Un comentario JSX */
+```jsx
+function Example() {
+  return (
+    <div>
+      {/* Esto sí funciona */}
+      <p>Hola</p>
+    </div>
+  )
 }
 ```
 
-Y en Multilinea:
+## Comentarios JSX de una línea
 
-```javascript
-{
-  /* 
-    Un comentario JSX
-    en muchas
-    líneas
-*/
+Usa la misma sintaxis incluso para un comentario de una sola línea:
+
+```jsx
+return (
+  <section>
+    {/* Se renderiza solo cuando el usuario ha iniciado sesión */}
+    <Dashboard />
+  </section>
+)
+```
+
+## Comentarios multilínea en React
+
+Los comentarios en React también pueden abarcar varias líneas:
+
+```jsx
+return (
+  <section>
+    {/*
+      Explica por qué existe esta rama,
+      o describe temporalmente la UI de abajo.
+    */}
+    <Dashboard />
+  </section>
+)
+```
+
+## Cómo comentar código React
+
+Si quieres comentar código React o desactivar temporalmente un componente, envuelve el JSX dentro de un comentario:
+
+```jsx
+return (
+  <main>
+    {/* <Sidebar /> */}
+    <Content />
+  </main>
+)
+```
+
+Para un bloque más grande:
+
+```jsx
+return (
+  <main>
+    {/*
+    <Sidebar />
+    <Filters />
+    <Recommendations />
+    */}
+    <Content />
+  </main>
+)
+```
+
+## Cómo comentar en TSX
+
+TSX usa la misma sintaxis que JSX. Si escribes React con TypeScript, usa llaves más un comentario de bloque de JavaScript:
+
+```tsx
+type Props = {
+  title: string
+}
+
+export function Header({ title }: Props) {
+  return (
+    <header>
+      {/* Comentario TSX */}
+      <h1>{title}</h1>
+    </header>
+  )
 }
 ```
+
+## Errores comunes
+
+El error más común es intentar usar comentarios HTML dentro de JSX:
+
+```html
+<!-- Incorrecto dentro de JSX -->
+```
+
+Otro error común es intentar usar `//` directamente dentro del marcado JSX:
+
+```jsx
+return (
+  <div>
+    // Incorrecto dentro de JSX
+    <p>Hola</p>
+  </div>
+)
+```
+
+`//` funciona en JavaScript normal fuera del JSX retornado, pero no directamente dentro del marcado:
+
+```jsx
+// Esto sí funciona
+const title = 'Hola'
+
+return <h1>{title}</h1>
+```
+
+## Respuesta rápida
+
+- Comentarios React dentro de JSX: `{/* comentario */}`
+- Comentarios JSX: `{/* comentario */}`
+- Comentarios TSX: `{/* comentario */}`
+- Comentar código React: `{/* <Component /> */}`
+
+## Artículos relacionados
+
+- [Evitar re-renders innecesarios con React.memo](/evitar-re-renders-innecesarios-react-memo)
+- [Entendiendo React.Suspense](/entendiendo-react-suspense)

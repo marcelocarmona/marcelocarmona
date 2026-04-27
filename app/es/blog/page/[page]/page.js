@@ -14,8 +14,8 @@ export async function generateMetadata({ params }) {
   const englishPath = getBlogPagePath('en', pageNumber)
 
   return {
-    title: `Blog ES - ${siteMetadata.author}`,
-    description: 'Articulos en espanol sobre desarrollo web.',
+    title: `Blog en espanol - Pagina ${pageNumber}`,
+    description: `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`,
     alternates: {
       canonical: canonicalPath,
       languages: {

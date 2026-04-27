@@ -2,7 +2,7 @@ import CalBookingEmbed from '@/components/CalBookingEmbed'
 import siteMetadata from '@/data/siteMetadata'
 
 export const metadata = {
-  title: `Book a Call - ${siteMetadata.author}`,
+  title: 'Book a Call',
   description: `Schedule a meeting with ${siteMetadata.author}`,
   alternates: {
     canonical: '/book',

@@ -5,7 +5,7 @@ import { getFileBySlug } from '@/lib/mdx'
 const DEFAULT_LAYOUT = 'AuthorLayout'
 
 export const metadata = {
-  title: `About - ${siteMetadata.author}`,
+  title: 'About',
   description: `About me - ${siteMetadata.author}`,
   alternates: {
     canonical: '/about',

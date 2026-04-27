@@ -31,7 +31,7 @@ const GUIDE_CLUSTERS = [
 ]
 
 export const metadata = {
-  title: `Guides - ${siteMetadata.author}`,
+  title: 'Guides',
   description: 'Topic hubs for React, frontend architecture, and platform engineering.',
   alternates: {
     canonical: '/guides',

@@ -10,7 +10,7 @@ import formatDate from '@/lib/utils/formatDate'
 const MAX_DISPLAY = 5
 
 export const metadata = {
-  title: siteMetadata.author,
+  title: 'React, Next.js, and Frontend Engineering',
   description: siteMetadata.description,
   alternates: {
     canonical: getHomePath('en'),
@@ -34,10 +34,10 @@ export default async function HomePage() {
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="display-title text-3xl font-extrabold leading-9 text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            Latest
+            React, Next.js, and Frontend Engineering
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            {siteMetadata.description}
+            Notes on React, Next.js, frontend performance, and software architecture.
           </p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">

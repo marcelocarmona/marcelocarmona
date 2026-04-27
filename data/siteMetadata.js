@@ -2,7 +2,8 @@ const siteMetadata = {
   title: 'Marcelo Carmona',
   author: 'Marcelo Carmona',
   headerTitle: 'Marcelo Carmona',
-  description: 'Marcelo Carmona - Full Stack Developer',
+  description:
+    'React, Next.js, frontend performance, and software engineering notes by Marcelo Carmona.',
   language: 'en-us',
   theme: 'dark', // system, dark or light
   siteUrl: 'https://marcelocarmona.com',

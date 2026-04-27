@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
   const spanishPath = getBlogPagePath('es', pageNumber)
 
   return {
-    title: `Blog - ${siteMetadata.author}`,
+    title: `Blog Page ${pageNumber}`,
     description: siteMetadata.description,
     alternates: {
       canonical: canonicalPath,

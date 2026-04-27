@@ -5,7 +5,7 @@ import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
 export const metadata = {
-  title: `Blog - ${siteMetadata.author}`,
+  title: 'Blog',
   description: siteMetadata.description,
   alternates: {
     canonical: getBlogPath('en'),

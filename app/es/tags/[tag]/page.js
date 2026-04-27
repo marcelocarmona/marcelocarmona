@@ -24,8 +24,8 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${tag} - ${siteMetadata.author}`,
-    description: `${tag} tags - ${siteMetadata.author}`,
+    title: tag,
+    description: `Articulos etiquetados con ${tag} por ${siteMetadata.author}`,
     alternates: {
       canonical: getTagPath('es', tag),
       languages: languageAlternates,
