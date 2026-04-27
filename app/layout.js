@@ -1,5 +1,4 @@
 import '@fontsource/inter/index.css'
-import 'katex/dist/katex.css'
 import '@/css/app.css'
 
 import { SpeedInsights } from '@vercel/speed-insights/next'

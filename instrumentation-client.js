@@ -1,21 +1,23 @@
-import * as Sentry from '@sentry/nextjs'
-
 const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN
+const tracesSampleRate = Number(process.env.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE ?? '0.1')
+let sentryPromise
 
-if (dsn) {
-  Sentry.init({
-    dsn,
-    tracesSampleRate: 1,
-    debug: false,
-    replaysOnErrorSampleRate: 1.0,
-    replaysSessionSampleRate: 0.1,
-    integrations: [
-      Sentry.replayIntegration({
-        maskAllText: true,
-        blockAllMedia: true,
-      }),
-    ],
-  })
+function loadSentry() {
+  if (!dsn) return null
+  sentryPromise ??= import('@sentry/nextjs')
+  return sentryPromise
 }
 
-export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
+loadSentry()?.then((Sentry) => {
+  Sentry.init({
+    dsn,
+    tracesSampleRate,
+    debug: false,
+  })
+})
+
+export const onRouterTransitionStart = (...args) => {
+  loadSentry()?.then((Sentry) => {
+    Sentry.captureRouterTransitionStart(...args)
+  })
+}
