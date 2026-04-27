@@ -28,7 +28,6 @@ export default async function sitemap() {
     '/es',
     '/es/blog',
     '/es/tags',
-    '/sentry-example-page',
   ]
 
   const blogPaginationRoutes = getPaginationRoutes('/blog', englishTotalPages)
