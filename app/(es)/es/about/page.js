@@ -1,12 +1,12 @@
 import siteMetadata from '@/data/siteMetadata'
 import { getAboutPath } from '@/lib/i18n/routes'
-import AboutPage from '../../_shared/AboutPage'
+import AboutPage from '../../../_shared/AboutPage'
 
 export const metadata = {
-  title: 'About',
-  description: `About me - ${siteMetadata.author}`,
+  title: 'Acerca de mi',
+  description: `Acerca de ${siteMetadata.author}`,
   alternates: {
-    canonical: getAboutPath('en'),
+    canonical: getAboutPath('es'),
     languages: {
       'en-US': getAboutPath('en'),
       'es-ES': getAboutPath('es'),
@@ -15,6 +15,6 @@ export const metadata = {
   },
 }
 
-export default function EnglishAboutPage() {
-  return <AboutPage locale="en" />
+export default function SpanishAboutPage() {
+  return <AboutPage locale="es" />
 }

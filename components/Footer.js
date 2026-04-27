@@ -12,15 +12,12 @@ export default function Footer({ locale = 'en' }) {
       <div className="flex flex-col gap-8 pb-10 md:flex-row md:items-end md:justify-between">
         <div className="space-y-4">
           <div>
-            <p className="eyebrow">Professional focus</p>
+            <p className="eyebrow">{footer.eyebrow}</p>
             <p className="display-title mt-2 text-2xl text-gray-900 dark:text-gray-100">
-              Frontend architecture, performance, and product delivery.
+              {footer.title}
             </p>
           </div>
-          <p className="max-w-2xl text-sm leading-7 muted-copy">
-            Writing and consulting on React, Next.js, platform architecture, and the engineering
-            tradeoffs behind reliable product teams.
-          </p>
+          <p className="max-w-2xl text-sm leading-7 muted-copy">{footer.summary}</p>
         </div>
         <div className="flex flex-col items-start md:items-end">
           <div className="mb-3 flex space-x-4">

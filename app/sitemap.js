@@ -1,5 +1,5 @@
 import siteMetadata from '@/data/siteMetadata'
-import { getPostPath } from '@/lib/i18n/routes'
+import { getAboutPath, getBookPath, getGuidesPath, getPostPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 import kebabCase from '@/lib/utils/kebabCase'
@@ -21,11 +21,15 @@ export default async function sitemap() {
 
   const staticRoutes = [
     '',
-    '/about',
     '/projects',
+    getAboutPath('en'),
+    getAboutPath('es'),
+    getBookPath('en'),
+    getBookPath('es'),
     '/blog',
     '/tags',
-    '/guides',
+    getGuidesPath('en'),
+    getGuidesPath('es'),
     '/es',
     '/es/blog',
     '/es/tags',

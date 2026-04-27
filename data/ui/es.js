@@ -1,6 +1,10 @@
 const esUi = {
   footer: {
     bookCall: 'Reservar llamada',
+    eyebrow: 'Enfoque profesional',
+    summary:
+      'Escribo y asesoro sobre React, Next.js, arquitectura frontend y las decisiones tecnicas detras de equipos de producto confiables.',
+    title: 'Arquitectura frontend, rendimiento y entrega de producto.',
   },
   list: {
     noPostsFound: 'No se encontraron articulos.',

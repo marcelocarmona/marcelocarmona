@@ -1,6 +1,10 @@
 const enUi = {
   footer: {
     bookCall: 'Book a call',
+    eyebrow: 'Professional focus',
+    summary:
+      'Writing and consulting on React, Next.js, platform architecture, and the engineering tradeoffs behind reliable product teams.',
+    title: 'Frontend architecture, performance, and product delivery.',
   },
   list: {
     noPostsFound: 'No posts found.',
