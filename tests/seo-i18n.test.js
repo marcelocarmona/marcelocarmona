@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import projectsData from '../data/projectsData'
 import sitemap from '../app/sitemap'
 import { getHeaderNavLinks } from '../data/headerNavLinks'
 import {
@@ -9,6 +10,7 @@ import {
   getPostPath,
   getWatchPath,
 } from '../lib/i18n/routes'
+import { getAllFilesFrontMatter } from '../lib/mdx'
 import { buildLanguageAlternates } from '../lib/post-relations'
 
 const siteUrl = 'https://marcelocarmona.com'
@@ -82,5 +84,34 @@ describe('sitemap', () => {
 
     expect(urls).not.toContain(`${siteUrl}/comentarios-en-jsx`)
     expect(urls).not.toContain(`${siteUrl}/watch/creando-observables-desde-cero`)
+  })
+})
+
+describe('projects data', () => {
+  it('does not point project cards at missing internal routes', async () => {
+    const posts = await getAllFilesFrontMatter('blog')
+    const validInternalProjectRoutes = new Set([
+      '/',
+      '/about',
+      '/blog',
+      '/book',
+      '/guides',
+      '/projects',
+      '/tags',
+      '/es',
+      '/es/about',
+      '/es/blog',
+      '/es/book',
+      '/es/guides',
+      '/es/tags',
+      ...posts.map((post) => getPostPath(post)),
+      ...posts.filter((post) => post.video?.watchPagePath).map((post) => getWatchPath(post)),
+    ])
+
+    projectsData
+      .filter((project) => project.href?.startsWith('/'))
+      .forEach((project) => {
+        expect(validInternalProjectRoutes.has(project.href), project.href).toBe(true)
+      })
   })
 })

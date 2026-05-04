@@ -1,19 +1,17 @@
 const projectsData = [
   {
-    title: 'A Search Engine',
-    description: `What if you could look up any information in the world? Webpages, images, videos
-    and more. Google has many features to help you find exactly what you're looking
-    for.`,
-    imgSrc: '/static/images/google.png',
-    href: 'https://www.google.com',
+    title: 'marcelocarmona.com',
+    description: `A multilingual Next.js and MDX site for technical writing, localized routes,
+    RSS feeds, structured data, and performance-minded static pages.`,
+    imgSrc: '/static/images/twitter-card.png',
+    href: 'https://github.com/marcelocarmona/marcelocarmona',
   },
   {
-    title: 'The Time Machine',
-    description: `Imagine being able to travel back in time or to the future. Simple turn the knob
-    to the desired date and press "Go". No more worrying about lost keys or
-    forgotten headphones with this simple yet affordable solution.`,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/the-time-machine',
+    title: 'Frontend engineering guides',
+    description: `Curated writing paths around React, Next.js, frontend architecture, performance,
+    and platform tradeoffs for product engineering teams.`,
+    imgSrc: '/static/images/marcelocarmona_talk.png',
+    href: '/guides',
   },
 ]
 

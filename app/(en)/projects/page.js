@@ -1,10 +1,9 @@
 import Card from '@/components/Card'
 import projectsData from '@/data/projectsData'
-import siteMetadata from '@/data/siteMetadata'
 
 export const metadata = {
   title: 'Projects',
-  description: siteMetadata.description,
+  description: 'Public projects and technical work by Marcelo Carmona.',
   alternates: {
     canonical: '/projects',
   },
@@ -18,7 +17,7 @@ export default function ProjectsPage() {
           Projects
         </h1>
         <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-          Showcase your projects with a hero image (16 x 9)
+          Public work, writing systems, and technical projects I can point to.
         </p>
       </div>
       <div className="container py-12">
