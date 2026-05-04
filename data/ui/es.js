@@ -13,6 +13,7 @@ const esUi = {
     publishedOn: 'Publicado el',
     searchArticles: 'Buscar articulos',
     nextPage: 'Siguiente',
+    updatedOn: 'Actualizado',
   },
   navigation: {
     about: 'Acerca',
@@ -34,6 +35,7 @@ const esUi = {
     tags: 'Etiquetas',
     twitter: 'Twitter',
     translations: 'Tambien disponible en',
+    updatedOn: 'Actualizado',
     viewOnGitHub: 'Ver en GitHub',
   },
   video: {

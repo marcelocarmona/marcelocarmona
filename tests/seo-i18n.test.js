@@ -14,6 +14,8 @@ import generateRss from '../lib/generate-rss'
 import { absoluteUrl, buildPageMetadata } from '../lib/metadata'
 import { getAllFilesFrontMatter } from '../lib/mdx'
 import { buildLanguageAlternates } from '../lib/post-relations'
+import { hasMeaningfulUpdate } from '../lib/posts'
+import formatDate from '../lib/utils/formatDate'
 
 const siteUrl = 'https://marcelocarmona.com'
 
@@ -170,7 +172,7 @@ describe('page metadata', () => {
 })
 
 describe('rss feeds', () => {
-  it('uses last modified dates for feed freshness and ordering', () => {
+  it('keeps RSS ordering by publish date while exposing feed freshness', () => {
     const updatedPost = {
       title: 'Updated old post',
       slug: 'updated-old-post',
@@ -194,11 +196,31 @@ describe('rss feeds', () => {
     expect(rss).toContain(
       `<lastBuildDate>${new Date(updatedPost.lastmod).toUTCString()}</lastBuildDate>`
     )
-    expect(rss.indexOf('<title>Updated old post</title>')).toBeLessThan(
-      rss.indexOf('<title>Newer published post</title>')
+    expect(rss.indexOf('<title>Newer published post</title>')).toBeLessThan(
+      rss.indexOf('<title>Updated old post</title>')
     )
-    expect(rss).toContain(`<pubDate>${new Date(updatedPost.lastmod).toUTCString()}</pubDate>`)
+    expect(rss).toContain(`<pubDate>${new Date(updatedPost.date).toUTCString()}</pubDate>`)
     expect(rss).toContain(`<atom:published>${updatedPost.date}</atom:published>`)
     expect(rss).toContain(`<atom:updated>${updatedPost.lastmod}</atom:updated>`)
+  })
+})
+
+describe('post helpers', () => {
+  it('detects meaningful updates without changing publish chronology', async () => {
+    const posts = await getAllFilesFrontMatter('blog', { locale: 'en' })
+    const newestPostIndex = posts.findIndex((post) => post.slug === 'istio-setup')
+    const updatedOldPostIndex = posts.findIndex(
+      (post) => post.slug === 'how-to-comment-in-react-jsx'
+    )
+
+    expect(newestPostIndex).toBeLessThan(updatedOldPostIndex)
+    expect(hasMeaningfulUpdate(posts[updatedOldPostIndex])).toBe(true)
+    expect(hasMeaningfulUpdate(posts[newestPostIndex])).toBe(false)
+  })
+})
+
+describe('date formatting', () => {
+  it('keeps date-only frontmatter stable across timezones', () => {
+    expect(formatDate('2026-04-26', 'en')).toBe('April 26, 2026')
   })
 })

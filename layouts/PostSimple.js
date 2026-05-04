@@ -3,12 +3,13 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import { getUiCopy } from '@/lib/i18n/ui'
 import { getPostPath } from '@/lib/i18n/routes'
+import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
-  const { date, title } = frontMatter
+  const { date, lastmod, title } = frontMatter
   const { post: postUi } = getUiCopy(frontMatter.locale)
 
   return (
@@ -24,6 +25,15 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>{formatDate(date, frontMatter.locale)}</time>
                   </dd>
+                  {hasMeaningfulUpdate(frontMatter) && (
+                    <>
+                      <dt className="sr-only">{postUi.updatedOn}</dt>
+                      <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+                        {postUi.updatedOn}{' '}
+                        <time dateTime={lastmod}>{formatDate(lastmod, frontMatter.locale)}</time>
+                      </dd>
+                    </>
+                  )}
                 </div>
               </dl>
               <div>

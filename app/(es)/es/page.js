@@ -6,6 +6,7 @@ import { getBlogPath, getFeedPath, getHomePath, getPostPath } from '@/lib/i18n/r
 import { getUiCopy } from '@/lib/i18n/ui'
 import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
+import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 
 const MAX_DISPLAY = 5
@@ -37,6 +38,7 @@ export const metadata = {
 export default async function SpanishHomePage() {
   const posts = await getAllFilesFrontMatter('blog', { locale: 'es' })
   const { list } = getUiCopy('es')
+  const displayPosts = posts.slice(0, MAX_DISPLAY)
 
   return (
     <>
@@ -51,17 +53,26 @@ export default async function SpanishHomePage() {
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && list.noPostsFound}
-          {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
-            const { slug, date, title, summary, tags } = frontMatter
+          {displayPosts.map((frontMatter) => {
+            const { slug, date, lastmod, title, summary, tags } = frontMatter
             return (
               <li key={slug} className="py-12">
                 <article lang="es">
                   <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                    <dl>
+                    <dl className="space-y-1">
                       <dt className="sr-only">{list.publishedOn}</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                         <time dateTime={date}>{formatDate(date, 'es')}</time>
                       </dd>
+                      {hasMeaningfulUpdate(frontMatter) && (
+                        <>
+                          <dt className="sr-only">{list.updatedOn}</dt>
+                          <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+                            {list.updatedOn}{' '}
+                            <time dateTime={lastmod}>{formatDate(lastmod, 'es')}</time>
+                          </dd>
+                        </>
+                      )}
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
                       <div className="space-y-6">

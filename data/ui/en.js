@@ -13,6 +13,7 @@ const enUi = {
     publishedOn: 'Published on',
     searchArticles: 'Search articles',
     nextPage: 'Next',
+    updatedOn: 'Updated',
   },
   navigation: {
     about: 'About',
@@ -34,6 +35,7 @@ const enUi = {
     tags: 'Tags',
     twitter: 'Twitter',
     translations: 'Also available in',
+    updatedOn: 'Updated',
     viewOnGitHub: 'View on GitHub',
   },
   video: {

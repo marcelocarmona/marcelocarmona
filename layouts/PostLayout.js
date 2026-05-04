@@ -10,6 +10,7 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import VideoPreviewCard from '@/components/VideoPreviewCard'
 import { getBlogPath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
+import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
@@ -25,7 +26,7 @@ export default function PostLayout({
   languageVersions = [],
   children,
 }) {
-  const { fileName, date, title, tags } = frontMatter
+  const { fileName, date, lastmod, title, tags } = frontMatter
   const { post: postUi } = getUiCopy(frontMatter.locale)
   const image = frontMatter.images?.[0] || siteMetadata.socialBanner
   const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
@@ -100,6 +101,17 @@ export default function PostLayout({
                       {formatDate(date, frontMatter.locale, postDateTemplate)}
                     </time>
                   </dd>
+                  {hasMeaningfulUpdate(frontMatter) && (
+                    <>
+                      <dt className="sr-only">{postUi.updatedOn}</dt>
+                      <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+                        {postUi.updatedOn}{' '}
+                        <time dateTime={lastmod}>
+                          {formatDate(lastmod, frontMatter.locale, postDateTemplate)}
+                        </time>
+                      </dd>
+                    </>
+                  )}
                 </div>
               </dl>
               <div>

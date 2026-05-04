@@ -6,6 +6,7 @@ import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import { getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
+import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 
 export default function ListLayout({
@@ -60,15 +61,24 @@ export default function ListLayout({
         <ul>
           {!filteredBlogPosts.length && list.noPostsFound}
           {displayPosts.map((frontMatter) => {
-            const { slug, date, title, summary, tags } = frontMatter
+            const { slug, date, lastmod, title, summary, tags } = frontMatter
             return (
               <li key={slug} className="py-4">
                 <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                  <dl>
+                  <dl className="space-y-1">
                     <dt className="sr-only">{list.publishedOn}</dt>
                     <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                       <time dateTime={date}>{formatDate(date, locale)}</time>
                     </dd>
+                    {hasMeaningfulUpdate(frontMatter) && (
+                      <>
+                        <dt className="sr-only">{list.updatedOn}</dt>
+                        <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+                          {list.updatedOn}{' '}
+                          <time dateTime={lastmod}>{formatDate(lastmod, locale)}</time>
+                        </dd>
+                      </>
+                    )}
                   </dl>
                   <div className="space-y-3 xl:col-span-3">
                     <div>
