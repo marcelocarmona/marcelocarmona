@@ -10,6 +10,7 @@ import {
   getPostPath,
   getWatchPath,
 } from '../lib/i18n/routes'
+import generateRss from '../lib/generate-rss'
 import { absoluteUrl, buildPageMetadata } from '../lib/metadata'
 import { getAllFilesFrontMatter } from '../lib/mdx'
 import { buildLanguageAlternates } from '../lib/post-relations'
@@ -165,5 +166,39 @@ describe('page metadata', () => {
     })
 
     expect(metadata.openGraph.alternateLocale).toBeUndefined()
+  })
+})
+
+describe('rss feeds', () => {
+  it('uses last modified dates for feed freshness and ordering', () => {
+    const updatedPost = {
+      title: 'Updated old post',
+      slug: 'updated-old-post',
+      locale: 'en',
+      date: '2016-10-06T00:00:00.000Z',
+      lastmod: '2026-04-26T00:00:00.000Z',
+      summary: 'An older post with a new update.',
+      tags: ['React'],
+    }
+    const newerPublishedPost = {
+      title: 'Newer published post',
+      slug: 'newer-published-post',
+      locale: 'en',
+      date: '2021-08-05T00:00:00.000Z',
+      summary: 'A newer original publication date.',
+      tags: ['Nextjs'],
+    }
+
+    const rss = generateRss([newerPublishedPost, updatedPost])
+
+    expect(rss).toContain(
+      `<lastBuildDate>${new Date(updatedPost.lastmod).toUTCString()}</lastBuildDate>`
+    )
+    expect(rss.indexOf('<title>Updated old post</title>')).toBeLessThan(
+      rss.indexOf('<title>Newer published post</title>')
+    )
+    expect(rss).toContain(`<pubDate>${new Date(updatedPost.lastmod).toUTCString()}</pubDate>`)
+    expect(rss).toContain(`<atom:published>${updatedPost.date}</atom:published>`)
+    expect(rss).toContain(`<atom:updated>${updatedPost.lastmod}</atom:updated>`)
   })
 })
