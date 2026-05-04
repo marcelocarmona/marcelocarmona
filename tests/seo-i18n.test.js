@@ -1,3 +1,5 @@
+import { existsSync } from 'fs'
+import path from 'path'
 import { describe, expect, it } from 'vitest'
 
 import projectsData from '../data/projectsData'
@@ -77,6 +79,10 @@ describe('localized alternates', () => {
 })
 
 describe('sitemap', () => {
+  it('does not keep a static public sitemap that can drift from dynamic routes', () => {
+    expect(existsSync(path.join(process.cwd(), 'public', 'sitemap.xml'))).toBe(false)
+  })
+
   it('includes localized Spanish routes and excludes migrated Spanish legacy URLs', async () => {
     const urls = (await sitemap()).map((entry) => entry.url)
 
