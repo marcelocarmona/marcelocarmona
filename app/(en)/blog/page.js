@@ -1,12 +1,21 @@
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
+const title = 'Blog'
+const description = siteMetadata.description
+
 export const metadata = {
-  title: 'Blog',
-  description: siteMetadata.description,
+  ...buildPageMetadata({
+    title,
+    description,
+    path: getBlogPath('en'),
+    locale: 'en',
+    alternateLocales: ['es'],
+  }),
   alternates: {
     canonical: getBlogPath('en'),
     languages: {

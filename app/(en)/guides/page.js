@@ -1,9 +1,18 @@
 import { getGuidesPath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import GuidesPage from '../../_shared/GuidesPage'
 
+const title = 'Guides'
+const description = 'Topic hubs for React, frontend architecture, and platform engineering.'
+
 export const metadata = {
-  title: 'Guides',
-  description: 'Topic hubs for React, frontend architecture, and platform engineering.',
+  ...buildPageMetadata({
+    title,
+    description,
+    path: getGuidesPath('en'),
+    locale: 'en',
+    alternateLocales: ['es'],
+  }),
   alternates: {
     canonical: getGuidesPath('en'),
     languages: {

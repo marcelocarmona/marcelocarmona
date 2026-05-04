@@ -1,6 +1,7 @@
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
 import { getTagPath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
@@ -22,10 +23,17 @@ export async function generateMetadata({ params }) {
     languageAlternates['en-US'] = getTagPath('en', tag)
     languageAlternates['x-default'] = getTagPath('en', tag)
   }
+  const title = tag
+  const description = `Articulos etiquetados con ${tag} por ${siteMetadata.author}`
 
   return {
-    title: tag,
-    description: `Articulos etiquetados con ${tag} por ${siteMetadata.author}`,
+    ...buildPageMetadata({
+      title,
+      description,
+      path: getTagPath('es', tag),
+      locale: 'es',
+      alternateLocales: hasEnglishVersion ? ['en'] : [],
+    }),
     alternates: {
       canonical: getTagPath('es', tag),
       languages: languageAlternates,

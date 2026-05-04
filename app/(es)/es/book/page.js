@@ -1,10 +1,19 @@
 import siteMetadata from '@/data/siteMetadata'
 import { getBookPath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import BookPage from '../../../_shared/BookPage'
 
+const title = 'Reservar llamada'
+const description = `Reserva una llamada con ${siteMetadata.author}`
+
 export const metadata = {
-  title: 'Reservar llamada',
-  description: `Reserva una llamada con ${siteMetadata.author}`,
+  ...buildPageMetadata({
+    title,
+    description,
+    path: getBookPath('es'),
+    locale: 'es',
+    alternateLocales: ['en'],
+  }),
   alternates: {
     canonical: getBookPath('es'),
     languages: {

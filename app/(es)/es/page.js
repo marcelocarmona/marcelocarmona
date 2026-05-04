@@ -4,15 +4,23 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath, getFeedPath, getHomePath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 
 const MAX_DISPLAY = 5
+const title = 'React, Next.js y arquitectura frontend'
+const description =
+  'Articulos en espanol sobre React, Next.js, rendimiento web y arquitectura frontend.'
 
 export const metadata = {
-  title: 'React, Next.js y arquitectura frontend',
-  description:
-    'Articulos en espanol sobre React, Next.js, rendimiento web y arquitectura frontend.',
+  ...buildPageMetadata({
+    title,
+    description,
+    path: getHomePath('es'),
+    locale: 'es',
+    alternateLocales: ['en'],
+  }),
   alternates: {
     canonical: getHomePath('es'),
     languages: {
@@ -35,7 +43,7 @@ export default async function SpanishHomePage() {
       <div lang="es" className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            React, Next.js y arquitectura frontend
+            {title}
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
             Articulos en espanol sobre React, Next.js, rendimiento web y arquitectura de software.

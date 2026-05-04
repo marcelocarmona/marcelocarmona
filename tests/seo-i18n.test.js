@@ -10,6 +10,7 @@ import {
   getPostPath,
   getWatchPath,
 } from '../lib/i18n/routes'
+import { absoluteUrl, buildPageMetadata } from '../lib/metadata'
 import { getAllFilesFrontMatter } from '../lib/mdx'
 import { buildLanguageAlternates } from '../lib/post-relations'
 
@@ -113,5 +114,56 @@ describe('projects data', () => {
       .forEach((project) => {
         expect(validInternalProjectRoutes.has(project.href), project.href).toBe(true)
       })
+  })
+})
+
+describe('page metadata', () => {
+  it('builds absolute Open Graph and Twitter metadata for static pages', () => {
+    const metadata = buildPageMetadata({
+      title: 'Projects',
+      description: 'Public projects and technical work by Marcelo Carmona.',
+      path: '/projects',
+      locale: 'en',
+      alternateLocales: ['es'],
+    })
+
+    expect(metadata.openGraph).toMatchObject({
+      title: 'Projects',
+      description: 'Public projects and technical work by Marcelo Carmona.',
+      url: `${siteUrl}/projects`,
+      siteName: 'Marcelo Carmona',
+      locale: 'en_US',
+      alternateLocale: ['es_ES'],
+      type: 'website',
+    })
+    expect(metadata.openGraph.images[0]).toMatchObject({
+      url: `${siteUrl}/static/images/twitter-card.png`,
+      width: 1200,
+      height: 600,
+      alt: 'Marcelo Carmona',
+    })
+    expect(metadata.twitter).toEqual({
+      card: 'summary_large_image',
+      title: 'Projects',
+      description: 'Public projects and technical work by Marcelo Carmona.',
+      images: [`${siteUrl}/static/images/twitter-card.png`],
+    })
+  })
+
+  it('normalizes root and nested paths into absolute URLs', () => {
+    expect(absoluteUrl('/')).toBe(siteUrl)
+    expect(absoluteUrl('/es/about')).toBe(`${siteUrl}/es/about`)
+    expect(absoluteUrl('https://example.com/image.png')).toBe('https://example.com/image.png')
+  })
+
+  it('omits Open Graph alternate locales unless a page provides them', () => {
+    const metadata = buildPageMetadata({
+      title: 'Projects',
+      description: 'Public projects and technical work by Marcelo Carmona.',
+      path: '/projects',
+      locale: 'en',
+    })
+
+    expect(metadata.openGraph.alternateLocale).toBeUndefined()
   })
 })

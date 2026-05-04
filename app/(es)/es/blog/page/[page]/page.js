@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPagePath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
@@ -12,10 +13,17 @@ export async function generateMetadata({ params }) {
   const pageNumber = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage
   const canonicalPath = getBlogPagePath('es', pageNumber)
   const englishPath = getBlogPagePath('en', pageNumber)
+  const title = `Blog en espanol - Pagina ${pageNumber}`
+  const description = `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
 
   return {
-    title: `Blog en espanol - Pagina ${pageNumber}`,
-    description: `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`,
+    ...buildPageMetadata({
+      title,
+      description,
+      path: canonicalPath,
+      locale: 'es',
+      alternateLocales: ['en'],
+    }),
     alternates: {
       canonical: canonicalPath,
       languages: {

@@ -1,12 +1,21 @@
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath, getFeedPath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
+const title = 'Blog en espanol'
+const description = `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
+
 export const metadata = {
-  title: 'Blog en espanol',
-  description: `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`,
+  ...buildPageMetadata({
+    title,
+    description,
+    path: getBlogPath('es'),
+    locale: 'es',
+    alternateLocales: ['en'],
+  }),
   alternates: {
     canonical: getBlogPath('es'),
     languages: {

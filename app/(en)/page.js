@@ -4,14 +4,22 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath, getFeedPath, getHomePath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
 
 const MAX_DISPLAY = 5
+const title = 'React, Next.js, and Frontend Engineering'
+const description = siteMetadata.description
 
 export const metadata = {
-  title: 'React, Next.js, and Frontend Engineering',
-  description: siteMetadata.description,
+  ...buildPageMetadata({
+    title,
+    description,
+    path: getHomePath('en'),
+    locale: 'en',
+    alternateLocales: ['es'],
+  }),
   alternates: {
     canonical: getHomePath('en'),
     languages: {
@@ -34,7 +42,7 @@ export default async function HomePage() {
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="display-title text-3xl font-extrabold leading-9 text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            React, Next.js, and Frontend Engineering
+            {title}
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
             Notes on React, Next.js, frontend performance, and software architecture.

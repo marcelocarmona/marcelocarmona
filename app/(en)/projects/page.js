@@ -1,9 +1,17 @@
 import Card from '@/components/Card'
 import projectsData from '@/data/projectsData'
+import { buildPageMetadata } from '@/lib/metadata'
+
+const title = 'Projects'
+const description = 'Public projects and technical work by Marcelo Carmona.'
 
 export const metadata = {
-  title: 'Projects',
-  description: 'Public projects and technical work by Marcelo Carmona.',
+  ...buildPageMetadata({
+    title,
+    description,
+    path: '/projects',
+    locale: 'en',
+  }),
   alternates: {
     canonical: '/projects',
   },

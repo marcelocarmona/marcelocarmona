@@ -1,12 +1,21 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import { getTagsPath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
+const title = 'Tags'
+const description = 'Things I blog about'
+
 export const metadata = {
-  title: 'Tags',
-  description: 'Things I blog about',
+  ...buildPageMetadata({
+    title,
+    description,
+    path: getTagsPath('en'),
+    locale: 'en',
+    alternateLocales: ['es'],
+  }),
   alternates: {
     canonical: getTagsPath('en'),
     languages: {

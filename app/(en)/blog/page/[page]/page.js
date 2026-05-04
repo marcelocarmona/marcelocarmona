@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPagePath } from '@/lib/i18n/routes'
+import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
@@ -12,10 +13,17 @@ export async function generateMetadata({ params }) {
   const pageNumber = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage
   const canonicalPath = getBlogPagePath('en', pageNumber)
   const spanishPath = getBlogPagePath('es', pageNumber)
+  const title = `Blog Page ${pageNumber}`
+  const description = siteMetadata.description
 
   return {
-    title: `Blog Page ${pageNumber}`,
-    description: siteMetadata.description,
+    ...buildPageMetadata({
+      title,
+      description,
+      path: canonicalPath,
+      locale: 'en',
+      alternateLocales: ['es'],
+    }),
     alternates: {
       canonical: canonicalPath,
       languages: {
