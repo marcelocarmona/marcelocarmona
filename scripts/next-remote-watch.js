@@ -20,6 +20,33 @@ const pkg = require('../package.json')
 
 const defaultWatchEvent = 'change'
 
+function colorizeLogMessage(msg, color) {
+  switch (color) {
+    case 'black':
+      return chalk.black(msg)
+    case 'red':
+      return chalk.red(msg)
+    case 'green':
+      return chalk.green(msg)
+    case 'yellow':
+      return chalk.yellow(msg)
+    case 'blue':
+      return chalk.blue(msg)
+    case 'magenta':
+      return chalk.magenta(msg)
+    case 'cyan':
+      return chalk.cyan(msg)
+    case 'white':
+      return chalk.white(msg)
+    case 'gray':
+      return chalk.gray(msg)
+    case 'grey':
+      return chalk.grey(msg)
+    default:
+      return msg
+  }
+}
+
 program.storeOptionsAsProperties().version(pkg.version)
 program
   .option('-r, --root [dir]', 'root directory of your nextjs app')
@@ -99,7 +126,9 @@ app.prepare().then(() => {
     // log message if present
     const msg = req.body.message
     const color = req.body.color
-    msg && console.log(color ? chalk[color](msg) : msg)
+    if (typeof msg === 'string' && msg) {
+      console.log(colorizeLogMessage(msg, color))
+    }
 
     // reload the nextjs app
     app.server.hotReloader.send('building')
