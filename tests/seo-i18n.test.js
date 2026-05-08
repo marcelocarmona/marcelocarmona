@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 import projectsData from '../data/projectsData'
 import sitemap from '../app/sitemap'
+import robots from '../app/robots'
 import { getHeaderNavLinks } from '../data/headerNavLinks'
 import {
   getAboutPath,
@@ -13,10 +14,12 @@ import {
   getWatchPath,
 } from '../lib/i18n/routes'
 import generateRss from '../lib/generate-rss'
+import { generateAiIndex, generateLlmsFullTxt, generateLlmsTxt } from '../lib/ai-discovery'
 import { absoluteUrl, buildPageMetadata } from '../lib/metadata'
 import { getAllFilesFrontMatter } from '../lib/mdx'
 import { buildLanguageAlternates } from '../lib/post-relations'
 import { hasMeaningfulUpdate } from '../lib/posts'
+import { AI_DISCOVERY_PATHS, getPublicStaticPages } from '../lib/site-catalog'
 import formatDate from '../lib/utils/formatDate'
 
 const siteUrl = 'https://marcelocarmona.com'
@@ -95,25 +98,109 @@ describe('sitemap', () => {
     expect(urls).not.toContain(`${siteUrl}/comentarios-en-jsx`)
     expect(urls).not.toContain(`${siteUrl}/watch/creando-observables-desde-cero`)
   })
+
+  it('advertises AI discovery endpoints', async () => {
+    const urls = (await sitemap()).map((entry) => entry.url)
+
+    AI_DISCOVERY_PATHS.forEach((route) => {
+      expect(urls).toContain(`${siteUrl}${route}`)
+    })
+  })
+
+  it('uses the shared public route catalog for static pages', async () => {
+    const urls = (await sitemap()).map((entry) => entry.url)
+
+    getPublicStaticPages().forEach((page) => {
+      expect(urls).toContain(page.url)
+    })
+  })
+})
+
+describe('robots', () => {
+  it('allows search and agent crawlers explicitly while keeping sitemap discovery', () => {
+    const robotsConfig = robots()
+    const allowedUserAgents = robotsConfig.rules.map((rule) => rule.userAgent)
+
+    expect(allowedUserAgents).toEqual(['*', 'OAI-SearchBot', 'GPTBot', 'ChatGPT-User'])
+    expect(robotsConfig.sitemap).toBe(`${siteUrl}/sitemap.xml`)
+    robotsConfig.rules.forEach((rule) => {
+      expect(rule.allow).toBe('/')
+    })
+  })
+})
+
+describe('AI discovery', () => {
+  it('builds a structured public index for agents', async () => {
+    const index = await generateAiIndex()
+
+    expect(index.site.discovery).toMatchObject({
+      llmsTxtUrl: `${siteUrl}/llms.txt`,
+      llmsFullTxtUrl: `${siteUrl}/llms-full.txt`,
+      aiIndexUrl: `${siteUrl}/ai-index.json`,
+      sitemapUrl: `${siteUrl}/sitemap.xml`,
+      robotsUrl: `${siteUrl}/robots.txt`,
+    })
+    expect(index.pages.map((page) => page.url)).toEqual(
+      expect.arrayContaining(getPublicStaticPages().map((page) => page.url))
+    )
+    expect(index.posts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          title: 'How to Comment in React, JSX, and TSX',
+          locale: 'en',
+          url: `${siteUrl}/how-to-comment-in-react-jsx`,
+          translations: [
+            expect.objectContaining({
+              locale: 'es',
+              url: `${siteUrl}/es/comentarios-en-jsx`,
+            }),
+          ],
+        }),
+        expect.objectContaining({
+          title: '¿Cómo comentar en React, JSX y TSX?',
+          locale: 'es',
+          url: `${siteUrl}/es/comentarios-en-jsx`,
+        }),
+      ])
+    )
+    expect(index.tags).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          slug: 'react',
+          locale: 'en',
+          url: `${siteUrl}/tags/react`,
+        }),
+        expect.objectContaining({
+          slug: 'react',
+          locale: 'es',
+          url: `${siteUrl}/es/tags/react`,
+        }),
+      ])
+    )
+  })
+
+  it('builds compact and full llms text files', async () => {
+    const llmsTxt = await generateLlmsTxt()
+    const llmsFullTxt = await generateLlmsFullTxt()
+
+    expect(llmsTxt).toContain('# Marcelo Carmona')
+    expect(llmsTxt).toContain(`${siteUrl}/ai-index.json`)
+    expect(llmsTxt).toContain(`${siteUrl}/llms-full.txt`)
+    expect(llmsTxt).toContain('## Notes For Agents')
+
+    expect(llmsFullTxt).toContain('## English Articles')
+    expect(llmsFullTxt).toContain('## Spanish Articles')
+    expect(llmsFullTxt).toContain(`${siteUrl}/es/comentarios-en-jsx`)
+    expect(llmsFullTxt).toContain('## Agent Guidance')
+  })
 })
 
 describe('projects data', () => {
   it('does not point project cards at missing internal routes', async () => {
     const posts = await getAllFilesFrontMatter('blog')
+    const publicStaticPaths = getPublicStaticPages().map((page) => new URL(page.url).pathname)
     const validInternalProjectRoutes = new Set([
-      '/',
-      '/about',
-      '/blog',
-      '/book',
-      '/guides',
-      '/projects',
-      '/tags',
-      '/es',
-      '/es/about',
-      '/es/blog',
-      '/es/book',
-      '/es/guides',
-      '/es/tags',
+      ...publicStaticPaths,
       ...posts.map((post) => getPostPath(post)),
       ...posts.filter((post) => post.video?.watchPagePath).map((post) => getWatchPath(post)),
     ])

@@ -1,7 +1,8 @@
-import siteMetadata from '@/data/siteMetadata'
-import { getAboutPath, getBookPath, getGuidesPath, getPostPath } from '@/lib/i18n/routes'
+import { getPostPath } from '@/lib/i18n/routes'
+import { absoluteUrl } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
+import { getSitemapStaticPaths } from '@/lib/site-catalog'
 import kebabCase from '@/lib/utils/kebabCase'
 
 export const runtime = 'nodejs'
@@ -18,22 +19,6 @@ export default async function sitemap() {
   const spanishPosts = posts.filter((post) => post.locale === 'es')
   const englishTotalPages = Math.ceil(englishPosts.length / POSTS_PER_PAGE)
   const spanishTotalPages = Math.ceil(spanishPosts.length / POSTS_PER_PAGE)
-
-  const staticRoutes = [
-    '',
-    '/projects',
-    getAboutPath('en'),
-    getAboutPath('es'),
-    getBookPath('en'),
-    getBookPath('es'),
-    '/blog',
-    '/tags',
-    getGuidesPath('en'),
-    getGuidesPath('es'),
-    '/es',
-    '/es/blog',
-    '/es/tags',
-  ]
 
   const blogPaginationRoutes = getPaginationRoutes('/blog', englishTotalPages)
   const spanishBlogPaginationRoutes = getPaginationRoutes('/es/blog', spanishTotalPages)
@@ -78,7 +63,7 @@ export default async function sitemap() {
     }
   }
 
-  staticRoutes.forEach((route) => addRoute({ route }))
+  getSitemapStaticPaths().forEach((route) => addRoute({ route }))
   blogPaginationRoutes.forEach((route) => addRoute({ route }))
   spanishBlogPaginationRoutes.forEach((route) => addRoute({ route }))
   blogPostRoutes.forEach(addRoute)
@@ -87,7 +72,7 @@ export default async function sitemap() {
   spanishTagRoutes.forEach(addRoute)
 
   return Array.from(routeMap.values()).map((entry) => ({
-    url: `${siteMetadata.siteUrl}${entry.route}`,
+    url: absoluteUrl(entry.route),
     ...(entry.lastModified ? { lastModified: new Date(entry.lastModified) } : {}),
   }))
 }
