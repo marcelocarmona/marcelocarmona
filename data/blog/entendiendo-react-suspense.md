@@ -7,11 +7,11 @@ translationKey: react-suspense
 tags: ['React', 'JavaScript']
 ---
 
-Esta es una nueva característica que nos permite "detener" un render hasta que hayamos terminado una tarea (por ejemplo, cargar datos desde una api)
+Esta es una nueva característica que nos permite "detener" un render hasta que hayamos terminado una tarea (por ejemplo, cargar datos desde una API).
 
 <CodeSandbox codeSandboxId="6wnrnmyq43" />
 
-Vamos a buscar una tarea cuando el componente está montado, y guardaremos el resultado en una caché muy simple. La parte interesante que hay que entender es cuando lanzamos una promesa, esta es atrapada por Suspense y muestra un loading... hasta que esta promesa se resuelve.
+Vamos a buscar una tarea cuando el componente `Task` esté montado y guardaremos el resultado en una caché muy simple. La parte interesante que hay que entender es que, cuando lanzamos una promesa, esta es atrapada por Suspense y muestra un estado de carga hasta que la promesa se resuelve.
 
 ```javascript
 import React, { Suspense } from 'react'
@@ -47,7 +47,7 @@ function App() {
 }
 ```
 
-A veces tenemos una conexión rápida y el recurso se carga muy rápidamente, en este caso tal vez no sea necesario mostrar loading..., por lo que podemos usar `maxDuration` para evitar este parpadeo extraño
+A veces tenemos una conexión rápida y el recurso se carga muy rápidamente. En este caso, tal vez no sea necesario mostrar un estado de carga, por lo que podemos usar `maxDuration` para evitar este parpadeo extraño.
 
 ```javascript
 <Suspense maxDuration={400} fallback={<div>Loading...</div>}>

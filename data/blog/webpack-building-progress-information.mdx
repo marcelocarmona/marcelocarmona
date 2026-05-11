@@ -1,41 +1,41 @@
 ---
-title: Webpack building progress information
+title: Webpack build progress information
 date: '2016-09-05'
 translationKey: webpack-progress
-summary: '"webpack-dashboard" is a webpack plugin that shows detailed information about module size, progress, errors, and assets during the development environment. It was created by Formidable and has several options to install and use.'
+summary: '"webpack-dashboard" is a webpack plugin that shows detailed information about module size, progress, errors, and assets in the development environment. It was created by Formidable, and there are several ways to install and use it.'
 tags: [Webpack, Javascript]
 ---
 
-When we use webpack to generate our bundles in many cases in our development environment it is convenient to show information about the size of each module, the bundles themselves, the time it takes to carry out the process, if we are transpiling the code through babel for example or using postcss to preprocess our style sheets.
+When we use webpack to generate our bundles, it is often convenient in our development environment to show information about the size of each module, the bundles themselves, the time the process takes, and whether we are transpiling code through Babel or using PostCSS to preprocess our style sheets.
 
-The options that we currently have to be able to show this information are made through webpack plugins. I will give three simple alternatives to be able to show this type of information.
+The current options for showing this information are provided through webpack plugins. I will show three simple alternatives for displaying this type of information.
 
 # webpack-dashboard
 
-This <a href="https://github.com/FormidableLabs/webpack-dashboard" target="_blank" rel="noopener">dashboard</a> was created by <a href="https://formidable.com/" target="_blank" rel="noopener">formidable.com</a> a good option that show information about:
+This <a href="https://github.com/FormidableLabs/webpack-dashboard" target="_blank" rel="noopener">dashboard</a> was created by <a href="https://formidable.com/" target="_blank" rel="noopener">formidable.com</a>, and it is a good option that shows information about:
 
-- **Log**: the error log of the building process
-- **Status**: status of the building process
-- **Operation**: shows the specific operation that is performed in the building process
+- **Log**: the error log of the build process
+- **Status**: status of the build process
+- **Operation**: shows the specific operation that is performed in the build process
 - **Progress**: live building progress
-- **Module**: a list of your modules, their size and percentage with respect to the size of the bundle
+- **Module**: a list of your modules, their size, and their percentage with respect to the size of the bundle
 - **Assets**: list of generated assets
 
-If you normally use webpack with `webpack-dev-server` or `webpack-dev-middleware` you will be used to seeing something like this:
+If you normally use webpack with `webpack-dev-server` or `webpack-dev-middleware`, you will be used to seeing something like this:
 
 <img
   src="/static/images/blog/webpack-dashboard-dev-server.png"
   alt="webpack dashboard common example"
 />
 
-`webpack-dashboard` was created by <a href="https://formidable.com/blog/2016/08/15/introducing-webpack-dashboard/" target="_blank" rel="noopener">Ken Wheeler</a> It looks like this :)
+`webpack-dashboard` was created by <a href="https://formidable.com/blog/2016/08/15/introducing-webpack-dashboard/" target="_blank" rel="noopener">Ken Wheeler</a>. It looks like this :)
 
 <img
   src="/static/images/blog/webpack-dashboard-screen-shot.png"
-  alt="webpack dashboard screen shot"
+  alt="webpack dashboard screenshot"
 />
 
-Here you can see it in action
+Here you can see it in action:
 
 <img src="/static/images/blog/webpack-dashboard-in-action.gif" alt="webpack dashboard in action" />
 
@@ -45,7 +45,7 @@ Installing it is quite simple:
 npm install webpack-dashboard --save-dev
 ```
 
-Then we add the <a href="https://webpack.github.io/docs/plugins.html" target="_blank" rel="noopener">plugin</a> to our webpack configuration
+Then we add the <a href="https://webpack.github.io/docs/plugins.html" target="_blank" rel="noopener">plugin</a> to our webpack configuration:
 
 ```javascript
 // Import the plugin:
@@ -58,8 +58,8 @@ plugins: [new DashboardPlugin()]
 compiler.apply(new DashboardPlugin())
 ```
 
-Now we have to call `webpack-dashboard` from your package.json.
-If your dev server looks like this.
+Now we have to call `webpack-dashboard` from our package.json.
+If your dev server looks like this:
 
 ```javascript
 "scripts": {
@@ -67,7 +67,7 @@ If your dev server looks like this.
 }
 ```
 
-We must change it for this.
+We must change it to this:
 
 ```javascript
 "scripts": {
@@ -75,9 +75,9 @@ We must change it for this.
 }
 ```
 
-To see more information about the configuration you can see the project in <a href="https://github.com/FormidableLabs/webpack-dashboard">github</a>
+For more configuration information, you can see the project on <a href="https://github.com/FormidableLabs/webpack-dashboard">GitHub</a>.
 
-As I said before, I think the proposal to have a dashboard to obtain relevant information about our projects seems very good.
+As I said before, I think the proposal of having a dashboard to obtain relevant information about our projects is very good.
 Here I leave some tweets that were written at the time of its release.
 
 <blockquote data-lang="es">
@@ -134,7 +134,7 @@ Here I leave some tweets that were written at the time of its release.
 
 # webpack progressBar plugin
 
-This is another option that is quite simple but when you work on a large project and the building time increases, even if it is to show a progress bar, it improves the developer experience a lot.
+This is another option that is quite simple, but when you work on a large project and the build time increases, even showing a progress bar improves the developer experience a lot.
 
 <img src="/static/images/blog/webpack-progressbar-plugin.gif" alt="webpack progressbar plugin" />
 <br />
@@ -161,9 +161,9 @@ You can see the project in <a href="https://github.com/clessg/progress-bar-webpa
 
 # webpack progress plugin
 
-And finally, if you want to have something even simpler or more custom, we can use the <a href="https://webpack.github.io/docs/list-of-plugins.html#progressplugin" target="_blank" rel="noopener">progressplugin provisto por webpack </a>.
+And finally, if you want to have something even simpler or more custom, we can use the <a href="https://webpack.github.io/docs/list-of-plugins.html#progressplugin" target="_blank" rel="noopener">ProgressPlugin provided by webpack</a>.
 
-That is basically inserted as a plugin in our webpack configuration file.
+It is basically inserted as a plugin in our webpack configuration file.
 
 ```javascript
 new webpack.ProgressPlugin(function handler(percentage, msg) {
@@ -182,7 +182,7 @@ new webpack.ProgressPlugin((percentage, msg) => {
 })
 ```
 
-In this case I want to show the information in a single line so I use `\r`.
+In this case, I want to show the information in a single line, so I use `\r`.
 
 And this example can look like this:
 

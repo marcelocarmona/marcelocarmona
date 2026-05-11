@@ -1,17 +1,17 @@
 ---
-title: Angular 1.5 metodos del ciclo de vida
+title: Angular 1.5 métodos del ciclo de vida
 lang: es
 date: '2016-08-08'
 translationKey: angular-lifecycle-hooks
 tags: ['Angularjs', 'JavaScript']
 ---
 
-En angular 1.5 los componentes tienen un ciclo de vida bien definido y por medio de los cycle hooks nos permiten enganchar funciones que ayudan a modificar su comportamiento, vamos a ver los roles que tienen cada uno de estos hooks y por que deberías usarlos, es muy importante entenderlos ya que estamos pensando en una aplicación basada en componentes.
-Los ejemplos los voy a estar escribiendo en ES6, así que si todavía no empezaste a usar Angularjs con ES6 te recomiendo un buen repo que pude servir como boilerplate <a href="https://github.com/angularclass/NG6-starter" target="_blank" rel="noopener"> https://github.com/angularclass/NG6-starter</a>
+En Angular 1.5, los componentes tienen un ciclo de vida bien definido. Por medio de los lifecycle hooks, podemos enganchar funciones que ayudan a modificar su comportamiento. Vamos a ver qué rol tiene cada uno de estos hooks y por qué deberías usarlos. Es importante entenderlos si estás pensando en una aplicación basada en componentes.
+Los ejemplos los voy a escribir en ES6, así que si todavía no empezaste a usar AngularJS con ES6, te recomiendo este repo que puede servir como boilerplate: <a href="https://github.com/angularclass/NG6-starter" target="_blank" rel="noopener"> https://github.com/angularclass/NG6-starter</a>
 
 # $onInit
 
-Es una propiedad predefinida por angular que se expone en el controlador del componente a la cual le podemos asignar una función
+Es una propiedad predefinida por Angular que se expone en el controlador del componente, a la cual le podemos asignar una función.
 
 ```javascript
 class ComponentController {
@@ -22,14 +22,14 @@ class ComponentController {
 }
 ```
 
-Es utilizado para código de inicialización del controller.
-Esta función es llamada solo una vez, una vez que se establecieron todos los bindings del componente y antes que se establezcan en sus hijos.
-Angular 2 tiene el método ngOnInit el cual nos servirá para la transición de Angular 1.x.
+Se utiliza para código de inicialización del controller.
+Esta función se llama solo una vez, después de que se establecen todos los bindings del componente y antes de que se establezcan en sus hijos.
+Angular 2 tiene el método `ngOnInit`, el cual nos servirá para la transición de Angular 1.x.
 
 ## require
 
-Anteriormente con las directivas usábamos el "require" para heredar métodos de otras directivas y su sintaxis nos permitía usar un String o Array (puedes buscarlo en la documentación de la api <a href="https://docs.angularjs.org/api/ng/service/$compile" target="_blank" rel="noopener">https://docs.angularjs.org/api/ng/service/$compile</a>).
-Con el uso de componentes vamos a poder utilizar "require" utilizand un string.
+Anteriormente, con las directivas, usábamos "require" para heredar métodos de otras directivas, y su sintaxis nos permitía usar un string o un array (puedes buscarlo en la documentación de la API: <a href="https://docs.angularjs.org/api/ng/service/$compile" target="_blank" rel="noopener">https://docs.angularjs.org/api/ng/service/$compile</a>).
+Con el uso de componentes vamos a poder utilizar "require" usando un string.
 
 ```javascript
 import template from './myComponent.template.html'
@@ -48,7 +48,7 @@ const myComponent = {
 export default myComponent
 ```
 
-Al hacer uso de require es posible acceder al controlador desde un componente hijo, por ejemplo:
+Al hacer uso de `require`, es posible acceder al controlador desde un componente hijo, por ejemplo:
 
 ```html
 <myList>
@@ -58,7 +58,7 @@ Al hacer uso de require es posible acceder al controlador desde un componente hi
 </myList>
 ```
 
-En este caso MyItem es un buen ejemplo de uso ya que
+En este caso, `MyItem` es un buen ejemplo de uso:
 
 ```javascript
 import template from './myList.template.html'
@@ -103,8 +103,8 @@ export default myItemController
 
 # $postLink
 
-Llamado después de que el elemento de este controlador y sus hijos hayan sido linkeados.
-De forma similar a la función post-link, este hook se puede usar para configurar handlers de eventos del DOM y hacer la manipulación del DOM.
+Llamado después de que el elemento de este controlador y sus hijos hayan sido enlazados.
+De forma similar a la función post-link, este hook se puede usar para configurar handlers de eventos del DOM y manipular el DOM.
 
 ```javascript
 class myComponente {
@@ -119,10 +119,10 @@ export default myComponente;
 
 # $onChanges
 
-Este hook es el mas importante gracias a el nos permite usar una arquitectura one-way dataflow con angular 1.5.x.
-Lo que hay que tener en cuenta que este método va a ser ejecutado cada vez que modifica un input del componente. Osea el input esta definido en bindings: `{...}`.
-Ya sea por `'<'` (one-way databinding) o '@' (for evaluated DOM attribute values).
-Es ejecutado también al inicializar el componente y como parámetro recibe un objeto changes.
+Este hook es el más importante porque nos permite usar una arquitectura de one-way data flow con Angular 1.5.x.
+Lo que hay que tener en cuenta es que este método se va a ejecutar cada vez que se modifique un input del componente. Es decir, el input está definido en `bindings: {...}`.
+Ya sea por `'<'` (one-way data binding) o '@' (for evaluated DOM attribute values).
+También se ejecuta al inicializar el componente y recibe un objeto `changes` como parámetro.
 
 ```javascript
 class myComponente {
@@ -136,7 +136,7 @@ class myComponente {
 export default myComponente
 ```
 
-Ahora vamos a clonar la data que nos viene para que el valor que reciba el componente sea "inmutable" y lo que significa que no podemos modificar la variable desde el interior de este componente.
+Ahora vamos a clonar la data que nos llega para que el valor que reciba el componente sea "inmutable", lo que significa que no podemos modificar la variable desde el interior de este componente.
 
 ```javascript
 class myComponente {
@@ -152,7 +152,7 @@ export default myComponente
 
 # $onDestroy
 
-Básicamente es para hacer algo cuando el scope del componente es destruido, antes lo usábamos algo como
+Básicamente sirve para hacer algo cuando el scope del componente es destruido. Antes usábamos algo como esto:
 
 ```javascript
 $scope.$on('$destroy', function () {
@@ -160,7 +160,7 @@ $scope.$on('$destroy', function () {
 })
 ```
 
-Ahora podemos escribirlo asi
+Ahora podemos escribirlo así:
 
 ```javascript
 class myComponente {

@@ -3,16 +3,16 @@ title: Understanding React.Suspense
 date: '2018-12-04'
 translationKey: react-suspense
 tags: ['React', 'JavaScript']
-summary: 'React Suspense is a powerful new feature that allows developers to pause rendering until a task (such as loading data from an API) is completed'
+summary: 'React Suspense is a powerful feature that allows developers to pause rendering until a task, such as loading data from an API, is completed.'
 draft: false
 ---
 
-This is a new feature that allow us to "stop" a render until we have finished a task (e.g. loading data from an api)
+This is a new feature that allows us to "stop" a render until we have finished a task (e.g. loading data from an API).
 
 <CodeSandbox codeSandboxId="6wnrnmyq43" />
 
-We are going to fetch a task when the component Task is mounted, and save the result in a very simple cache.
-The interesting part to understand is when we throw a promise it is catch by Suspense and show a loading until it is resolved.
+We are going to fetch a task when the `Task` component is mounted and save the result in a very simple cache.
+The interesting part to understand is that when we throw a promise, it is caught by Suspense and shows a loading state until it is resolved.
 
 ```javascript
 import React, { Suspense } from 'react'
@@ -48,7 +48,7 @@ function App() {
 }
 ```
 
-Sometimes we have a fast conexion and the resource is loaded very quickly, in this case maybe it is no necessary to show a loading, so we can use `maxDuration` to avoid this weird blink.
+Sometimes we have a fast connection and the resource is loaded very quickly. In this case, it may not be necessary to show a loading state, so we can use `maxDuration` to avoid this weird blink.
 
 ```javascript
 <Suspense maxDuration={400} fallback={<div>Loading...</div>}>

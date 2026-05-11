@@ -1,5 +1,5 @@
 ---
-title: Parsers and Formatters Angularjs
+title: Parsers and formatters in AngularJS
 date: '2015-10-16'
 translationKey: angular-parsers-formatters
 tags: ['Angularjs', 'Javascript']
@@ -9,16 +9,15 @@ draft: false
 
 # $parsers
 
-It is an array of functions to execute. These functions are executed in order like a pipeline every time that the control read a DOM value. Functions are called following the order of the array and the result of the function is the entry of the next function and the last return value is sent to the collection of $validators
+It is an array of functions to execute. These functions run in order, like a pipeline, every time the control reads a DOM value. The functions are called in array order, the result of each function becomes the input for the next function, and the final return value is sent to the `$validators` collection.
 
-If the parser returns undefined that means that an error occurred, `$validators` are not going to be executed and the ngModel is going to be seted undefined
-unless ngModelOptions.allowInvalid is set to true the parse error is stored in ngModel. $ error.parse
+If the parser returns `undefined`, it means an error occurred. `$validators` will not be executed, and `ngModel` will be set to `undefined` unless `ngModelOptions.allowInvalid` is set to `true`. The parse error is stored in `ngModel.$error.parse`.
 
 # $formatters
 
-It is an array of functions that are executed in the pipeline when the ngModel change, the functions are called in reverse order, and each one passes its value back to the next.
-The last value returned is used as a value in the DOM
+It is an array of functions that are executed in the pipeline when `ngModel` changes. The functions are called in reverse order, and each one passes its value back to the next.
+The last returned value is used as the DOM value.
 
-In the following image, it can be seen that the parsers are used to transform the data from the view to the model and the formatters of the model to the view
+In the following image, you can see that parsers are used to transform data from the view to the model, and formatters are used to transform data from the model to the view.
 
 <img src="/static/images/blog/ng-model-flow.png" />

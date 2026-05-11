@@ -1,26 +1,26 @@
 ---
-title: Avoid unnecessary re-renders React.memo
+title: Avoid unnecessary re-renders with React.memo
 date: '2018-11-21'
 translationKey: react-memo
 tags: ['React', 'JavaScript']
-summary: 'Preventing unnecessary component re-renders in React and various ways to achieve it, including React memo function, PureComponent, and shouldComponentUpdate'
+summary: 'Prevent unnecessary component re-renders in React with React.memo, PureComponent, and shouldComponentUpdate.'
 draft: false
 ---
 
-We don't want to re-render a component if the data for that component has not change. In many cases a component re-render when the props change.
+We don't want to re-render a component if the data for that component has not changed. In many cases, a component re-renders when its props change.
 
 <CodeSandbox codeSandboxId="n3x3rvxvy0" />
-In this example we render a new Title for every click in the button.
+In this example, we render a new Title for every click on the button.
 
-With React memo function we can pass a stateless functional component and we can be sure that the component will not update if the props does not change.
+With the React `memo` function, we can pass a stateless functional component and be sure that the component will not update if its props do not change.
 
 <CodeSandbox codeSandboxId="1omq1wvzr4" />
-In a class we can use pureComponent
+In a class, we can use `PureComponent`.
 
 <CodeSandbox codeSandboxId="40jlzo1810" />
 
-And also is possible to use shouldComponentUpdate
+It is also possible to use `shouldComponentUpdate`.
 
-warning: shallowCompare is a legacy add-on. Use memo or PureComponent
+Warning: `shallowCompare` is a legacy add-on. Use `memo` or `PureComponent` instead.
 
 <CodeSandbox codeSandboxId="k53m503975" />

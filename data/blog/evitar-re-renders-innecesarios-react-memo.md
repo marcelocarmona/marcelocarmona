@@ -6,21 +6,21 @@ translationKey: react-memo
 tags: ['React', 'JavaScript']
 ---
 
-No queremos re renderear un component si la data de ese componente no cambio, en muchos casos un componente se re-renderiza cuando las props cambian.
+No queremos re-renderizar un componente si la data de ese componente no cambió. En muchos casos, un componente se re-renderiza cuando las props cambian.
 
 <CodeSandbox codeSandboxId="n3x3rvxvy0" />
-En este ejemplo renderizamos un nuevo Title por cada click en el botón.
+En este ejemplo, renderizamos un nuevo Title por cada clic en el botón.
 
-Con la función memo podemos pasar un stateless functional component y podemos estar seguros que el componente no se actualizará si las props no cambian.
+Con la función `memo`, podemos pasar un stateless functional component y estar seguros de que el componente no se actualizará si las props no cambian.
 
 <CodeSandbox codeSandboxId="1omq1wvzr4" />
 
-Con class podemos usar pureComponent
+En una class, podemos usar `PureComponent`.
 
 <CodeSandbox codeSandboxId="40jlzo1810" />
 
-Y tambien es posible usar shouldComponentUpdate
+Y también es posible usar `shouldComponentUpdate`.
 
-Cuidado: shallowCompare es un legacy add-on. Usar memo o PureComponent
+Cuidado: `shallowCompare` es un legacy add-on. Usa `memo` o `PureComponent`.
 
 <CodeSandbox codeSandboxId="k53m503975" />

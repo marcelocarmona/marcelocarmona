@@ -3,15 +3,15 @@ title: Angular 1.5 lifecycle hooks
 date: '2016-08-08'
 translationKey: angular-lifecycle-hooks
 tags: ['Angularjs', 'Javascript']
-summary: 'Use of Angular 1.5 component lifecycle hooks, including $onInit, $postLink, $onChanges, and $onDestroy'
+summary: 'Using Angular 1.5 component lifecycle hooks, including $onInit, $postLink, $onChanges, and $onDestroy.'
 draft: false
 ---
 
-In angular 1.5 the components have a well-defined lifecycle and by means of cycle hooks they allow us to hook functions that help to modify their behavior, we are going to see the roles that each of these hooks have and why you should use them, it is very important to understand them since we are thinking of a component-based application. The examples are going to be written in ES6, so if you still have not started using Angularjs with ES6 I recommend a good repo that could serve as a boilerplate <a href="https://github.com/angularclass/NG6-starter" target="_blank" rel="noopener"> https://github.com/angularclass/NG6-starter</a>
+In Angular 1.5, components have a well-defined lifecycle. Lifecycle hooks let us attach functions that modify component behavior. We are going to look at the role of each hook and why you should use them. It is important to understand them when thinking about component-based applications. The examples are written in ES6, so if you have not started using AngularJS with ES6 yet, I recommend this repo as a boilerplate: <a href="https://github.com/angularclass/NG6-starter" target="_blank" rel="noopener"> https://github.com/angularclass/NG6-starter</a>
 
 # $onInit
 
-It is a property predefined by angular that is exposed in the controller of the component to which we can assign a function
+It is a predefined property in Angular that is exposed in the component controller, and we can assign a function to it.
 
 ```javascript
 class ComponentController {
@@ -23,13 +23,13 @@ class ComponentController {
 ```
 
 It is used for controller initialization code.
-This function is called only once, once all the bindings of the component have been established and before they are established in their children.
-Angular 2 has the ngOnInit method which will serve us for the Angular 1.x transition.
+This function is called only once, after all the component bindings have been established and before the bindings are established in its children.
+Angular 2 has the `ngOnInit` method, which helps with the Angular 1.x transition.
 
 ## require
 
-Previously with the directives, we used the "requires" for the methods of other directives and its syntax allowed us to use a string or matrix (you can look for it in the API documentation)<a href="https://docs.angularjs.org/api/ng/service/$compile" target="_blank" rel="noopener">https://docs.angularjs.org/api/ng/service/$compile</a>).
-With the use of components we will be able to use "require" using a string.
+Previously, with directives, we used "require" to access methods from other directives, and its syntax allowed us to use a string or an array (you can look for it in the API documentation: <a href="https://docs.angularjs.org/api/ng/service/$compile" target="_blank" rel="noopener">https://docs.angularjs.org/api/ng/service/$compile</a>).
+With components, we can use "require" with a string.
 
 ```javascript
 import template from './myComponent.template.html'
@@ -48,7 +48,7 @@ const myComponent = {
 export default myComponent
 ```
 
-When using require it is possible to access the controller from a child component, for example:
+When using `require`, it is possible to access the controller from a child component, for example:
 
 ```html
 <myList>
@@ -58,7 +58,7 @@ When using require it is possible to access the controller from a child componen
 </myList>
 ```
 
-In this case, MyItem is a good example of use since
+In this case, `MyItem` is a good usage example:
 
 ```javascript
 import template from './myList.template.html'
@@ -118,7 +118,7 @@ export default myComponente;
 
 # $onChanges
 
-This hook is the most important thanks to it allows us to use a one-way data flow architecture with angular 1.5.x. What you have to keep in mind is that this method will be executed every time you modify an input of the component. That is, the input is defined in bindings: `{...}`. Either by `<` (one-way data binding) or '@' (for evaluated DOM attribute values). It is also executed when the component is initialized and as a parameter it receives a changes object.
+This hook is the most important because it allows us to use a one-way data flow architecture with Angular 1.5.x. Keep in mind that this method executes every time you modify a component input. That is, the input is defined in `bindings: {...}`. It can be set with `<` (one-way data binding) or '@' (for evaluated DOM attribute values). It also runs when the component is initialized, and it receives a `changes` object as a parameter.
 
 ```javascript
 class myComponente {
@@ -132,7 +132,7 @@ class myComponente {
 export default myComponente
 ```
 
-Now we are going to clone the data that comes to us so that the value received by the component is "immutable" and which means that we can not modify the variable from within this component.
+Now we are going to clone the incoming data so that the value received by the component is "immutable", which means that we cannot modify the variable from within this component.
 
 ```javascript
 class myComponente {
@@ -148,7 +148,7 @@ export default myComponente
 
 # $onDestroy
 
-It's basically to do something when the scope of the component is destroyed before we used it something like
+It is basically used to do something when the component's scope is destroyed. Before, we used something like this:
 
 ```javascript
 $scope.$on('$destroy', function () {
@@ -156,7 +156,7 @@ $scope.$on('$destroy', function () {
 })
 ```
 
-Now we can write it like this
+Now we can write it like this:
 
 ```javascript
 class myComponente {
