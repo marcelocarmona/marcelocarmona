@@ -8,6 +8,7 @@ import Comments from '@/components/comments'
 import SeoSchema from '@/components/SeoSchema'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import VideoPreviewCard from '@/components/VideoPreviewCard'
+import { Prose } from '@/components/ui/typography'
 import { getBlogPath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
 import { hasMeaningfulUpdate } from '@/lib/posts'
@@ -176,10 +177,10 @@ export default function PostLayout({
               </dd>
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10">
+              <Prose className="pb-8 pt-10">
                 <VideoPreviewCard video={frontMatter.video} locale={frontMatter.locale} />
                 {children}
-              </div>
+              </Prose>
               <div className="pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
                 <Link href={editUrl(fileName)}>{postUi.viewOnGitHub}</Link>
               </div>

@@ -7,6 +7,7 @@ import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import { Prose } from '@/components/ui/typography'
 import type { AuthorFrontMatter, ContentFrontMatter } from '@/types/content'
 import type { ReactNode } from 'react'
 
@@ -64,7 +65,7 @@ export default function PostLayout({
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10">{children}</div>
+              <Prose className="pb-8 pt-10">{children}</Prose>
             </div>
             <Comments frontMatter={frontMatter} />
             <footer>

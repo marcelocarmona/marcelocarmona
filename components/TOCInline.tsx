@@ -52,7 +52,7 @@ const TOCInline = ({
   return (
     <>
       {asDisclosure ? (
-        <details open>
+        <details open className="rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-800">
           <summary className="ml-6 pb-2 pt-2 text-xl font-bold">Table of Contents</summary>
           <div className="ml-6">{tocList}</div>
         </details>

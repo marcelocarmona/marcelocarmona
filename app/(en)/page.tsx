@@ -2,6 +2,7 @@ import Image from '@/components/Image'
 import Link from '@/components/Link'
 import NewsletterForm from '@/components/NewsletterForm'
 import Tag from '@/components/Tag'
+import { DisplayTitle, Prose } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath, getFeedPath, getHomePath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
@@ -52,9 +53,12 @@ export default async function HomePage() {
               <p className="text-sm font-semibold uppercase text-gray-500 dark:text-gray-400">
                 Software engineering
               </p>
-              <h1 className="display-title text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100 sm:text-4xl md:text-5xl">
+              <DisplayTitle
+                as="h1"
+                className="text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100 sm:text-4xl md:text-5xl"
+              >
                 {headline}
-              </h1>
+              </DisplayTitle>
               <p className="mx-auto max-w-2xl text-lg leading-8 text-gray-500 dark:text-gray-400 md:mx-0">
                 {intro}
               </p>
@@ -124,9 +128,7 @@ export default async function HomePage() {
                               ))}
                             </div>
                           </div>
-                          <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                            {summary}
-                          </div>
+                          <Prose className="text-gray-500 dark:text-gray-400">{summary}</Prose>
                         </div>
                         <div className="text-base font-medium leading-6">
                           <Link

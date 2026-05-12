@@ -10,6 +10,7 @@ import Footer from './Footer'
 import MobileNav from './MobileNav'
 import HeaderNav from './HeaderNav'
 import ThemeSwitch from './ThemeSwitch'
+import { DisplayTitle } from './ui/typography'
 import type { Locale } from '@/types/content'
 import type { ReactNode } from 'react'
 
@@ -33,9 +34,9 @@ const LayoutWrapper = ({
                   <Logo />
                 </div>
                 {typeof siteMetadata.headerTitle === 'string' ? (
-                  <div className="display-title h-6 whitespace-nowrap text-xl font-semibold sm:block sm:text-2xl">
+                  <DisplayTitle className="h-6 whitespace-nowrap text-xl font-semibold sm:block sm:text-2xl">
                     {siteMetadata.headerTitle}
-                  </div>
+                  </DisplayTitle>
                 ) : (
                   siteMetadata.headerTitle
                 )}

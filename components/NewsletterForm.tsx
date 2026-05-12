@@ -51,7 +51,7 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }: { title?: str
           </label>
           <input
             autoComplete="email"
-            className="w-72 rounded-md px-4 focus:border-transparent focus:outline-hidden focus:ring-2 focus:ring-primary-600 dark:bg-black"
+            className="w-72 rounded-md px-4 focus:border-transparent focus:outline-hidden focus:ring-2 focus:ring-primary-600 dark:bg-black [&:-webkit-autofill]:duration-[600000s] [&:-webkit-autofill]:transition-colors"
             id="email-input"
             name="email"
             placeholder={subscribed ? "You're subscribed !  🎉" : 'Enter your email'}

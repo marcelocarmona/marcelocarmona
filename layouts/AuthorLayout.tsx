@@ -1,5 +1,6 @@
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
+import { Prose } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
 import type { AuthorFrontMatter } from '@/types/content'
 import type { ReactNode } from 'react'
@@ -37,7 +38,7 @@ export default function AuthorLayout({
             <SocialIcon kind="twitter" href={twitter} />
           </div>
         </div>
-        <div className="prose max-w-none pb-8 pt-8 xl:col-span-2">{children}</div>
+        <Prose className="pb-8 pt-8 xl:col-span-2">{children}</Prose>
       </div>
     </div>
   )

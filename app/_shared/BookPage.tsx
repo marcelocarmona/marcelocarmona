@@ -1,4 +1,5 @@
 import CalBookingEmbed from '@/components/CalBookingEmbed'
+import { DisplayTitle } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
 import type { Locale } from '@/types/content'
 
@@ -19,9 +20,12 @@ export default function BookPage({ locale = 'en' }: { locale?: Locale }) {
   return (
     <div lang={locale} className="divide-y divide-gray-200 dark:divide-gray-700">
       <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-        <h1 className="display-title text-3xl font-extrabold leading-9 text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+        <DisplayTitle
+          as="h1"
+          className="text-3xl font-extrabold leading-9 text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14"
+        >
           {copy.title}
-        </h1>
+        </DisplayTitle>
         <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">{copy.description}</p>
       </div>
 

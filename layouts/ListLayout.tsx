@@ -2,6 +2,7 @@
 
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
+import { Prose } from '@/components/ui/typography'
 import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import { getPostPath } from '@/lib/i18n/routes'
@@ -110,9 +111,7 @@ export default function ListLayout({
                         ))}
                       </div>
                     </div>
-                    <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                      {summary}
-                    </div>
+                    <Prose className="text-gray-500 dark:text-gray-400">{summary}</Prose>
                   </div>
                 </article>
               </li>

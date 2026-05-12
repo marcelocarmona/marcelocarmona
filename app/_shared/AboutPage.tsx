@@ -1,6 +1,7 @@
 import Image from '@/components/Image'
 import Link from '@/components/Link'
 import SocialIcon from '@/components/social-icons'
+import { Prose } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
 import { getBookPath } from '@/lib/i18n/routes'
 import type { Locale } from '@/types/content'
@@ -68,14 +69,14 @@ export default function AboutPage({ locale = 'en' }: { locale?: Locale }) {
             <SocialIcon kind="twitter" href={siteMetadata.twitter} />
           </div>
         </div>
-        <div className="prose max-w-none pb-8 pt-8 xl:col-span-2">
+        <Prose className="pb-8 pt-8 xl:col-span-2">
           <p>{copy.intro}</p>
           <p>{copy.body}</p>
           <p>{copy.connect}</p>
           <p>
             <Link href={getBookPath(locale)}>{copy.cta}</Link>
           </p>
-        </div>
+        </Prose>
       </div>
     </div>
   )
