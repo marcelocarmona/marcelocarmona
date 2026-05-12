@@ -6,13 +6,15 @@
     "node": "24.x"
   },
   "scripts": {
-    "start": "cross-env SOCKET=true node ./scripts/next-remote-watch.js ./data",
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "start": "cross-env SOCKET=true tsx ./scripts/next-remote-watch.ts ./data",
+    "dev": "next dev",
+    "dev:webpack": "next dev --webpack",
+    "build": "next build",
+    "build:webpack": "next build --webpack",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build --webpack",
-    "lint": "eslint --fix --ext .js,.jsx app components lib layouts scripts",
-    "lint:check": "eslint --ext .js,.jsx app components lib layouts scripts tests",
+    "lint": "eslint --fix --ext .ts,.tsx app components lib layouts scripts tests",
+    "lint:check": "eslint --ext .ts,.tsx app components lib layouts scripts tests",
     "test": "vitest run",
     "prepare": "husky"
   },
@@ -48,6 +50,9 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^16.2.6",
     "@svgr/webpack": "^8.1.0",
+    "@types/node": "^25.7.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "cross-env": "^10.1.0",
     "dedent": "^1.7.2",
     "eslint": "^9.39.4",
@@ -62,6 +67,8 @@
     "prettier-plugin-tailwindcss": "^0.7.4",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.5"
   },
   "lint-staged": {
