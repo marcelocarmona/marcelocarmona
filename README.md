@@ -37,12 +37,6 @@ Start the standard development server:
 npm run dev
 ```
 
-Start development with extra watching for content changes in `data/`:
-
-```bash
-npm start
-```
-
 Build and serve production locally:
 
 ```bash

@@ -6,7 +6,7 @@
     "node": "24.x"
   },
   "scripts": {
-    "start": "cross-env SOCKET=true tsx ./scripts/next-remote-watch.ts ./data",
+    "start": "next start",
     "dev": "next dev",
     "dev:webpack": "next dev --webpack",
     "build": "next build",
@@ -62,14 +62,13 @@
     "husky": "^9.1.7",
     "inquirer": "^13.4.2",
     "lint-staged": "^16.4.0",
-    "next-remote-watch": "^2.0.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.7.4",
-    "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3",
-    "tsx": "^4.21.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   },
   "lint-staged": {
     "*.+(js|jsx|ts|tsx)": [
