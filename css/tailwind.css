@@ -1,5 +1,44 @@
 @import 'tailwindcss';
-@config "../tailwind.config.js";
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-primary-50: var(--color-teal-50);
+  --color-primary-100: var(--color-teal-100);
+  --color-primary-200: var(--color-teal-200);
+  --color-primary-300: var(--color-teal-300);
+  --color-primary-400: var(--color-teal-400);
+  --color-primary-500: var(--color-teal-500);
+  --color-primary-600: var(--color-teal-600);
+  --color-primary-700: var(--color-teal-700);
+  --color-primary-800: var(--color-teal-800);
+  --color-primary-900: var(--color-teal-900);
+  --color-primary-950: var(--color-teal-950);
+
+  --color-gray-50: var(--color-neutral-50);
+  --color-gray-100: var(--color-neutral-100);
+  --color-gray-200: var(--color-neutral-200);
+  --color-gray-300: var(--color-neutral-300);
+  --color-gray-400: var(--color-neutral-400);
+  --color-gray-500: var(--color-neutral-500);
+  --color-gray-600: var(--color-neutral-600);
+  --color-gray-700: var(--color-neutral-700);
+  --color-gray-800: var(--color-neutral-800);
+  --color-gray-900: var(--color-neutral-900);
+  --color-gray-950: var(--color-neutral-950);
+
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif;
+
+  --leading-11: 2.75rem;
+  --leading-12: 3rem;
+  --leading-13: 3.25rem;
+  --leading-14: 3.5rem;
+}
 
 :root {
   --page-bg: 244 240 232;
@@ -62,6 +101,106 @@ body {
 
 .muted-copy {
   color: rgb(var(--page-muted));
+}
+
+.prose {
+  --tw-prose-body: var(--color-gray-700);
+  --tw-prose-headings: var(--color-gray-900);
+  --tw-prose-links: var(--color-primary-500);
+  --tw-prose-bold: var(--color-gray-600);
+  --tw-prose-counters: var(--color-gray-500);
+  --tw-prose-bullets: var(--color-gray-500);
+  --tw-prose-hr: var(--color-gray-200);
+  --tw-prose-quotes: var(--color-gray-900);
+  --tw-prose-quote-borders: var(--color-gray-200);
+  --tw-prose-code: var(--color-pink-500);
+  --tw-prose-pre-bg: var(--color-gray-800);
+  --tw-prose-invert-body: var(--color-gray-300);
+  --tw-prose-invert-headings: var(--color-gray-100);
+  --tw-prose-invert-links: var(--color-primary-500);
+  --tw-prose-invert-bold: var(--color-gray-100);
+  --tw-prose-invert-counters: var(--color-gray-400);
+  --tw-prose-invert-bullets: var(--color-gray-400);
+  --tw-prose-invert-hr: var(--color-gray-700);
+  --tw-prose-invert-quotes: var(--color-gray-100);
+  --tw-prose-invert-quote-borders: var(--color-gray-700);
+  --tw-prose-invert-code: var(--color-pink-500);
+  --tw-prose-invert-pre-bg: var(--color-gray-800);
+}
+
+.prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)):hover {
+  color: var(--color-primary-600) !important;
+}
+
+.prose :where(a code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--color-primary-400);
+}
+
+.prose :where(h1, h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.prose :where(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-weight: 600;
+}
+
+.prose :where(code):not(:where(pre code, [class~='not-prose'], [class~='not-prose'] *)) {
+  border-radius: 0.25rem;
+  background-color: var(--color-gray-100);
+  padding: 2px 4px;
+}
+
+.prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *))::before,
+.prose :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
+  content: none;
+}
+
+.prose :where(details):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  border-radius: 0.25rem;
+  background-color: var(--color-gray-100);
+  padding: 2px 4px;
+}
+
+.prose :where(ol li)::marker {
+  font-weight: 600;
+  color: var(--tw-prose-counters);
+}
+
+.prose :where(ul li)::marker {
+  color: var(--tw-prose-bullets);
+}
+
+.dark .prose {
+  --tw-prose-body: var(--tw-prose-invert-body);
+  --tw-prose-headings: var(--tw-prose-invert-headings);
+  --tw-prose-links: var(--tw-prose-invert-links);
+  --tw-prose-bold: var(--tw-prose-invert-bold);
+  --tw-prose-counters: var(--tw-prose-invert-counters);
+  --tw-prose-bullets: var(--tw-prose-invert-bullets);
+  --tw-prose-hr: var(--tw-prose-invert-hr);
+  --tw-prose-quotes: var(--tw-prose-invert-quotes);
+  --tw-prose-quote-borders: var(--tw-prose-invert-quote-borders);
+  --tw-prose-code: var(--tw-prose-invert-code);
+  --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);
+}
+
+.dark .prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)):hover {
+  color: var(--color-primary-400) !important;
+}
+
+.dark
+  .prose
+  :where(code, details):not(:where(pre code, [class~='not-prose'], [class~='not-prose'] *)) {
+  background-color: var(--color-gray-800);
+}
+
+.dark .prose :where(thead th):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  color: var(--color-gray-100);
+}
+
+.dark .prose :where(tbody tr):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  border-bottom-color: var(--color-gray-700);
 }
 
 .task-list-item::before {

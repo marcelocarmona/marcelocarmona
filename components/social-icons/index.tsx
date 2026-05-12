@@ -17,6 +17,10 @@ const components = {
 }
 
 type SocialIconKind = keyof typeof components
+const iconSizeClassNames: Record<string, string> = {
+  '6': 'size-6',
+  '8': 'size-8',
+}
 
 const SocialIcon = ({
   kind,
@@ -31,6 +35,7 @@ const SocialIcon = ({
     return null
 
   const SocialSvg = components[kind]
+  const sizeClassName = iconSizeClassNames[String(size)] ?? iconSizeClassNames['8']
 
   return (
     <a
@@ -41,7 +46,7 @@ const SocialIcon = ({
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg
-        className={`fill-current text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 h-${size} w-${size}`}
+        className={`fill-current text-gray-700 hover:text-blue-500 dark:text-gray-200 dark:hover:text-blue-400 ${sizeClassName}`}
       />
     </a>
   )

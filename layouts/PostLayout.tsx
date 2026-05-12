@@ -176,7 +176,7 @@ export default function PostLayout({
               </dd>
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10 dark:prose-dark">
+              <div className="prose max-w-none pb-8 pt-10">
                 <VideoPreviewCard video={frontMatter.video} locale={frontMatter.locale} />
                 {children}
               </div>

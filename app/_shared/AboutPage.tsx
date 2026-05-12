@@ -68,7 +68,7 @@ export default function AboutPage({ locale = 'en' }: { locale?: Locale }) {
             <SocialIcon kind="twitter" href={siteMetadata.twitter} />
           </div>
         </div>
-        <div className="prose max-w-none pb-8 pt-8 dark:prose-dark xl:col-span-2">
+        <div className="prose max-w-none pb-8 pt-8 xl:col-span-2">
           <p>{copy.intro}</p>
           <p>{copy.body}</p>
           <p>{copy.connect}</p>

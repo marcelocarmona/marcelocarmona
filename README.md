@@ -13,7 +13,7 @@ The site currently includes:
 
 - Next.js 16
 - React 19
-- Tailwind CSS 3
+- Tailwind CSS 4
 - MDX via `mdx-bundler`
 - Giscus comments
 - Optional Sentry and newsletter integrations
@@ -70,7 +70,7 @@ If you are only editing content, layout, or styles, you can usually leave them u
 - `components/`: shared UI, embeds, analytics, and comments
 - `layouts/`: post and list layouts
 - `public/static/`: images and favicons
-- `css/tailwind.css` and `tailwind.config.js`: theme and styling
+- `css/tailwind.css`: Tailwind theme tokens and global styling
 
 ## Writing posts
 
