@@ -1,10 +1,10 @@
 const esUi = {
   footer: {
     bookCall: 'Reservar llamada',
-    eyebrow: 'Enfoque profesional',
+    eyebrow: 'Ingeniería de software',
     summary:
-      'Escribo y asesoro sobre React, Next.js, arquitectura frontend y las decisiones tecnicas detras de equipos de producto confiables.',
-    title: 'Arquitectura frontend, rendimiento y entrega de producto.',
+      'Notas y trabajo práctico sobre arquitectura frontend, infraestructura cloud, flujos de entrega y las decisiones de ingeniería detrás de software mantenible.',
+    title: 'Productos web confiables y los sistemas que los sostienen.',
   },
   list: {
     noPostsFound: 'No se encontraron articulos.',

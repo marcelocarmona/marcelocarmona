@@ -25,7 +25,7 @@ const LayoutWrapper = ({ children, postLocaleMap }) => {
                   <Logo />
                 </div>
                 {typeof siteMetadata.headerTitle === 'string' ? (
-                  <div className="display-title h-6 text-xl font-semibold sm:block sm:text-2xl">
+                  <div className="display-title h-6 whitespace-nowrap text-xl font-semibold sm:block sm:text-2xl">
                     {siteMetadata.headerTitle}
                   </div>
                 ) : (

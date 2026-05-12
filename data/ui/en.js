@@ -1,10 +1,10 @@
 const enUi = {
   footer: {
     bookCall: 'Book a call',
-    eyebrow: 'Professional focus',
+    eyebrow: 'Software engineering',
     summary:
-      'Writing and consulting on React, Next.js, platform architecture, and the engineering tradeoffs behind reliable product teams.',
-    title: 'Frontend architecture, performance, and product delivery.',
+      'Notes and practical work across frontend architecture, cloud infrastructure, delivery workflows, and the engineering decisions behind maintainable software.',
+    title: 'Reliable web products and the systems behind them.',
   },
   list: {
     noPostsFound: 'No posts found.',
