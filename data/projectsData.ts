@@ -15,6 +15,12 @@ const projectsData: ProjectData[] = [
     imgSrc: '/static/images/marcelocarmona_talk.png',
     href: '/guides',
   },
+  {
+    title: 'SF Crash Map',
+    description: `A DataSF injury crash map for exploring recent records across San Francisco
+    neighborhoods.`,
+    href: '/sf-crash-map',
+  },
 ]
 
 export default projectsData

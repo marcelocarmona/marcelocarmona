@@ -92,6 +92,12 @@ export const PUBLIC_STATIC_PAGES = [
     path: '/projects',
     description: 'Public projects and technical work by Marcelo Carmona.',
   },
+  {
+    title: 'SF Crash Map',
+    locale: 'en',
+    path: '/sf-crash-map',
+    description: 'Explore recent DataSF injury crash records across San Francisco neighborhoods.',
+  },
 ]
 
 export function getPublicStaticPages() {
