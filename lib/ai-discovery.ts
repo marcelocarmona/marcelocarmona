@@ -25,6 +25,7 @@ interface AiPostEntry {
   canonicalUrl: string
   summary: string
   tags: string[]
+  topics: string[]
   datePublished: string | null
   dateModified: string | null
   translationKey: string | null
@@ -143,6 +144,7 @@ function buildPostEntry(posts: ContentFrontMatter[], post: ContentFrontMatter): 
     canonicalUrl: toAbsoluteMaybe(post.canonicalUrl) || absoluteUrl(sitePath),
     summary: compactText(post.summary || ''),
     tags: post.tags || [],
+    topics: post.topics || post.tags || [],
     datePublished: post.date,
     dateModified: getPostUpdatedDate(post),
     translationKey: post.translationKey || null,

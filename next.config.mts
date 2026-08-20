@@ -86,6 +86,11 @@ const nextConfig: NextConfig = withBundleAnalyzer({
   async redirects() {
     return [
       {
+        source: '/diagrams-you-can-break',
+        destination: '/interactive-distributed-systems',
+        permanent: true,
+      },
+      {
         source: '/cv',
         destination: 'https://www.linkedin.com/in/carmonamarcelo',
         permanent: false,

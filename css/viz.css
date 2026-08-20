@@ -1,0 +1,602 @@
+/*
+ * Diagram design system.
+ *
+ * Every diagram component emits layout only; all appearance is resolved here
+ * from `data-tone`, `data-variant`, `data-ghost` and `data-active` attributes.
+ * That separation is what keeps six different diagrams looking like one family.
+ */
+
+.viz-figure {
+  --viz-bg: #0e1116;
+  --viz-surface: #161b22;
+  --viz-border: #30363d;
+  --viz-text: #e6edf3;
+  --viz-muted: #8b949e;
+
+  --viz-accent: #f54e00;
+  --viz-success: #3fb950;
+  --viz-danger: #f85149;
+
+  /* Categorical palette, for peers of equal status. Deliberately excludes the
+   * orange of --viz-accent so "which node owns this" never reads as "this is
+   * the thing currently happening". Six hues is the practical ceiling before
+   * they stop being tellable apart at 5px. */
+  --viz-owner-0: #58a6ff;
+  --viz-owner-1: #bc8cff;
+  --viz-owner-2: #3fb950;
+  --viz-owner-3: #e3b341;
+  --viz-owner-4: #39c5cf;
+  --viz-owner-5: #f778ba;
+
+  --viz-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+  --viz-motion: 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------- figure */
+
+.viz-figure {
+  position: relative;
+  z-index: 1;
+  margin: 2.5rem 0;
+  padding: 0;
+  border: 1px solid var(--viz-border);
+  border-radius: 10px;
+  background: var(--viz-surface);
+  overflow: hidden;
+}
+
+.viz-stage {
+  display: block;
+  width: 100%;
+  min-width: 52rem;
+  height: auto;
+  background: var(--viz-bg);
+  font-family: var(--viz-font-mono);
+}
+
+.viz-stage-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  background: var(--viz-bg);
+}
+
+.viz-stage-scroll:focus-visible {
+  outline: 2px solid var(--viz-accent);
+  outline-offset: -2px;
+}
+
+.viz-caption {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--viz-border);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--viz-muted);
+}
+
+.viz-caption strong {
+  color: var(--viz-text);
+}
+
+/* ----------------------------------------------------------------- nodes */
+
+.viz-node {
+  fill: var(--viz-surface);
+  stroke: var(--viz-border);
+  stroke-width: 1;
+  transition:
+    stroke var(--viz-motion),
+    fill var(--viz-motion);
+}
+
+.viz-node-group {
+  transition:
+    transform var(--viz-motion),
+    opacity var(--viz-motion);
+}
+
+.viz-node-title {
+  fill: var(--viz-text);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.viz-node-subtitle {
+  fill: var(--viz-muted);
+  font-size: 10px;
+}
+
+.viz-node-group[data-tone='accent'] .viz-node {
+  stroke: var(--viz-accent);
+}
+.viz-node-group[data-tone='success'] .viz-node {
+  stroke: var(--viz-success);
+}
+.viz-node-group[data-tone='danger'] .viz-node {
+  stroke: var(--viz-danger);
+}
+.viz-node-group[data-tone='muted'] .viz-node {
+  stroke: var(--viz-border);
+}
+
+.viz-node-group[data-ghost] {
+  opacity: 0.35;
+}
+
+.viz-node-group[data-ghost] .viz-node {
+  stroke-dasharray: 3 3;
+}
+
+.viz-node-group[data-active] .viz-node {
+  fill: color-mix(in srgb, var(--viz-accent) 12%, var(--viz-surface));
+  stroke-width: 2;
+}
+
+.viz-node-group[data-tone='success'][data-active] .viz-node {
+  fill: color-mix(in srgb, var(--viz-success) 14%, var(--viz-surface));
+}
+
+.viz-node-group[data-tone='danger'][data-active] .viz-node {
+  fill: color-mix(in srgb, var(--viz-danger) 16%, var(--viz-surface));
+}
+
+/* ----------------------------------------------------------------- edges */
+
+.viz-edge {
+  fill: none;
+  stroke: var(--viz-border);
+  stroke-width: 1.5;
+  transition:
+    stroke var(--viz-motion),
+    stroke-width var(--viz-motion);
+}
+
+.viz-edge[data-variant='dashed'] {
+  stroke-dasharray: 4 4;
+}
+
+.viz-edge-arrow {
+  fill: var(--viz-border);
+  transition: fill var(--viz-motion);
+}
+
+.viz-edge-label {
+  fill: var(--viz-muted);
+  font-size: 10px;
+}
+
+.viz-edge-group[data-tone='accent'] .viz-edge,
+.viz-edge-group[data-active] .viz-edge {
+  stroke: var(--viz-accent);
+  stroke-width: 2;
+}
+
+.viz-edge-group[data-tone='accent'] .viz-edge-arrow,
+.viz-edge-group[data-active] .viz-edge-arrow {
+  fill: var(--viz-accent);
+}
+
+.viz-edge-group[data-tone='danger'] .viz-edge {
+  stroke: var(--viz-danger);
+}
+.viz-edge-group[data-tone='danger'] .viz-edge-arrow {
+  fill: var(--viz-danger);
+}
+.viz-edge-group[data-tone='danger'] .viz-edge-label {
+  fill: var(--viz-danger);
+}
+.viz-edge-group[data-tone='muted'] .viz-edge {
+  stroke: var(--viz-border);
+  opacity: 0.5;
+}
+.viz-edge-group[data-tone='muted'] .viz-edge-arrow {
+  fill: var(--viz-border);
+  opacity: 0.5;
+}
+
+.viz-edge-group[data-active] .viz-edge-label {
+  fill: var(--viz-text);
+}
+
+/* -------------------------------------------------------- badges, labels */
+
+.viz-label {
+  fill: var(--viz-muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.viz-badge rect {
+  fill: color-mix(in srgb, var(--viz-accent) 18%, transparent);
+  stroke: var(--viz-accent);
+  stroke-width: 1;
+}
+
+.viz-badge text {
+  fill: var(--viz-text);
+  font-size: 10px;
+}
+
+.viz-badge[data-tone='success'] rect {
+  fill: color-mix(in srgb, var(--viz-success) 18%, transparent);
+  stroke: var(--viz-success);
+}
+
+.viz-badge[data-tone='danger'] rect {
+  fill: color-mix(in srgb, var(--viz-danger) 20%, transparent);
+  stroke: var(--viz-danger);
+}
+
+.viz-packet circle {
+  fill: var(--viz-accent);
+  transition: transform var(--viz-motion);
+}
+
+.viz-packet[data-tone='danger'] circle {
+  fill: var(--viz-danger);
+}
+
+.viz-packet {
+  transition: transform var(--viz-motion);
+}
+
+.viz-packet-label {
+  fill: var(--viz-text);
+  font-size: 10px;
+}
+
+.viz-badge[data-ghost] rect {
+  fill: none;
+  stroke: var(--viz-border);
+}
+
+.viz-badge[data-ghost] text {
+  fill: var(--viz-muted);
+}
+
+/* -------------------------------------------------------- owner identity */
+
+/* One assignment per index, inherited by every child shape. A diagram sets
+ * data-owner and never names a color; the shape rules below read --owner. */
+.viz-figure [data-owner='0'] {
+  --owner: var(--viz-owner-0);
+}
+.viz-figure [data-owner='1'] {
+  --owner: var(--viz-owner-1);
+}
+.viz-figure [data-owner='2'] {
+  --owner: var(--viz-owner-2);
+}
+.viz-figure [data-owner='3'] {
+  --owner: var(--viz-owner-3);
+}
+.viz-figure [data-owner='4'] {
+  --owner: var(--viz-owner-4);
+}
+.viz-figure [data-owner='5'] {
+  --owner: var(--viz-owner-5);
+}
+
+/* ----------------------------------------------------- dots, bars, arcs */
+
+.viz-dot {
+  transition:
+    transform var(--viz-motion),
+    opacity var(--viz-motion);
+}
+
+.viz-dot-core {
+  fill: var(--owner, var(--viz-muted));
+  stroke: var(--viz-bg);
+  stroke-width: 1;
+  transition: fill var(--viz-motion);
+}
+
+.viz-dot[data-tone='accent'] .viz-dot-core {
+  fill: var(--owner, var(--viz-accent));
+}
+.viz-dot[data-tone='success'] .viz-dot-core {
+  fill: var(--owner, var(--viz-success));
+}
+.viz-dot[data-tone='danger'] .viz-dot-core {
+  fill: var(--viz-danger);
+}
+.viz-dot[data-ghost] {
+  opacity: 0.3;
+}
+
+.viz-dot-halo {
+  fill: none;
+  stroke: var(--viz-accent);
+  stroke-width: 1.5;
+}
+
+.viz-dot-label {
+  fill: var(--viz-muted);
+  font-size: 9px;
+}
+
+.viz-bar-track {
+  fill: color-mix(in srgb, var(--viz-text) 5%, transparent);
+}
+
+.viz-bar-fill {
+  fill: var(--owner, var(--viz-muted));
+  transition:
+    width var(--viz-motion),
+    fill var(--viz-motion);
+}
+
+.viz-bar[data-tone='accent'] .viz-bar-fill {
+  fill: var(--owner, var(--viz-accent));
+}
+.viz-bar[data-tone='success'] .viz-bar-fill {
+  fill: var(--owner, var(--viz-success));
+}
+.viz-bar[data-tone='danger'] .viz-bar-fill {
+  fill: var(--viz-danger);
+}
+.viz-bar[data-ghost] .viz-bar-fill {
+  fill: var(--viz-border);
+}
+.viz-bar[data-ghost] .viz-bar-track {
+  fill: none;
+}
+
+.viz-bar-label,
+.viz-bar-value {
+  font-size: 10px;
+}
+
+.viz-bar-label {
+  fill: var(--viz-text);
+}
+.viz-bar-value {
+  fill: var(--viz-muted);
+}
+
+.viz-tick {
+  stroke: var(--owner, var(--viz-border));
+  stroke-width: 1.5;
+  transition: stroke var(--viz-motion);
+}
+
+.viz-tick[data-variant='dashed'] {
+  stroke-dasharray: 3 3;
+}
+.viz-tick[data-tone='muted'] {
+  stroke: var(--viz-border);
+}
+.viz-tick[data-tone='accent'] {
+  stroke: var(--viz-accent);
+}
+.viz-tick[data-tone='danger'] {
+  stroke: var(--viz-danger);
+}
+
+.viz-arc {
+  fill: color-mix(in srgb, var(--owner, var(--viz-border)) 26%, transparent);
+  stroke: var(--owner, var(--viz-border));
+  stroke-width: 1;
+  transition:
+    fill var(--viz-motion),
+    stroke var(--viz-motion),
+    opacity var(--viz-motion);
+}
+
+.viz-arc[data-ghost] {
+  fill: none;
+  stroke: var(--viz-danger);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.viz-ring-guide {
+  fill: none;
+  stroke: var(--viz-border);
+  stroke-width: 1;
+}
+
+/* --------------------------------------------------------- readout panel */
+
+.viz-panel-frame {
+  fill: color-mix(in srgb, var(--viz-text) 4%, transparent);
+  stroke: var(--viz-border);
+  stroke-width: 1;
+}
+
+.viz-panel-title {
+  fill: var(--viz-muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.viz-panel-rule {
+  stroke: var(--viz-border);
+  stroke-width: 1;
+}
+
+.viz-panel-label {
+  fill: var(--viz-muted);
+  font-size: 11px;
+}
+
+.viz-panel-value {
+  fill: var(--viz-text);
+  font-size: 11px;
+}
+
+.viz-panel g[data-tone='success'] .viz-panel-value {
+  fill: var(--viz-success);
+}
+.viz-panel g[data-tone='danger'] .viz-panel-value {
+  fill: var(--viz-danger);
+}
+.viz-panel g[data-tone='accent'] .viz-panel-value {
+  fill: var(--viz-accent);
+}
+.viz-panel g[data-tone='muted'] .viz-panel-value {
+  fill: var(--viz-muted);
+}
+
+/* -------------------------------------------------------------- controls */
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--viz-border);
+  background: var(--viz-surface);
+}
+
+.viz-controls-transport,
+.viz-controls-custom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.viz-controls button {
+  min-width: 30px;
+  height: 28px;
+  padding: 0 0.5rem;
+  border: 1px solid var(--viz-border);
+  border-radius: 5px;
+  background: var(--viz-bg);
+  color: var(--viz-text);
+  font-family: var(--viz-font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    border-color 160ms,
+    background 160ms;
+}
+
+.viz-controls button:hover {
+  border-color: var(--viz-accent);
+}
+
+.viz-controls button:focus-visible {
+  outline: 2px solid var(--viz-accent);
+  outline-offset: 2px;
+}
+
+.viz-step-readout {
+  margin-left: 0.35rem;
+  color: var(--viz-muted);
+  font-family: var(--viz-font-mono);
+  font-size: 11px;
+}
+
+.viz-toggle {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.viz-toggle-dot {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--viz-muted);
+  border-radius: 50%;
+  background: transparent;
+  transition:
+    background 160ms,
+    border-color 160ms;
+}
+
+.viz-toggle[data-checked] {
+  border-color: var(--viz-accent);
+}
+
+.viz-toggle[data-checked] .viz-toggle-dot {
+  background: var(--viz-accent);
+  border-color: var(--viz-accent);
+}
+
+.viz-toggle[data-tone='danger'][data-checked] {
+  border-color: var(--viz-danger);
+}
+
+.viz-toggle[data-tone='danger'][data-checked] .viz-toggle-dot {
+  background: var(--viz-danger);
+  border-color: var(--viz-danger);
+}
+
+.viz-slider {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  color: var(--viz-muted);
+  font-family: var(--viz-font-mono);
+  font-size: 11px;
+}
+
+.viz-slider input[type='range'] {
+  width: 84px;
+  accent-color: var(--viz-accent);
+}
+
+.viz-slider-value {
+  min-width: 2.4em;
+  color: var(--viz-text);
+}
+
+/* A control with no effect under the current mode stays visible but inert, so
+ * the reader can see what the other mode would have given them. */
+.viz-slider[data-disabled] {
+  opacity: 0.4;
+}
+
+.viz-slider[data-disabled] input[type='range'] {
+  cursor: not-allowed;
+}
+
+.viz-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.viz-controls button:disabled:hover {
+  border-color: var(--viz-border);
+}
+
+/* Honour the OS reduced-motion setting. Playback autostart is also disabled
+ * in usePlayback; this removes the tweening on top of that. */
+@media (prefers-reduced-motion: reduce) {
+  .viz-node-group,
+  .viz-node,
+  .viz-edge,
+  .viz-edge-arrow,
+  .viz-packet,
+  .viz-packet circle,
+  .viz-dot,
+  .viz-dot-core,
+  .viz-bar-fill,
+  .viz-tick,
+  .viz-arc {
+    transition: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .viz-controls {
+    justify-content: flex-start;
+  }
+}
+
+/* Keep prose on a comfortable reading measure, but let diagrams expand evenly
+ * on both sides of that centered column. This follows the original article
+ * layout without introducing a second visual system for the figures. */
+@media (min-width: 64rem) {
+  .prose .viz-figure {
+    width: min(62rem, calc(100vw - 3rem));
+    max-width: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+}

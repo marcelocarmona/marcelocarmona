@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import type { ComponentType } from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
+import dynamic from 'next/dynamic'
 import { CodeSandbox } from '@/components/MdxEmbed'
 import AuthorLayout from '@/layouts/AuthorLayout'
 import PostLayout from '@/layouts/PostLayout'
@@ -19,6 +20,12 @@ const Layouts: Record<string, ComponentType<any>> = {
   PostSimple,
 }
 
+// Keep complex, article-specific visualizations out of the baseline blog bundle.
+// `next/dynamic` uses the site's React runtime and still server-renders by default.
+const HashRingDemo = dynamic(() => import('./diagrams/HashRingDemo'))
+const QuorumDemo = dynamic(() => import('./diagrams/QuorumDemo'))
+const TailLatencyDemo = dynamic(() => import('./diagrams/TailLatencyDemo'))
+
 const BaseMDXComponents = {
   CodeSandbox,
   Image,
@@ -26,6 +33,9 @@ const BaseMDXComponents = {
   a: CustomLink,
   pre: Pre,
   BlogNewsletterForm: BlogNewsletterForm,
+  HashRingDemo,
+  QuorumDemo,
+  TailLatencyDemo,
   wrapper: ({ layout, ...rest }: { layout: string; [key: string]: any }) => {
     const Layout = Layouts[layout] || PostLayout
     return <Layout {...rest} />

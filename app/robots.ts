@@ -19,6 +19,14 @@ export default function robots() {
         userAgent: 'ChatGPT-User',
         allow: '/',
       },
+      {
+        userAgent: 'Claude-SearchBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Claude-User',
+        allow: '/',
+      },
     ],
     sitemap: `${siteMetadata.siteUrl}/sitemap.xml`,
     host: siteMetadata.siteUrl,

@@ -1,0 +1,167 @@
+---
+title: 'Interactive Distributed Systems: Hashing, Quorums, and Tail Latency'
+date: '2026-08-20'
+summary: 'Explore consistent hashing, quorum reads and writes, and tail latency through interactive diagrams. Change inputs to see how distributed systems behave.'
+tags: ['Distributed systems', 'React', 'SVG']
+topics: ['Consistent hashing', 'Quorum reads and writes', 'Tail latency', 'Interactive diagrams']
+authors: ['default']
+draft: false
+narrationChecked: true
+---
+
+Cursor published [Git at any scale](https://cursor.com/blog/git-at-any-scale) this week.
+Vicent Martí walks through why hosting Git is genuinely hard, why GitHub's Spokes made
+the choices it did, and how Cursor's replacement puts a write-ahead log in S3 and stops
+caring which machine a repository lives on. It is very good systems writing and you
+should read it.
+
+I want to talk about the pictures.
+
+The interactive diagram lets you change the replica count, increase network latency, or
+take a participant offline. As latency rises, commit throughput falls. The paragraph
+makes a claim; the diagram lets you test it.
+
+So I opened the page source, because I assumed there was a library I had somehow never
+heard of.
+
+There isn't one. No D3, no Framer Motion, no canvas, no Mermaid, no Lottie. The diagrams
+are React components that compute their own coordinates and emit raw `<svg>`,
+server-rendered and then hydrated into something you can poke. You can see it in the
+static HTML:
+
+```html
+<polygon
+  class="viz-edge-arrow"
+  points="0 0, 8 3, 0 6"
+  transform="translate(101.89 77.51) rotate(78.05582281155372) translate(-8 -3)"
+/>
+```
+
+That rotation value was calculated, not typed by hand. `Math.atan2` finds the angle of
+the arrow, and its result is already present in the static HTML. The server positioned
+the arrow before the page reached the browser.
+
+## A static diagram asks you to trust it
+
+A static diagram can look correct even when it is wrong. An arrow may connect services
+that never communicate, but the image gives you no way to check.
+
+An interactive diagram lets you test the idea. Change an input or take a node offline.
+If the result does not match the explanation, you can see the problem.
+
+That is why every diagram in this article includes a control that can expose a mistake.
+
+## What actually changed
+
+None of this is a new idea. Bret Victor was arguing for
+[explorable explanations](https://worrydream.com/ExplorableExplanations/) in 2011, and
+people were hand-rolling SVG long before that. The reason almost nobody did it is that it
+cost too much. Three hundred lines of trigonometry in support of one paragraph is a
+terrible trade when you have a whiteboard photo and a deadline, so we all shipped the
+whiteboard photo.
+
+The cost moved. Working out where an arrowhead meets the perimeter of a rectangle at an
+arbitrary angle, building an SVG arc path that survives crossing the 360 degree boundary,
+writing a seeded generator so the server and the browser draw byte-identical output. All
+of that is well-specified, verifiable, fiddly work, and it is where current models are
+strongest. I described the ring geometry I wanted for the first diagram below and got a
+working `arcBandPath` back on the first attempt.
+
+AI made these diagrams faster to build, but I still had to decide what each one should
+explain. The three examples below follow one request through a distributed system: find
+the data, read the right copy, and wait for the response.
+
+## Example 1: Where does the data live?
+
+Imagine an application's cache or database has grown beyond one server. The data is
+divided across a cluster. Each item has a key, such as a user or product ID, and every
+request needs to find the server that owns it. This situation appears in distributed
+caches and partitioned databases.
+
+The system needs a repeatable placement rule. A simple rule works while the cluster
+stays the same, but adding or removing a server can force most of the data to move.
+
+[Consistent hashing](https://people.csail.mit.edu/karger/Papers/web.pdf) limits that
+movement. The diagram places keys and servers around a circle. The coloured arcs show
+which server owns each part of the circle. When node E leaves, the outer dots show the
+keys that need a new home. Switch to `hash % N` to see how many more keys move with the
+simpler approach.
+
+<HashRingDemo />
+
+Consistent hashing is useful when servers often join, leave, or fail and moving data is
+expensive. For a small cluster that rarely changes, a simpler placement rule may be
+enough. The tokens slider shows a second concern: more positions per server spread the
+data more evenly, although the balance is never perfect.
+
+**Used in practice:** Uber built and open-sourced
+[Ringpop](https://www.uber.com/blog/ringpop-open-source-nodejs-library/), which used
+consistent hashing to distribute live driver-location work across its Geospatial
+service.
+
+## Example 2: When is a read correct?
+
+Imagine a database keeps the same value on several servers so the application can
+continue working if one fails. After a write, network delays can leave some copies with
+the old value. A read must decide how many replicas to consult before returning an
+answer. This is common in replicated databases running across several servers or
+locations.
+
+The diagram shows the quorum rule from Amazon's original
+[Dynamo paper](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf).
+`N` is the total number of replicas, `W` is the number that confirm a write, and `R` is
+the number consulted during a read. Green marks the write group, orange marks the read
+group, and a split marker belongs to both. When `R + W > N`, the groups must share at
+least one replica.
+
+<QuorumDemo />
+
+Lower `R` or `W` and the groups can miss each other, allowing an old value to be returned.
+Take replicas offline and a larger quorum may become impossible to reach. Quorums are
+useful when a database must balance fresh reads with the ability to keep working during
+failures.
+
+**Used in practice:** Amazon's
+[Dynamo](https://www.allthingsdistributed.com/2007/10/amazons_dynamo.html) used
+quorum-like reads and writes for services such as shopping carts and session state.
+[Apache Cassandra](https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html)
+makes the same tradeoff available through consistency levels such as `QUORUM`.
+
+## Example 3: How long does the answer take?
+
+Imagine a search request split across many servers, with each server searching one part
+of the data. The work happens in parallel, and a coordinator combines the results. This
+pattern is common in search, analytics, and other systems that divide large datasets into
+shards.
+
+Fan-out is useful when work can run in parallel, but the complete request cannot finish
+until every required shard replies. One slow response can delay everything.
+
+Each bar in the diagram is one shard handling part of the request. The longest bar is
+the time the user waits. Increase the number of shards and rare delays become much more
+common at the request level. This is the problem described in
+[_The Tail at Scale_](https://research.google/pubs/the-tail-at-scale/).
+
+<TailLatencyDemo />
+
+The **Hedge at p95** control sends a second copy of a slow request and uses whichever
+reply arrives first. Hedging is useful for latency-sensitive requests when the system
+has enough capacity for the extra work. The diagram shows the tradeoff: fewer long delays
+in exchange for more requests.
+
+**Used in practice:**
+[_The Tail at Scale_](https://research.google/pubs/the-tail-at-scale/) uses Google Search
+as an example of a system that must consult large datasets within a few tens of
+milliseconds, then describes techniques such as hedged requests for controlling long
+delays.
+
+## Steal this
+
+I have wanted a simple way to explain an idea without giving someone a lecture. I never
+built it because making the diagrams took too much time.
+That excuse is gone. AI makes the drawing easier, but the important work has not changed.
+You still have to decide what the diagram should explain and give readers a way to test
+it.
+
+A useful diagram does more than look good. It lets the reader change something and see
+whether the idea still holds.

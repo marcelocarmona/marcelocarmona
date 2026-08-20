@@ -130,7 +130,14 @@ describe('robots', () => {
     const robotsConfig = robots()
     const allowedUserAgents = robotsConfig.rules.map((rule) => rule.userAgent)
 
-    expect(allowedUserAgents).toEqual(['*', 'OAI-SearchBot', 'GPTBot', 'ChatGPT-User'])
+    expect(allowedUserAgents).toEqual([
+      '*',
+      'OAI-SearchBot',
+      'GPTBot',
+      'ChatGPT-User',
+      'Claude-SearchBot',
+      'Claude-User',
+    ])
     expect(robotsConfig.sitemap).toBe(`${siteUrl}/sitemap.xml`)
     robotsConfig.rules.forEach((rule) => {
       expect(rule.allow).toBe('/')

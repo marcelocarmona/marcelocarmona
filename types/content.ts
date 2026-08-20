@@ -24,6 +24,7 @@ export interface ContentFrontMatter {
   date: string | null
   lastmod?: string | null
   tags?: string[]
+  topics?: string[]
   draft?: boolean
   images?: string[]
   authors?: string[]

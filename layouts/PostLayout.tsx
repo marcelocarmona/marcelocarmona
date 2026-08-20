@@ -60,10 +60,13 @@ export default function PostLayout({
     '@type': 'BlogPosting',
     headline: title,
     description: frontMatter.summary || siteMetadata.description,
+    articleSection: tags?.[0],
+    keywords: frontMatter.topics || tags || [],
     datePublished: date,
     dateModified: frontMatter.lastmod || date,
     image: [imageUrl],
     mainEntityOfPage: pageUrl,
+    isAccessibleForFree: true,
     inLanguage: frontMatter.locale === 'es' ? 'es-ES' : 'en-US',
     author: authorDetails.map((author) => ({
       '@type': 'Person',
@@ -108,8 +111,8 @@ export default function PostLayout({
       <article lang={frontMatter.locale || 'en'}>
         <SeoSchema data={articleSchema} />
         <SeoSchema data={breadcrumbSchema} />
-        <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
-          <header className="pt-6 xl:pb-6">
+        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <header className="pb-8 pt-6">
             <div className="space-y-1 text-center">
               <dl className="space-y-10">
                 <div>
@@ -135,61 +138,53 @@ export default function PostLayout({
               <div>
                 <PageTitle>{title}</PageTitle>
               </div>
+              <dl className="pt-5">
+                <dt className="sr-only">{postUi.authors}</dt>
+                <dd>
+                  <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+                    {authorDetails.map((author) => (
+                      <li className="flex items-center space-x-2 text-left" key={author.name}>
+                        {author.avatar && (
+                          <Image
+                            src={author.avatar}
+                            width={38}
+                            height={38}
+                            alt="avatar"
+                            className="h-10 w-10 rounded-full"
+                          />
+                        )}
+                        <dl className="whitespace-nowrap text-sm font-medium leading-5">
+                          <dt className="sr-only">{postUi.name}</dt>
+                          <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
+                          <dt className="sr-only">{postUi.twitter}</dt>
+                          <dd>
+                            {author.twitter && (
+                              <Link
+                                href={author.twitter}
+                                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                              >
+                                {author.twitter.replace('https://twitter.com/', '@')}
+                              </Link>
+                            )}
+                          </dd>
+                        </dl>
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </dl>
             </div>
           </header>
-          <div
-            className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0"
-            style={{ gridTemplateRows: 'auto 1fr' }}
-          >
-            <dl className="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
-              <dt className="sr-only">{postUi.authors}</dt>
-              <dd>
-                <ul className="flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
-                  {authorDetails.map((author) => (
-                    <li className="flex items-center space-x-2" key={author.name}>
-                      {author.avatar && (
-                        <Image
-                          src={author.avatar}
-                          width={38}
-                          height={38}
-                          alt="avatar"
-                          className="h-10 w-10 rounded-full"
-                        />
-                      )}
-                      <dl className="whitespace-nowrap text-sm font-medium leading-5">
-                        <dt className="sr-only">{postUi.name}</dt>
-                        <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                        <dt className="sr-only">{postUi.twitter}</dt>
-                        <dd>
-                          {author.twitter && (
-                            <Link
-                              href={author.twitter}
-                              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                            >
-                              {author.twitter.replace('https://twitter.com/', '@')}
-                            </Link>
-                          )}
-                        </dd>
-                      </dl>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </dl>
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <Prose className="pb-8 pt-10">
-                <VideoPreviewCard video={frontMatter.video} locale={frontMatter.locale} />
-                {children}
-              </Prose>
-              <div className="pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
-                <Link href={editUrl(fileName)}>{postUi.viewOnGitHub}</Link>
-              </div>
-              <Comments frontMatter={frontMatter} />
-            </div>
-            <footer>
-              <div className="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
+          <div className="pb-8">
+            <Prose className="mx-auto max-w-[42rem] pb-8 pt-10">
+              <VideoPreviewCard video={frontMatter.video} locale={frontMatter.locale} />
+              {children}
+            </Prose>
+
+            <div className="mx-auto max-w-[42rem] divide-y divide-gray-200 dark:divide-gray-700">
+              <footer className="divide-y divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700">
                 {tags && (
-                  <div className="py-4 xl:py-8">
+                  <div className="py-6">
                     <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       {postUi.tags}
                     </h2>
@@ -201,11 +196,11 @@ export default function PostLayout({
                   </div>
                 )}
                 {languageVersions.length > 0 && (
-                  <div className="py-4 xl:py-8">
+                  <div className="py-6">
                     <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       {postUi.translations}
                     </h2>
-                    <ul className="space-y-2">
+                    <ul className="mt-2 space-y-2">
                       {languageVersions.map((post) => (
                         <li key={post.href}>
                           <Link
@@ -220,11 +215,11 @@ export default function PostLayout({
                   </div>
                 )}
                 {relatedPosts.length > 0 && (
-                  <div className="py-4 xl:py-8">
+                  <div className="py-6">
                     <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       {postUi.relatedArticles}
                     </h2>
-                    <ul className="space-y-2">
+                    <ul className="mt-2 grid gap-2 sm:grid-cols-2">
                       {relatedPosts.map((post) => (
                         <li key={post.slug}>
                           <Link
@@ -239,13 +234,13 @@ export default function PostLayout({
                   </div>
                 )}
                 {(next || prev) && (
-                  <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
+                  <div className="grid gap-6 py-6 sm:grid-cols-2">
                     {prev && (
                       <div>
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                           {postUi.previousArticle}
                         </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                        <div className="mt-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
                           <Link href={getPostPath(frontMatter.locale, prev.slug)}>
                             {prev.title}
                           </Link>
@@ -253,11 +248,11 @@ export default function PostLayout({
                       </div>
                     )}
                     {next && (
-                      <div>
+                      <div className="sm:text-right">
                         <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                           {postUi.nextArticle}
                         </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                        <div className="mt-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
                           <Link href={getPostPath(frontMatter.locale, next.slug)}>
                             {next.title}
                           </Link>
@@ -266,16 +261,20 @@ export default function PostLayout({
                     )}
                   </div>
                 )}
+                <div className="flex flex-wrap items-center justify-between gap-4 py-6">
+                  <Link
+                    href={blogPath}
+                    className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  >
+                    &larr; {postUi.backToBlog}
+                  </Link>
+                  <Link href={editUrl(fileName)}>{postUi.viewOnGitHub}</Link>
+                </div>
+              </footer>
+              <div className="pt-8">
+                <Comments frontMatter={frontMatter} />
               </div>
-              <div className="pt-4 xl:pt-8">
-                <Link
-                  href={blogPath}
-                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                >
-                  &larr; {postUi.backToBlog}
-                </Link>
-              </div>
-            </footer>
+            </div>
           </div>
         </div>
       </article>
