@@ -5,6 +5,12 @@
   "engines": {
     "node": "24.x"
   },
+  "allowScripts": {
+    "@sentry/cli@2.58.5": true,
+    "esbuild@0.28.0": true,
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.11.1": true
+  },
   "scripts": {
     "start": "next start",
     "dev": "next dev",
