@@ -1,4 +1,5 @@
 import ListLayout from '@/layouts/ListLayout'
+import PaginationLinkTags from '@/components/PaginationLinkTags'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath } from '@/lib/i18n/routes'
 import { buildPageMetadata } from '@/lib/metadata'
@@ -35,12 +36,19 @@ export default async function BlogPage() {
   }
 
   return (
-    <ListLayout
-      posts={posts}
-      initialDisplayPosts={initialDisplayPosts}
-      locale="en"
-      pagination={pagination}
-      title="All Posts"
-    />
+    <>
+      <PaginationLinkTags
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        locale="en"
+      />
+      <ListLayout
+        posts={posts}
+        initialDisplayPosts={initialDisplayPosts}
+        locale="en"
+        pagination={pagination}
+        title="All Posts"
+      />
+    </>
   )
 }

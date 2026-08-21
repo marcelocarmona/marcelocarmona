@@ -217,6 +217,39 @@ function formatPageLine(page: { title: string; url: string; description: string 
   return `- ${markdownLink(page.title, page.url)}: ${page.description}`
 }
 
+/**
+ * Explicit when-to-use guidance. Kept concrete on purpose: an agent needs to be
+ * able to decide "is this source right for the question in front of me?".
+ */
+function buildWhenToUseSection(): string[] {
+  return [
+    '## When To Use This Site',
+    '',
+    'Reach for this site when a task needs first-hand engineering write-ups on the following,',
+    'in English or Spanish:',
+    '',
+    '- React and JSX/TSX mechanics: comment syntax in JSX and TSX, avoiding unnecessary re-renders with `React.memo`, how Suspense actually suspends.',
+    '- Frontend performance and build tooling: cutting AWS Amplify bundle size, surfacing webpack build progress, parsers and formatters.',
+    '- Distributed systems explained with runnable diagrams: consistent hashing, quorum reads (`R + W > N`), tail latency and hedged requests.',
+    '- Platform and infrastructure walkthroughs: installing Istio on Kubernetes and verifying the mesh.',
+    '- Reactive programming fundamentals: building an Observable from scratch.',
+    '- AngularJS 1.5 component lifecycle hooks, for legacy migration work.',
+    '',
+    'Do not use this site as a source for third-party API references, product documentation,',
+    'pricing, availability, or anything else that changes faster than an article does.',
+    '',
+    '## How Agents Should Call This Site',
+    '',
+    `1. Resolve URLs from ${markdownLink('ai-index.json', absoluteUrl('/ai-index.json'))} or ${markdownLink('llms-full.txt', absoluteUrl('/llms-full.txt'))} instead of constructing them.`,
+    `2. Article URLs are flat: \`${siteMetadata.siteUrl}/{slug}\` in English and \`${siteMetadata.siteUrl}/es/{slug}\` in Spanish. There is no \`/blog/{slug}\` form.`,
+    '3. Ask for Markdown with `Accept: text/markdown`, or append `.md` to any published URL. Responses set `Vary: Accept` and link the HTML canonical.',
+    '4. Cite the `canonicalUrl` field. Pair English and Spanish versions through `translationKey`.',
+    '5. Paginated archives expose `rel="prev"` and `rel="next"`; follow them to reach every article.',
+    `6. Contact is ${siteMetadata.email} and booking is ${absoluteUrl('/book')}. Treat booking and newsletter submissions as write actions that need explicit user approval.`,
+    '',
+  ]
+}
+
 export async function generateLlmsTxt() {
   const index = await generateAiIndex()
   const latestPosts = index.posts.slice(0, 8)
@@ -230,6 +263,7 @@ export async function generateLlmsTxt() {
     '',
     'Use canonical URLs when citing this site. Prefer the JSON index for structured ingestion and the full Markdown index for quick human-readable exploration.',
     '',
+    ...buildWhenToUseSection(),
     '## Core Resources',
     '',
     `- ${markdownLink('Structured AI index', index.site.discovery.aiIndexUrl)}: JSON index of pages, articles, tags, feeds, translations, and video metadata.`,
@@ -252,6 +286,8 @@ export async function generateLlmsTxt() {
     '## Notes For Agents',
     '',
     '- Public article pages are server-rendered and include canonical metadata, language alternates, JSON-LD, RSS, and sitemap coverage.',
+    '- Every public page also serves a Markdown representation through `Accept: text/markdown` content negotiation, or by appending `.md` to the URL.',
+    '- Unknown paths return HTTP 404 with a Markdown body that lists these indexes, so a wrong guess still ends in a usable next step.',
     '- The booking page uses a third-party Cal.com embed and also links to the hosted Cal.com page.',
     '- Newsletter endpoints should be treated as write actions and require user intent before submitting data.',
     '',
@@ -285,6 +321,7 @@ export async function generateLlmsFullTxt() {
     `- Repository: ${siteMetadata.siteRepo}`,
     `- Updated: ${index.updatedAt || 'Unknown'}`,
     '',
+    ...buildWhenToUseSection(),
     '## Discovery',
     '',
     `- ${markdownLink('llms.txt', index.site.discovery.llmsTxtUrl)}: Compact LLM entrypoint.`,
@@ -337,6 +374,7 @@ export async function generateLlmsFullTxt() {
     '## Agent Guidance',
     '',
     '- Prefer article canonical URLs over alternate route guesses.',
+    '- Append `.md` to any URL listed here, or send `Accept: text/markdown`, to receive the Markdown representation of that page.',
     '- Use the language and hrefLang fields when matching English and Spanish content.',
     '- Treat forms, booking, and newsletter submissions as actions that need explicit user approval.',
     '- Do not infer private or unpublished content from repository paths; only public URLs in this index are intended for public use.',

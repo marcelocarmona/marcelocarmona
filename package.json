@@ -19,8 +19,8 @@
     "build:webpack": "next build --webpack",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build --webpack",
-    "lint": "eslint --fix --ext .ts,.tsx app components lib layouts scripts tests",
-    "lint:check": "eslint --ext .ts,.tsx app components lib layouts scripts tests",
+    "lint": "eslint --fix --ext .ts,.tsx app components lib layouts scripts tests middleware.ts",
+    "lint:check": "eslint --ext .ts,.tsx app components lib layouts scripts tests middleware.ts",
     "test": "vitest run",
     "prepare": "husky"
   },

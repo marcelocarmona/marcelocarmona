@@ -1,4 +1,5 @@
 import ListLayout from '@/layouts/ListLayout'
+import PaginationLinkTags from '@/components/PaginationLinkTags'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath, getFeedPath } from '@/lib/i18n/routes'
 import { buildPageMetadata } from '@/lib/metadata'
@@ -38,12 +39,19 @@ export default async function SpanishBlogPage() {
   }
 
   return (
-    <ListLayout
-      posts={posts}
-      initialDisplayPosts={initialDisplayPosts}
-      locale="es"
-      pagination={pagination}
-      title="Todos los Articulos"
-    />
+    <>
+      <PaginationLinkTags
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        locale="es"
+      />
+      <ListLayout
+        posts={posts}
+        initialDisplayPosts={initialDisplayPosts}
+        locale="es"
+        pagination={pagination}
+        title="Todos los Articulos"
+      />
+    </>
   )
 }

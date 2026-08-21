@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation'
+
 import ListLayout from '@/layouts/ListLayout'
 import siteMetadata from '@/data/siteMetadata'
 import { getTagPath } from '@/lib/i18n/routes'
@@ -52,6 +54,13 @@ export default async function SpanishTagPage({ params }: TagPageProps) {
     (post) =>
       post.draft !== true && (post.tags || []).map((postTag) => kebabCase(postTag)).includes(tag)
   )
+
+  // Without this an unknown tag renders an empty page with HTTP 200, telling
+  // crawlers and agents that every /es/tags/* path exists.
+  if (!posts.length) {
+    notFound()
+  }
+
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
 
   return <ListLayout locale="es" posts={posts} title={title} />

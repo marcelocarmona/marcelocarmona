@@ -116,14 +116,14 @@ export default async function SpanishHomePage() {
                       <div className="space-y-5 xl:col-span-3">
                         <div className="space-y-6">
                           <div>
-                            <h2 className="text-2xl font-bold leading-8 tracking-tight">
+                            <h3 className="text-2xl font-bold leading-8 tracking-tight">
                               <HoverPrefetchLink
                                 href={getPostPath('es', slug)}
                                 className="text-gray-900 dark:text-gray-100"
                               >
                                 {title}
                               </HoverPrefetchLink>
-                            </h2>
+                            </h3>
                             <div className="flex flex-wrap">
                               {(tags || []).map((tag) => (
                                 <Tag key={tag} locale="es" text={tag} />
