@@ -15,7 +15,7 @@ import formatDate from '@/lib/utils/formatDate'
 const MAX_DISPLAY = 5
 const title = 'Software Engineer | Frontend, Cloud, AI | Marcelo Carmona'
 const description = siteMetadata.description
-const headline = 'I build web products and the AI systems inside them.'
+const headline = 'I build web products, cloud infrastructure, and AI tooling.'
 const intro =
   'I work across frontend architecture, cloud infrastructure, and delivery workflows to turn product ideas into maintainable software. I care about clear interfaces, resilient systems, and engineering decisions that help teams move with confidence.'
 

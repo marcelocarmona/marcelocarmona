@@ -4,7 +4,7 @@ const enUi = {
     eyebrow: 'Software engineering',
     summary:
       'Notes and practical work across frontend architecture, cloud infrastructure, delivery workflows, and the engineering decisions behind maintainable software.',
-    title: 'Reliable web products and the systems behind them.',
+    title: 'Web products that hold up in production.',
   },
   list: {
     noPostsFound: 'No posts found.',

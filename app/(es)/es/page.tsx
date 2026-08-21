@@ -16,7 +16,7 @@ const MAX_DISPLAY = 5
 const title = 'Ingeniero de Software | Frontend, Cloud, IA | Marcelo Carmona'
 const description =
   'Notas de ingeniería de software sobre productos web, arquitectura frontend, infraestructura cloud y entrega mantenible por Marcelo Carmona.'
-const headline = 'Construyo productos web y los sistemas de IA que llevan dentro.'
+const headline = 'Construyo productos web, infraestructura cloud y herramientas de IA.'
 const intro =
   'Trabajo entre arquitectura frontend, infraestructura cloud y flujos de entrega para convertir ideas de producto en software mantenible. Me importan las interfaces claras, los sistemas resilientes y las decisiones de ingeniería que ayudan a los equipos a avanzar con confianza.'
 

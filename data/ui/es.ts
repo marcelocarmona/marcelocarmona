@@ -4,7 +4,7 @@ const esUi = {
     eyebrow: 'Ingeniería de software',
     summary:
       'Notas y trabajo práctico sobre arquitectura frontend, infraestructura cloud, flujos de entrega y las decisiones de ingeniería detrás de software mantenible.',
-    title: 'Productos web confiables y los sistemas que los sostienen.',
+    title: 'Productos web que aguantan en producción.',
   },
   list: {
     noPostsFound: 'No se encontraron articulos.',
