@@ -36,7 +36,7 @@ export const CodeSandbox = ({
   if (!codeSandboxId) return null
 
   return (
-    <div className="my-6 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+    <div className="my-6 overflow-hidden rounded-lg border border-border">
       <iframe
         title={title}
         src={`https://codesandbox.io/embed/${codeSandboxId}?fontsize=14&hidenavigation=1&theme=dark`}

@@ -3,7 +3,7 @@ import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import Link from '@/components/Link'
 import NewsletterForm from '@/components/NewsletterForm'
 import Tag from '@/components/Tag'
-import { DisplayTitle, Prose } from '@/components/ui/typography'
+import { DisplayTitle, Typeset } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
 import { getBlogPath, getFeedPath, getHomePath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
@@ -49,25 +49,25 @@ export default async function SpanishHomePage() {
   return (
     <>
       <div lang="es" className="space-y-14">
-        <section className="border-b border-gray-200 pb-12 pt-8 dark:border-gray-700">
+        <section className="border-b border-border pb-12 pt-8">
           <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_12rem] md:items-start md:gap-10">
             <div className="max-w-3xl space-y-5 text-center md:text-left">
-              <p className="text-sm font-semibold uppercase text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-semibold uppercase text-muted-foreground">
                 Ingeniería de software
               </p>
               <DisplayTitle
                 as="h1"
-                className="text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100 sm:text-4xl md:text-5xl"
+                className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl"
               >
                 {headline}
               </DisplayTitle>
-              <p className="mx-auto max-w-2xl text-lg leading-8 text-gray-500 dark:text-gray-400 md:mx-0">
+              <p className="mx-auto max-w-2xl text-lg leading-8 text-muted-foreground md:mx-0">
                 {intro}
               </p>
             </div>
 
             <div className="order-first flex justify-center md:order-none md:justify-end">
-              <div className="rounded-full bg-gray-50 p-1 shadow-sm ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-700">
+              <div className="rounded-full bg-muted p-1 shadow-sm ring-1 ring-border">
                 <Image
                   src="/static/images/marcelo.jpg"
                   alt="Marcelo Carmona"
@@ -83,12 +83,12 @@ export default async function SpanishHomePage() {
 
         <section>
           <div className="pb-2">
-            <h2 className="text-2xl font-bold leading-8 tracking-tight text-gray-900 dark:text-gray-100">
+            <h2 className="font-display text-2xl font-semibold leading-snug tracking-tight text-foreground">
               Escritura técnica reciente
             </h2>
           </div>
 
-          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+          <ul className="divide-y divide-border">
             {!posts.length && list.noPostsFound}
             {displayPosts.map((frontMatter) => {
               const { slug, date, lastmod, title, summary, tags } = frontMatter
@@ -98,13 +98,13 @@ export default async function SpanishHomePage() {
                     <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                       <dl className="space-y-1">
                         <dt className="sr-only">{list.publishedOn}</dt>
-                        <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                        <dd className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                           <time dateTime={date || undefined}>{formatDate(date, 'es')}</time>
                         </dd>
                         {hasMeaningfulUpdate(frontMatter) && (
                           <>
                             <dt className="sr-only">{list.updatedOn}</dt>
-                            <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+                            <dd className="font-mono text-xs text-muted-foreground">
                               {list.updatedOn}{' '}
                               <time dateTime={lastmod || undefined}>
                                 {formatDate(lastmod, 'es')}
@@ -116,10 +116,10 @@ export default async function SpanishHomePage() {
                       <div className="space-y-5 xl:col-span-3">
                         <div className="space-y-6">
                           <div>
-                            <h3 className="text-2xl font-bold leading-8 tracking-tight">
+                            <h3 className="font-display text-2xl font-semibold leading-snug tracking-tight">
                               <HoverPrefetchLink
                                 href={getPostPath('es', slug)}
-                                className="text-gray-900 dark:text-gray-100"
+                                className="text-foreground"
                               >
                                 {title}
                               </HoverPrefetchLink>
@@ -130,12 +130,12 @@ export default async function SpanishHomePage() {
                               ))}
                             </div>
                           </div>
-                          <Prose className="text-gray-500 dark:text-gray-400">{summary}</Prose>
+                          <Typeset variant="note">{summary}</Typeset>
                         </div>
                         <div className="text-base font-medium leading-6">
                           <HoverPrefetchLink
                             href={getPostPath('es', slug)}
-                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                            className="text-primary underline-offset-4 hover:underline"
                             aria-label={`Leer "${title}"`}
                           >
                             Leer más &rarr;
@@ -154,7 +154,7 @@ export default async function SpanishHomePage() {
         <div className="flex justify-end text-base font-medium leading-6">
           <Link
             href={getBlogPath('es')}
-            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+            className="text-primary underline-offset-4 hover:underline"
             aria-label="todos los artículos"
           >
             Ver todos &rarr;

@@ -7,18 +7,26 @@
  */
 
 .viz-figure {
-  --viz-bg: #0e1116;
-  --viz-surface: #161b22;
-  --viz-border: #30363d;
-  --viz-text: #e6edf3;
-  --viz-muted: #8b949e;
+  /*
+   * Chrome is bridged to the site palette so a diagram does not read as pasted
+   * in from another site. Only the frame: the categorical data colors below are
+   * deliberately independent, because they are optimised for mutual separation
+   * rather than for brand.
+   *
+   * Diagrams stay dark in both modes, matching the code blocks.
+   */
+  --viz-bg: #0e0e0e;
+  --viz-surface: var(--code-surface);
+  --viz-border: var(--code-border);
+  --viz-text: #ede9e1;
+  --viz-muted: #a39d93;
 
-  --viz-accent: #f54e00;
+  --viz-accent: #2dd4bf;
   --viz-success: #3fb950;
-  --viz-danger: #f85149;
+  --viz-danger: #f87171;
 
   /* Categorical palette, for peers of equal status. Deliberately excludes the
-   * orange of --viz-accent so "which node owns this" never reads as "this is
+   * hue of --viz-accent so "which node owns this" never reads as "this is
    * the thing currently happening". Six hues is the practical ceiling before
    * they stop being tellable apart at 5px. */
   --viz-owner-0: #58a6ff;
@@ -28,8 +36,8 @@
   --viz-owner-4: #39c5cf;
   --viz-owner-5: #f778ba;
 
-  --viz-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
-  --viz-motion: 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  --viz-font-mono: var(--font-mono);
+  --viz-motion: 420ms var(--ease-out-soft);
 }
 
 /* ---------------------------------------------------------------- figure */
@@ -633,16 +641,15 @@
 
 /*
  * Reclaim the page gutters on phones. A diagram explaining a hash ring wants
- * every pixel; prose does not.
+ * every pixel; body text does not.
  *
  * `calc(50% - 50vw)` reaches the viewport edge from any depth of nested padded
  * containers, which a fixed negative margin cannot: this article sits inside
- * two of them. `max-width` has to be released as well, because the typography
- * plugin caps figures at 100% of the reading column and would otherwise
- * swallow the extra width.
+ * two of them. `max-width` is released as well. Typeset does not cap figures,
+ * but keeping this explicit means the escape survives a future change there.
  */
 @media (max-width: 39.999rem) {
-  .prose .viz-figure {
+  .typeset .viz-figure {
     max-width: none;
     margin-inline: calc(50% - 50vw);
     border-inline-width: 0;
@@ -651,10 +658,10 @@
 }
 
 /* Above the phone breakpoint the figure widens past the reading measure and
- * centres on it, up to the point where the page's own gutters take over. Prose
- * stays on a comfortable measure; the figures get the rest. */
+ * centres on it, up to the point where the page's own gutters take over. Body
+ * text stays on a comfortable measure; the figures get the rest. */
 @media (min-width: 40rem) {
-  .prose .viz-figure {
+  .typeset .viz-figure {
     width: min(62rem, calc(100vw - 3rem));
     max-width: none;
     margin-left: 50%;

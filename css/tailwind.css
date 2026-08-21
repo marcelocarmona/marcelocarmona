@@ -1,47 +1,163 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
 @plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Design tokens.
+ *
+ * Contract: the same variable name is redefined under `.dark`, and `@theme inline`
+ * maps it once into Tailwind. Components write `bg-background`, never
+ * `bg-background dark:bg-background-dark`.
+ *
+ * Every text/surface pair below is verified at >= 4.5:1 in both modes.
+ */
+
+:root {
+  --radius: 0.5rem;
+
+  /* Warm paper */
+  --background: #f4f0e8;
+  --foreground: #1f1d1a; /* 14.79:1 */
+
+  --card: #fbf8f2;
+  --card-foreground: #1f1d1a; /* 15.86:1 */
+
+  --popover: #fbf8f2;
+  --popover-foreground: #1f1d1a;
+
+  /* Single accent. teal-700 is the lightest teal that clears 4.5:1 on paper. */
+  --primary: #0f766e; /* 4.82:1 */
+  --primary-foreground: #faf7f1; /* 5.12:1 */
+
+  --secondary: #eae5da;
+  --secondary-foreground: #1f1d1a;
+
+  --muted: #eae5da;
+  --muted-foreground: #5c574e; /* 6.31:1 */
+
+  --accent: #eae5da;
+  --accent-foreground: #1f1d1a;
+
+  --destructive: #b3261e; /* 5.75:1 */
+  --destructive-foreground: #faf7f1;
+
+  /* Hairlines. The layout is built from these rather than from boxes. */
+  --border: #dcd6c9;
+  --border-strong: #c6bda9;
+  --input: #dcd6c9;
+  --ring: #0f766e;
+
+  /* Code sits dark on paper in both modes, as a deliberate object. */
+  --code-surface: #121212;
+  --code-border: #2a2a2a;
+
+  /* One curve, one duration, promoted from the diagram system. */
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-ui: 160ms;
+}
+
+.dark {
+  /* Warm near-black, not an inverted blue-black. */
+  --background: #131211;
+  --foreground: #ede9e1; /* 15.45:1 */
+
+  --card: #1a1917;
+  --card-foreground: #ede9e1; /* 14.51:1 */
+
+  --popover: #1a1917;
+  --popover-foreground: #ede9e1;
+
+  /* teal-700 fails on dark (3.46:1), so the accent lightens instead. */
+  --primary: #2dd4bf; /* 10.05:1 */
+  --primary-foreground: #0b1a18; /* 9.60:1 */
+
+  --secondary: #24221f;
+  --secondary-foreground: #ede9e1;
+
+  --muted: #24221f;
+  --muted-foreground: #a39d93; /* 6.95:1 */
+
+  --accent: #24221f;
+  --accent-foreground: #ede9e1;
+
+  --destructive: #f87171; /* 6.76:1 */
+  --destructive-foreground: #131211;
+
+  --border: #2a2724;
+  --border-strong: #3d3833;
+  --input: #2a2724;
+  --ring: #2dd4bf;
+
+  --code-surface: #0e0e0e;
+  --code-border: #262626;
+}
+
 @theme inline {
-  --color-background: rgb(244 240 232);
-  --color-background-dark: rgb(11 17 27);
-  --color-background-accent: rgb(168 208 201);
-  --color-background-accent-dark: rgb(20 105 97);
-  --color-background-wash: rgb(244 222 194);
-  --color-background-wash-dark: rgb(86 65 41);
-  --color-foreground: rgb(24 32 47);
-  --color-foreground-dark: rgb(240 245 249);
-  --color-muted-foreground: rgb(86 97 114);
-  --color-muted-foreground-dark: rgb(160 174 192);
-  --color-border: rgb(28 37 54);
-  --color-border-dark: rgb(148 163 184);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-code-surface: var(--code-surface);
+  --color-code-border: var(--code-border);
 
-  --color-primary-200: var(--color-teal-200);
-  --color-primary-300: var(--color-teal-300);
-  --color-primary-400: var(--color-teal-400);
-  --color-primary-500: var(--color-teal-500);
-  --color-primary-600: var(--color-teal-600);
-  --color-primary-700: var(--color-teal-700);
-  --color-primary-950: var(--color-teal-950);
-
-  --color-gray-50: var(--color-neutral-50);
-  --color-gray-100: var(--color-neutral-100);
-  --color-gray-200: var(--color-neutral-200);
-  --color-gray-300: var(--color-neutral-300);
-  --color-gray-400: var(--color-neutral-400);
-  --color-gray-500: var(--color-neutral-500);
-  --color-gray-600: var(--color-neutral-600);
-  --color-gray-700: var(--color-neutral-700);
-  --color-gray-800: var(--color-neutral-800);
-  --color-gray-900: var(--color-neutral-900);
-  --color-gray-950: var(--color-neutral-950);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
 
   --font-sans:
-    Inter, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-display: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif;
+    'Inter Tight Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --font-mono: 'Spline Sans Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /*
+   * Reading measure. Measured, not calculated: at 18px Inter Tight this renders a
+   * mean of 66.3 and a median of 67 characters per line, which sits on the classic
+   * 66-character optimum. 38rem measured at 75 and was too wide.
+   */
+  --container-measure: 35rem;
 
   --leading-14: 3.5rem;
+}
+
+@layer base {
+  /*
+   * Fraunces carries an optical size axis. Letting the browser drive it means one
+   * file reads soft at 18px and dramatic at 56px.
+   */
+  .font-display {
+    font-optical-sizing: auto;
+  }
+
+  /* Motion is feedback only, and always opt-out-able. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

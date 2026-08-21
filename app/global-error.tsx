@@ -15,17 +15,22 @@ export default function GlobalError({
   }, [error])
 
   return (
+    // No ThemeProvider runs here: global-error replaces the root layout. The
+    // semantic tokens still resolve because `:root` defines them unconditionally,
+    // so this must not use a hardcoded light background with a `dark:` text color.
     <html lang="en">
-      <body className="bg-white text-black antialiased dark:bg-gray-900 dark:text-white">
+      <body className="bg-background text-foreground antialiased">
         <main className="mx-auto max-w-3xl px-6 py-16">
-          <h1 className="text-2xl font-bold">Something went wrong</h1>
-          <p className="mt-3 text-gray-600 dark:text-gray-300">
+          <h1 className="font-display text-2xl font-semibold tracking-tight">
+            Something went wrong
+          </h1>
+          <p className="mt-3 text-muted-foreground">
             An unexpected error occurred in the App Router layer.
           </p>
           <button
             type="button"
             onClick={() => reset()}
-            className="mt-6 rounded-sm bg-primary-600 px-4 py-2 text-white hover:bg-primary-500"
+            className="mt-6 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors duration-(--duration-ui) ease-(--ease-out-soft) hover:bg-primary/90"
           >
             Try again
           </button>

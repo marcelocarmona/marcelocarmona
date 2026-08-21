@@ -18,15 +18,15 @@ export default function BookPage({ locale = 'en' }: { locale?: Locale }) {
   const copy = bookCopy[locale]
 
   return (
-    <div lang={locale} className="divide-y divide-gray-200 dark:divide-gray-700">
+    <div lang={locale} className="divide-y divide-border">
       <div className="space-y-2 pb-8 pt-6 md:space-y-5">
         <DisplayTitle
           as="h1"
-          className="text-3xl font-extrabold leading-9 text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14"
+          className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl"
         >
           {copy.title}
         </DisplayTitle>
-        <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">{copy.description}</p>
+        <p className="text-lg leading-7 text-muted-foreground">{copy.description}</p>
       </div>
 
       <div className="pb-8 pt-8">

@@ -1,7 +1,7 @@
 import Image from '@/components/Image'
 import Link from '@/components/Link'
 import SocialIcon from '@/components/social-icons'
-import { Prose } from '@/components/ui/typography'
+import { Typeset } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
 import { getBookPath } from '@/lib/i18n/routes'
 import type { Locale } from '@/types/content'
@@ -43,9 +43,9 @@ export default function AboutPage({ locale = 'en' }: { locale?: Locale }) {
   const copy = aboutCopy[locale]
 
   return (
-    <div lang={locale} className="divide-y divide-gray-200 dark:divide-gray-700">
+    <div lang={locale} className="divide-y divide-border">
       <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-        <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+        <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
           {copy.title}
         </h1>
       </div>
@@ -58,10 +58,10 @@ export default function AboutPage({ locale = 'en' }: { locale?: Locale }) {
             height={192}
             className="h-48 w-48 rounded-full"
           />
-          <h2 className="pb-1 pt-4 text-2xl font-bold leading-8 tracking-tight">
+          <h2 className="pb-1 pt-4 font-display text-2xl font-semibold leading-snug tracking-tight">
             {siteMetadata.author}
           </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{copy.occupation}</p>
+          <p className="text-sm text-muted-foreground">{copy.occupation}</p>
           <div className="flex space-x-3 pt-6">
             <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} />
             <SocialIcon kind="github" href={siteMetadata.github} />
@@ -69,14 +69,14 @@ export default function AboutPage({ locale = 'en' }: { locale?: Locale }) {
             <SocialIcon kind="twitter" href={siteMetadata.twitter} />
           </div>
         </div>
-        <Prose className="pb-8 pt-8 xl:col-span-2">
+        <Typeset className="pb-8 pt-8 xl:col-span-2">
           <p>{copy.intro}</p>
           <p>{copy.body}</p>
           <p>{copy.connect}</p>
           <p>
             <Link href={getBookPath(locale)}>{copy.cta}</Link>
           </p>
-        </Prose>
+        </Typeset>
       </div>
     </div>
   )

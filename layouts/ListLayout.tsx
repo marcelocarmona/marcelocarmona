@@ -2,7 +2,7 @@
 
 import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import Tag from '@/components/Tag'
-import { Prose } from '@/components/ui/typography'
+import { Typeset } from '@/components/ui/typography'
 import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import { getPostPath } from '@/lib/i18n/routes'
@@ -42,9 +42,9 @@ export default function ListLayout({
 
   return (
     <>
-      <div lang={resolvedLocale} className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div lang={resolvedLocale} className="divide-y divide-border">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+          <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
             {title}
           </h1>
           <div className="relative max-w-lg">
@@ -53,10 +53,10 @@ export default function ListLayout({
               type="text"
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder={list.searchArticles}
-              className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              className="block w-full rounded-md border border-border bg-card px-4 py-2 text-foreground focus:border-primary focus:ring-ring"
             />
             <svg
-              className="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
+              className="absolute right-3 top-3 h-5 w-5 text-muted-foreground"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -80,13 +80,13 @@ export default function ListLayout({
                 <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                   <dl className="space-y-1">
                     <dt className="sr-only">{list.publishedOn}</dt>
-                    <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                    <dd className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                       <time dateTime={date || undefined}>{formatDate(date, resolvedLocale)}</time>
                     </dd>
                     {hasMeaningfulUpdate(frontMatter) && (
                       <>
                         <dt className="sr-only">{list.updatedOn}</dt>
-                        <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+                        <dd className="font-mono text-xs text-muted-foreground">
                           {list.updatedOn}{' '}
                           <time dateTime={lastmod || undefined}>
                             {formatDate(lastmod, resolvedLocale)}
@@ -97,10 +97,10 @@ export default function ListLayout({
                   </dl>
                   <div className="space-y-3 xl:col-span-3">
                     <div>
-                      <h3 className="text-2xl font-bold leading-8 tracking-tight">
+                      <h3 className="font-display text-2xl font-semibold leading-snug tracking-tight">
                         <HoverPrefetchLink
                           href={getPostPath(resolvedLocale, slug)}
-                          className="text-gray-900 dark:text-gray-100"
+                          className="text-foreground"
                         >
                           {title}
                         </HoverPrefetchLink>
@@ -111,7 +111,7 @@ export default function ListLayout({
                         ))}
                       </div>
                     </div>
-                    <Prose className="text-gray-500 dark:text-gray-400">{summary}</Prose>
+                    <Typeset variant="note">{summary}</Typeset>
                   </div>
                 </article>
               </li>

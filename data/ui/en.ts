@@ -27,6 +27,7 @@ const enUi = {
     authors: 'Authors',
     backToBlog: 'Back to the blog',
     blogLabel: 'Blog',
+    contents: 'Contents',
     homeLabel: 'Home',
     name: 'Name',
     nextArticle: 'Next Article',

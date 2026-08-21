@@ -16,15 +16,10 @@ const ThemeSwitch = () => {
     <button
       aria-label="Toggle theme"
       type="button"
-      className="ml-1 mr-1 h-8 w-8 rounded-sm p-1 sm:ml-4"
+      className="ml-1 mr-1 size-8 rounded-md p-1 text-muted-foreground transition-colors duration-(--duration-ui) ease-(--ease-out-soft) hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:ml-4"
       onClick={toggleTheme}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        className="text-gray-900 dark:text-gray-100"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         {mounted && resolvedTheme === 'dark' ? (
           <path
             fillRule="evenodd"

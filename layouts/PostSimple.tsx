@@ -7,7 +7,7 @@ import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-import { Prose } from '@/components/ui/typography'
+import { Typeset } from '@/components/ui/typography'
 import type { AuthorFrontMatter, ContentFrontMatter } from '@/types/content'
 import type { ReactNode } from 'react'
 
@@ -35,17 +35,17 @@ export default function PostLayout({
       <article lang={frontMatter.locale || 'en'}>
         <div>
           <header>
-            <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
+            <div className="space-y-1 border-b border-border pb-10 text-center">
               <dl>
                 <div>
                   <dt className="sr-only">{postUi.publishedOn}</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                  <dd className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     <time dateTime={date || undefined}>{formatDate(date, frontMatter.locale)}</time>
                   </dd>
                   {hasMeaningfulUpdate(frontMatter) && (
                     <>
                       <dt className="sr-only">{postUi.updatedOn}</dt>
-                      <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
+                      <dd className="font-mono text-xs text-muted-foreground">
                         {postUi.updatedOn}{' '}
                         <time dateTime={lastmod || undefined}>
                           {formatDate(lastmod, frontMatter.locale)}
@@ -61,11 +61,11 @@ export default function PostLayout({
             </div>
           </header>
           <div
-            className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 "
+            className="divide-y divide-border pb-8 xl:divide-y-0"
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <Prose className="pb-8 pt-10">{children}</Prose>
+            <div className="divide-y divide-border xl:col-span-3 xl:row-span-2 xl:pb-0">
+              <Typeset className="pb-8 pt-10">{children}</Typeset>
             </div>
             <Comments frontMatter={frontMatter} />
             <footer>
@@ -74,7 +74,7 @@ export default function PostLayout({
                   <div className="pt-4 xl:pt-8">
                     <Link
                       href={getPostPath(frontMatter.locale, prev.slug)}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                      className="text-primary underline-offset-4 hover:underline"
                     >
                       &larr; {prev.title}
                     </Link>
@@ -84,7 +84,7 @@ export default function PostLayout({
                   <div className="pt-4 xl:pt-8">
                     <Link
                       href={getPostPath(frontMatter.locale, next.slug)}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                      className="text-primary underline-offset-4 hover:underline"
                     >
                       {next.title} &rarr;
                     </Link>

@@ -7,7 +7,7 @@ const Tag = ({ locale = 'en', text }: { locale?: LocaleInput; text: string }) =>
   return (
     <Link
       href={getTagPath(locale, kebabCase(text))}
-      className="mr-3 text-sm font-medium uppercase text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+      className="mr-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground transition-colors duration-(--duration-ui) ease-(--ease-out-soft) hover:text-primary"
     >
       {text.split(' ').join('-')}
     </Link>

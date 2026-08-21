@@ -33,7 +33,7 @@ const MobileNav = ({ locale = 'en' }: { locale?: LocaleInput }) => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="text-gray-900 dark:text-gray-100"
+          className="text-foreground"
         >
           <path
             fillRule="evenodd"
@@ -43,7 +43,7 @@ const MobileNav = ({ locale = 'en' }: { locale?: LocaleInput }) => {
         </svg>
       </button>
       <div
-        className={`fixed left-0 top-0 z-10 h-full w-full transform bg-gray-200 opacity-95 duration-300 ease-in-out dark:bg-gray-800 ${
+        className={`fixed left-0 top-0 z-10 h-full w-full transform bg-muted opacity-95 duration-300 ease-in-out  ${
           navShow ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -58,7 +58,7 @@ const MobileNav = ({ locale = 'en' }: { locale?: LocaleInput }) => {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
-              className="text-gray-900 dark:text-gray-100"
+              className="text-foreground"
             >
               <path
                 fillRule="evenodd"
@@ -73,7 +73,7 @@ const MobileNav = ({ locale = 'en' }: { locale?: LocaleInput }) => {
             <div key={link.title} className="px-12 py-4">
               <Link
                 href={link.href}
-                className="text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100"
+                className="text-2xl font-bold tracking-widest text-foreground"
                 onClick={onToggleNav}
               >
                 {link.title}

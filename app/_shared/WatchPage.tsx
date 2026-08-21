@@ -250,22 +250,22 @@ export default async function WatchPage({
           <div className="space-y-4">
             <Link
               href={articlePath}
-              className="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
+              className="text-sm font-medium text-primary underline-offset-4 hover:underline"
             >
               &larr; {videoUi.backToArticle}
             </Link>
             <div className="space-y-4 text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 {videoUi.watchPageLabel}
               </p>
               <PageTitle>{video.title}</PageTitle>
-              <p className="mx-auto max-w-2xl text-base text-gray-600 dark:text-gray-300">
+              <p className="mx-auto max-w-2xl text-base text-muted-foreground">
                 {video.description || siteMetadata.description}
               </p>
               {(video.uploadDate || frontMatter.date) && (
                 <time
                   dateTime={video.uploadDate || frontMatter.date || undefined}
-                  className="block text-sm text-gray-500 dark:text-gray-400"
+                  className="block text-sm text-muted-foreground"
                 >
                   {formatDate(
                     video.uploadDate || frontMatter.date,
@@ -282,21 +282,21 @@ export default async function WatchPage({
           <div className="flex flex-wrap gap-3">
             <Link
               href={articlePath}
-              className="inline-flex items-center rounded-full bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-500"
+              className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors duration-(--duration-ui) ease-(--ease-out-soft) hover:bg-primary/90"
             >
               {videoUi.readArticle}
             </Link>
             <Link
               href={video.watchUrl}
-              className="inline-flex items-center rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:text-gray-200 dark:hover:border-primary-400 dark:hover:text-primary-300"
+              className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-muted-foreground hover:border-primary hover:text-primary dark:hover:border-primary"
             >
               {videoUi.watchOnYouTube}
             </Link>
           </div>
 
           {languageVersions.length > 0 && (
-            <div className="rounded-2xl border border-gray-200 p-5 dark:border-gray-700">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <div className="rounded-2xl border border-border p-5">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                 {videoUi.translations}
               </h2>
               <ul className="mt-3 space-y-2">
@@ -304,7 +304,7 @@ export default async function WatchPage({
                   <li key={translatedPost.href}>
                     <Link
                       href={translatedPost.href}
-                      className="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
+                      className="text-sm font-medium text-primary underline-offset-4 hover:underline"
                     >
                       {translatedPost.label}: {translatedPost.title}
                     </Link>

@@ -43,7 +43,7 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }: { title?: str
 
   return (
     <div>
-      <div className="pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</div>
+      <div className="pb-1 text-lg font-semibold text-foreground">{title}</div>
       <form className="flex flex-col sm:flex-row" onSubmit={subscribe}>
         <div>
           <label className="sr-only" htmlFor="email-input">
@@ -51,7 +51,7 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }: { title?: str
           </label>
           <input
             autoComplete="email"
-            className="w-72 rounded-md px-4 focus:border-transparent focus:outline-hidden focus:ring-2 focus:ring-primary-600 dark:bg-black [&:-webkit-autofill]:duration-[600000s] [&:-webkit-autofill]:transition-colors"
+            className="w-72 rounded-md border border-border bg-card px-4 text-foreground focus:border-transparent focus:outline-hidden focus:ring-2 focus:ring-ring [&:-webkit-autofill]:duration-[600000s] [&:-webkit-autofill]:transition-colors"
             id="email-input"
             name="email"
             placeholder={subscribed ? "You're subscribed !  🎉" : 'Enter your email'}
@@ -63,9 +63,9 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }: { title?: str
         </div>
         <div className="mt-2 flex w-full rounded-md shadow-xs sm:ml-3 sm:mt-0">
           <button
-            className={`w-full rounded-md bg-primary-500 px-4 py-2 font-medium text-white sm:py-0 ${
-              subscribed ? 'cursor-default' : 'hover:bg-primary-700 dark:hover:bg-primary-400'
-            } focus:outline-hidden focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:ring-offset-black`}
+            className={`w-full rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground sm:py-0 ${
+              subscribed ? 'cursor-default' : 'hover:bg-primary dark:hover:bg-primary'
+            } focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:ring-offset-black`}
             type="submit"
             disabled={subscribed}
           >
@@ -73,9 +73,7 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }: { title?: str
           </button>
         </div>
       </form>
-      {error && (
-        <div className="w-72 pt-2 text-sm text-red-500 dark:text-red-400 sm:w-96">{message}</div>
-      )}
+      {error && <div className="w-72 pt-2 text-sm text-destructive sm:w-96">{message}</div>}
     </div>
   )
 }
@@ -84,7 +82,7 @@ export default NewsletterForm
 
 export const BlogNewsletterForm = ({ title }: { title?: string }) => (
   <div className="flex items-center justify-center">
-    <div className="bg-gray-100 p-6 dark:bg-gray-800 sm:px-14 sm:py-8">
+    <div className="bg-muted p-6 sm:px-14 sm:py-8">
       <NewsletterForm title={title} />
     </div>
   </div>

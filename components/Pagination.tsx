@@ -15,8 +15,8 @@ export default function Pagination({
   const prevPage = currentPage - 1 > 0
   const nextPage = currentPage + 1 <= totalPages
   const { list } = getUiCopy(locale)
-  const disabledClassName = 'cursor-auto text-gray-400 dark:text-gray-500'
-  const linkClassName = 'text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
+  const disabledClassName = 'cursor-auto text-muted-foreground'
+  const linkClassName = 'text-primary underline-offset-4 hover:underline'
 
   return (
     <div className="space-y-2 pb-8 pt-6 md:space-y-5">

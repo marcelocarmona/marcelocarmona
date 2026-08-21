@@ -1,6 +1,6 @@
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
-import { Prose } from '@/components/ui/typography'
+import { Typeset } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
 import type { AuthorFrontMatter } from '@/types/content'
 import type { ReactNode } from 'react'
@@ -15,9 +15,9 @@ export default function AuthorLayout({
   const { name, avatar, occupation, company, email, twitter, linkedin, github } = frontMatter
 
   return (
-    <div className="divide-y divide-gray-200 dark:divide-gray-700">
+    <div className="divide-y divide-border">
       <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-        <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+        <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
           About
         </h1>
       </div>
@@ -30,7 +30,9 @@ export default function AuthorLayout({
             height={192}
             className="h-48 w-48 rounded-full"
           />
-          <h3 className="pb-2 pt-4 text-2xl font-bold leading-8 tracking-tight">{name}</h3>
+          <h3 className="pb-2 pt-4 font-display text-2xl font-semibold leading-snug tracking-tight">
+            {name}
+          </h3>
           <div className="flex space-x-3 pt-6">
             <SocialIcon kind="mail" href={`mailto:${email}`} />
             <SocialIcon kind="github" href={github} />
@@ -38,7 +40,7 @@ export default function AuthorLayout({
             <SocialIcon kind="twitter" href={twitter} />
           </div>
         </div>
-        <Prose className="pb-8 pt-8 xl:col-span-2">{children}</Prose>
+        <Typeset className="pb-8 pt-8 xl:col-span-2">{children}</Typeset>
       </div>
     </div>
   )

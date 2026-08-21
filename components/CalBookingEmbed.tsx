@@ -49,11 +49,11 @@ export default function CalBookingEmbed({ calUrl = siteMetadata.calCom }: { calU
     <section className="space-y-4">
       <div id={CAL_CONTAINER_ID} className="w-full overflow-hidden" />
 
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-muted-foreground">
         Prefer the hosted page?{' '}
         <Link
           href={hostedCalUrl}
-          className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+          className="text-primary underline-offset-4 hover:underline"
           onClick={() => logEvent('cal_fallback_click', 'cal.com', calLink)}
         >
           Open {hostedCalUrl.replace(/^https?:\/\//, '')}

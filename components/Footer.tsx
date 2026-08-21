@@ -10,12 +10,12 @@ export default function Footer({ locale = 'en' }: { locale?: LocaleInput }) {
   const { footer } = getUiCopy(locale)
 
   return (
-    <footer className="mt-20 border-t border-border/10 pt-8 dark:border-border-dark/10">
+    <footer className="mt-20 border-t border-border pt-8">
       <div className="flex flex-col gap-8 pb-10 md:flex-row md:items-end md:justify-between">
         <div className="space-y-4">
           <div>
             <Eyebrow>{footer.eyebrow}</Eyebrow>
-            <DisplayTitle as="p" className="mt-2 text-2xl text-gray-900 dark:text-gray-100">
+            <DisplayTitle as="p" className="mt-2 text-2xl text-foreground">
               {footer.title}
             </DisplayTitle>
           </div>
@@ -31,7 +31,7 @@ export default function Footer({ locale = 'en' }: { locale?: LocaleInput }) {
           <div className="mb-3 text-sm font-medium">
             <Link
               href={getBookPath(locale)}
-              className="text-primary-600 hover:text-primary-700 dark:hover:text-primary-300"
+              className="text-primary underline-offset-4 hover:underline"
             >
               {footer.bookCall}
             </Link>

@@ -1,0 +1,128 @@
+/*
+ * Shiki output styling.
+ *
+ * rehype-pretty-code runs with `defaultColor: false`, so tokens carry
+ * `--shiki-light` and `--shiki-dark` in a style attribute and no literal color.
+ * That leaves the palette here rather than in a vendored theme file.
+ *
+ * Hooks are data attributes, not classes: rehype-pretty-code does not emit a
+ * `.shiki` class. `data-theme` holds both theme names, space separated.
+ *
+ * The block stays dark in both modes, so `--shiki-dark` is applied
+ * unconditionally. `--shiki-light` is still emitted, so switching to a light
+ * block in light mode is a one-selector change.
+ */
+
+figure[data-rehype-pretty-code-figure] {
+  margin-block-start: var(--typeset-flow, 1.4em);
+}
+
+/*
+ * Token colors.
+ *
+ * The background is cleared on spans only. Clearing it on the `pre` too would
+ * win against `.typeset :where(pre)`, which is zero-specificity by design, and
+ * silently strip the block surface. The surface is restated here so this rule
+ * set is self-contained.
+ */
+pre[data-theme] {
+  background-color: var(--code-surface);
+}
+
+pre[data-theme],
+pre[data-theme] span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
+}
+
+pre[data-theme] span {
+  background-color: transparent;
+}
+
+/* Each line is its own grid row, so a highlight spans the full scroll width. */
+pre[data-theme] [data-line] {
+  padding-inline: 1rem;
+  border-inline-start: 2px solid transparent;
+}
+
+pre[data-theme] [data-highlighted-line] {
+  border-inline-start-color: var(--primary);
+  background-color: rgb(255 255 255 / 0.06);
+}
+
+pre[data-theme] [data-highlighted-chars] {
+  padding: 0.1em 0.25em;
+  border-radius: var(--radius-sm);
+  background-color: rgb(255 255 255 / 0.1);
+}
+
+/* Line numbers, opt in per block with `showLineNumbers`. */
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  display: inline-block;
+  width: 1rem;
+  margin-inline-end: 1.25rem;
+  color: #5c5c5c;
+  content: counter(line);
+  counter-increment: line;
+  text-align: right;
+}
+
+code[data-line-numbers-max-digits='3'] > [data-line]::before {
+  width: 1.75rem;
+}
+
+/* Filename header, from ```lang title="..." */
+[data-rehype-pretty-code-title] {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--code-border);
+  border-block-end: 0;
+  border-start-end-radius: var(--radius-lg);
+  border-start-start-radius: var(--radius-lg);
+  background: var(--code-surface);
+  color: #a39d93;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+[data-rehype-pretty-code-title] + pre {
+  margin-block-start: 0;
+  border-start-end-radius: 0;
+  border-start-start-radius: 0;
+}
+
+/* Caption, from ```lang caption="..." */
+[data-rehype-pretty-code-caption] {
+  margin-block-start: 0.75em;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/*
+ * Inline code written as `expr{:js}` is highlighted too. It sits in body text, so
+ * it takes the page surface rather than the dark block surface, and it follows
+ * the active mode.
+ */
+:not(pre) > code[data-theme] {
+  padding: 0.15em 0.35em;
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+:not(pre) > code[data-theme],
+:not(pre) > code[data-theme] span {
+  color: var(--shiki-light);
+}
+
+.dark :not(pre) > code[data-theme],
+.dark :not(pre) > code[data-theme] span {
+  color: var(--shiki-dark);
+}

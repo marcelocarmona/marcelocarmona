@@ -1,0 +1,276 @@
+/*
+ * Typeset - styles rendered markdown inside a `.typeset` container.
+ *
+ * Follows the shadcn/typeset contract:
+ *   - lives in the `components` layer so plain utilities win without `!important`
+ *   - element selectors are wrapped in `:where()` for zero specificity
+ *   - spacing flows one direction (`margin-block-start` only), so appending a
+ *     block never restyles the blocks above it
+ *   - colors and fonts come from the app theme, so dark mode needs nothing extra
+ *
+ * Three variables drive the rhythm. Everything else derives from them.
+ */
+
+@layer components {
+  .typeset {
+    --typeset-font-body: var(--font-sans);
+    --typeset-font-heading: var(--font-display);
+    --typeset-font-mono: var(--font-mono);
+
+    --typeset-size: 1.125rem; /* 18px */
+    --typeset-leading: 1.7;
+    --typeset-flow: 1.4em;
+
+    font-family: var(--typeset-font-body);
+    font-size: var(--typeset-size);
+    line-height: var(--typeset-leading);
+    color: var(--foreground);
+    text-wrap: pretty;
+  }
+
+  /* Opt out. Covers the element and everything inside it. */
+  .typeset :where(.not-typeset, .not-typeset *),
+  .typeset :where([data-not-typeset], [data-not-typeset] *) {
+    all: revert-layer;
+  }
+
+  /* ---- Flow ------------------------------------------------------------- */
+
+  .typeset :where(p, ul, ol, blockquote, pre, table, hr, figure, dl, details) {
+    margin-block-start: var(--typeset-flow);
+  }
+
+  .typeset > :where(:first-child) {
+    margin-block-start: 0;
+  }
+
+  /* ---- Headings --------------------------------------------------------- */
+
+  .typeset :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--typeset-font-heading);
+    font-optical-sizing: auto;
+    color: var(--foreground);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .typeset :where(h1) {
+    margin-block-start: calc(var(--typeset-flow) * 2);
+    font-size: 2.25em;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .typeset :where(h2) {
+    margin-block-start: calc(var(--typeset-flow) * 1.9);
+    font-size: 1.55em;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .typeset :where(h3) {
+    margin-block-start: calc(var(--typeset-flow) * 1.5);
+    font-size: 1.25em;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .typeset :where(h4, h5, h6) {
+    margin-block-start: calc(var(--typeset-flow) * 1.25);
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  /*
+   * The hairline system. An h2 opens a new section, so it gets a rule above it.
+   * `:where()` keeps specificity at zero; utilities can still override.
+   */
+  .typeset :where(h2)::before {
+    display: block;
+    margin-block-end: calc(var(--typeset-flow) * 0.75);
+    border-block-start: 1px solid var(--border);
+    content: '';
+  }
+
+  .typeset :where(h1, h2, h3, h4, h5, h6) + * {
+    margin-block-start: calc(var(--typeset-flow) * 0.5);
+  }
+
+  /* ---- Links ------------------------------------------------------------ */
+
+  .typeset :where(a) {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: color var(--duration-ui) var(--ease-out-soft);
+  }
+
+  .typeset :where(a):hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .typeset :where(h1, h2, h3, h4, h5, h6) :where(a) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* ---- Lists ------------------------------------------------------------ */
+
+  .typeset :where(ul, ol) {
+    padding-inline-start: 1.4em;
+  }
+
+  .typeset :where(ul) {
+    list-style: disc;
+  }
+
+  .typeset :where(ol) {
+    list-style: decimal;
+  }
+
+  .typeset :where(li) {
+    margin-block-start: calc(var(--typeset-flow) * 0.4);
+  }
+
+  .typeset :where(li)::marker {
+    color: var(--muted-foreground);
+  }
+
+  .typeset :where(li > ul, li > ol) {
+    margin-block-start: calc(var(--typeset-flow) * 0.4);
+  }
+
+  /* ---- Quotes and rules ------------------------------------------------- */
+
+  .typeset :where(blockquote) {
+    padding-inline-start: 1.2em;
+    border-inline-start: 2px solid var(--border-strong);
+    color: var(--muted-foreground);
+    font-style: normal;
+  }
+
+  .typeset :where(hr) {
+    margin-block-start: calc(var(--typeset-flow) * 2);
+    border: 0;
+    border-block-start: 1px solid var(--border);
+  }
+
+  /* ---- Code ------------------------------------------------------------- */
+
+  .typeset :where(code) {
+    padding: 0.15em 0.35em;
+    border-radius: var(--radius-sm);
+    background: var(--muted);
+    color: var(--foreground);
+    font-family: var(--typeset-font-mono);
+    font-size: 0.875em;
+  }
+
+  .typeset :where(pre) {
+    overflow-x: auto;
+    padding: 1rem 0;
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-lg);
+    background: var(--code-surface);
+    font-size: 0.875em;
+    line-height: 1.65;
+  }
+
+  /* Inside a block, the token colors own the styling. */
+  .typeset :where(pre code) {
+    display: grid;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    font-size: inherit;
+  }
+
+  /* ---- Figures and media ------------------------------------------------ */
+
+  /*
+   * Deliberately no `max-width` here. @tailwindcss/typography capped
+   * `.prose figure` at 100%, which broke the full-bleed diagrams that escape the
+   * measure with `margin-inline: calc(50% - 50vw)`.
+   */
+  .typeset :where(img, video, canvas, svg) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .typeset :where(figcaption) {
+    margin-block-start: 0.75em;
+    color: var(--muted-foreground);
+    font-family: var(--typeset-font-mono);
+    font-size: 0.8125em;
+    line-height: 1.5;
+  }
+
+  /* ---- Tables ----------------------------------------------------------- */
+
+  .typeset :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375em;
+  }
+
+  .typeset :where(th) {
+    padding: 0.5em 0.75em;
+    border-block-end: 1px solid var(--border-strong);
+    font-weight: 600;
+    text-align: start;
+  }
+
+  .typeset :where(td) {
+    padding: 0.5em 0.75em;
+    border-block-start: 1px solid var(--border);
+  }
+
+  .typeset-scroll {
+    overflow-x: auto;
+  }
+
+  /* ---- Misc ------------------------------------------------------------- */
+
+  .typeset :where(strong) {
+    font-weight: 600;
+  }
+
+  .typeset :where(kbd) {
+    padding: 0.15em 0.4em;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-family: var(--typeset-font-mono);
+    font-size: 0.8125em;
+  }
+
+  .typeset :where(sup, sub) {
+    font-size: 0.75em;
+  }
+
+  /* ---- Presets ---------------------------------------------------------- */
+
+  /* Long-form articles. Roomier, and the measure is owned by the layout. */
+  .typeset-article {
+    --typeset-flow: 1.5em;
+  }
+
+  /* Summaries and bios inside list pages. Tighter, and quieter by default. */
+  .typeset-note {
+    --typeset-size: 1rem;
+    --typeset-leading: 1.6;
+    --typeset-flow: 1em;
+
+    color: var(--muted-foreground);
+  }
+
+  .typeset-note :where(h2)::before {
+    display: none;
+  }
+
+  /* Dark surfaces need slightly looser leading to read the same. */
+  .dark .typeset {
+    --typeset-leading: 1.75;
+  }
+}

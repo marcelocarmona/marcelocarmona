@@ -27,6 +27,7 @@ const esUi = {
     authors: 'Autores',
     backToBlog: 'Volver al blog',
     blogLabel: 'Blog',
+    contents: 'Contenido',
     homeLabel: 'Inicio',
     name: 'Nombre',
     nextArticle: 'Articulo siguiente',

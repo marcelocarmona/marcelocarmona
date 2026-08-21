@@ -190,7 +190,7 @@ export function VizFigure({
   )
 
   return (
-    <figure ref={attach} className={`not-prose viz-figure${className ? ` ${className}` : ''}`}>
+    <figure ref={attach} className={`not-typeset viz-figure${className ? ` ${className}` : ''}`}>
       {children}
       {caption && <figcaption className="viz-caption">{caption}</figcaption>}
     </figure>

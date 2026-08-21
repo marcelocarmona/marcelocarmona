@@ -3,11 +3,9 @@ import Link from './Link'
 import type { ProjectData } from '@/types/site'
 
 const Card = ({ title, description, imgSrc, href }: ProjectData) => (
-  <div className="md p-4 md:w-1/2" style={{ maxWidth: '544px' }}>
+  <div className="p-4 md:w-1/2" style={{ maxWidth: '544px' }}>
     <div
-      className={`${
-        imgSrc && 'h-full'
-      }  overflow-hidden rounded-md border-2 border-gray-200/60 dark:border-gray-700`}
+      className={`${imgSrc && 'h-full'} overflow-hidden rounded-lg border border-border bg-card`}
     >
       {imgSrc &&
         (href ? (
@@ -30,7 +28,7 @@ const Card = ({ title, description, imgSrc, href }: ProjectData) => (
           />
         ))}
       <div className="p-6">
-        <h2 className="mb-3 text-2xl font-bold leading-8 tracking-tight">
+        <h2 className="mb-3 font-display text-2xl font-semibold leading-snug tracking-tight text-card-foreground">
           {href ? (
             <Link href={href} aria-label={`Link to ${title}`}>
               {title}
@@ -39,11 +37,11 @@ const Card = ({ title, description, imgSrc, href }: ProjectData) => (
             title
           )}
         </h2>
-        <p className="mb-3 text-gray-500 dark:text-gray-400">{description}</p>
+        <p className="mb-3 text-muted-foreground">{description}</p>
         {href && (
           <Link
             href={href}
-            className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+            className="font-mono text-xs uppercase tracking-[0.14em] text-primary transition-colors duration-(--duration-ui) ease-(--ease-out-soft) hover:text-foreground"
             aria-label={`Link to ${title}`}
           >
             Learn more &rarr;

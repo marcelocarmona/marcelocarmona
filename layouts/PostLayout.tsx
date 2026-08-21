@@ -1,4 +1,5 @@
 import Link from '@/components/Link'
+import ArticleRail from '@/components/ArticleRail'
 import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
@@ -9,12 +10,17 @@ import Comments from '@/components/comments'
 import SeoSchema from '@/components/SeoSchema'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import VideoPreviewCard from '@/components/VideoPreviewCard'
-import { Prose } from '@/components/ui/typography'
+import { Typeset } from '@/components/ui/typography'
 import { getBlogPath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
 import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
-import type { AuthorFrontMatter, ContentFrontMatter, LanguageVersion } from '@/types/content'
+import type {
+  AuthorFrontMatter,
+  ContentFrontMatter,
+  LanguageVersion,
+  TocHeading,
+} from '@/types/content'
 import type { ReactNode } from 'react'
 
 const editUrl = (fileName: string) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
@@ -33,6 +39,7 @@ interface PostLayoutProps {
   prev?: ContentFrontMatter | null
   relatedPosts?: ContentFrontMatter[]
   languageVersions?: LanguageVersion[]
+  toc?: TocHeading[]
   children: ReactNode
 }
 
@@ -43,6 +50,7 @@ export default function PostLayout({
   prev,
   relatedPosts = [],
   languageVersions = [],
+  toc = [],
   children,
 }: PostLayoutProps) {
   const { fileName, date, lastmod, title, tags } = frontMatter
@@ -112,84 +120,81 @@ export default function PostLayout({
       <article lang={frontMatter.locale || 'en'}>
         <SeoSchema data={articleSchema} />
         <SeoSchema data={breadcrumbSchema} />
-        <div className="divide-y divide-gray-200 dark:divide-gray-700">
-          <header className="pb-8 pt-6">
-            <div className="space-y-1 text-center">
-              <dl className="space-y-10">
-                <div>
-                  <dt className="sr-only">{postUi.publishedOn}</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time dateTime={date || undefined}>
-                      {formatDate(date, frontMatter.locale, postDateTemplate)}
-                    </time>
-                  </dd>
-                  {hasMeaningfulUpdate(frontMatter) && (
-                    <>
-                      <dt className="sr-only">{postUi.updatedOn}</dt>
-                      <dd className="text-sm leading-5 text-gray-500 dark:text-gray-400">
-                        {postUi.updatedOn}{' '}
-                        <time dateTime={lastmod || undefined}>
-                          {formatDate(lastmod, frontMatter.locale, postDateTemplate)}
-                        </time>
-                      </dd>
-                    </>
-                  )}
-                </div>
-              </dl>
-              <div>
-                <PageTitle>{title}</PageTitle>
-              </div>
-              <dl className="pt-5">
-                <dt className="sr-only">{postUi.authors}</dt>
-                <dd>
-                  <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3">
-                    {authorDetails.map((author) => (
-                      <li className="flex items-center space-x-2 text-left" key={author.name}>
-                        {author.avatar && (
-                          <Image
-                            src={author.avatar}
-                            width={38}
-                            height={38}
-                            alt="avatar"
-                            className="h-10 w-10 rounded-full"
-                          />
-                        )}
-                        <dl className="whitespace-nowrap text-sm font-medium leading-5">
-                          <dt className="sr-only">{postUi.name}</dt>
-                          <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                          <dt className="sr-only">{postUi.twitter}</dt>
-                          <dd>
-                            {author.twitter && (
-                              <Link
-                                href={author.twitter}
-                                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                              >
-                                {author.twitter.replace('https://twitter.com/', '@')}
-                              </Link>
-                            )}
-                          </dd>
-                        </dl>
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </dl>
+        <div>
+          <header className="mx-auto max-w-measure pb-10 pt-6">
+            <dl>
+              <dt className="sr-only">{postUi.publishedOn}</dt>
+              <dd className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                <time dateTime={date || undefined}>
+                  {formatDate(date, frontMatter.locale, postDateTemplate)}
+                </time>
+                {hasMeaningfulUpdate(frontMatter) && (
+                  <>
+                    <span aria-hidden="true"> / </span>
+                    <span>
+                      {postUi.updatedOn}{' '}
+                      <time dateTime={lastmod || undefined}>
+                        {formatDate(lastmod, frontMatter.locale, postDateTemplate)}
+                      </time>
+                    </span>
+                  </>
+                )}
+              </dd>
+            </dl>
+            <div className="mt-5">
+              <PageTitle>{title}</PageTitle>
             </div>
+            <dl className="mt-8 border-t border-border pt-5">
+              <dt className="sr-only">{postUi.authors}</dt>
+              <dd>
+                <ul className="flex flex-wrap gap-x-8 gap-y-3">
+                  {authorDetails.map((author) => (
+                    <li className="flex items-center gap-2.5" key={author.name}>
+                      {author.avatar && (
+                        <Image
+                          src={author.avatar}
+                          width={38}
+                          height={38}
+                          alt="avatar"
+                          className="size-9 rounded-full"
+                        />
+                      )}
+                      <dl className="whitespace-nowrap text-sm leading-5">
+                        <dt className="sr-only">{postUi.name}</dt>
+                        <dd className="text-foreground">{author.name}</dd>
+                        <dt className="sr-only">{postUi.twitter}</dt>
+                        <dd>
+                          {author.twitter && (
+                            <Link
+                              href={author.twitter}
+                              className="font-mono text-xs text-muted-foreground underline-offset-4 hover:underline"
+                            >
+                              {author.twitter.replace('https://twitter.com/', '@')}
+                            </Link>
+                          )}
+                        </dd>
+                      </dl>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </dl>
           </header>
-          <div className="pb-8">
-            <Prose className="mx-auto max-w-[42rem] pb-8 pt-10">
+          <div className="relative pb-8">
+            <ArticleRail toc={toc} label={postUi.contents} />
+            <Typeset className="mx-auto max-w-measure pb-8">
               <VideoPreviewCard video={frontMatter.video} locale={frontMatter.locale} />
               {children}
-            </Prose>
+            </Typeset>
 
-            <div className="mx-auto max-w-[42rem] divide-y divide-gray-200 dark:divide-gray-700">
-              <footer className="divide-y divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700">
+            <div className="mx-auto max-w-measure divide-y divide-border">
+              <footer className="divide-y divide-border text-sm leading-5">
                 {tags && (
                   <div className="py-6">
-                    <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                       {postUi.tags}
                     </h2>
-                    <div className="flex flex-wrap">
+                    <div className="mt-3 flex flex-wrap">
                       {tags.map((tag) => (
                         <Tag key={tag} locale={frontMatter.locale} text={tag} />
                       ))}
@@ -198,7 +203,7 @@ export default function PostLayout({
                 )}
                 {languageVersions.length > 0 && (
                   <div className="py-6">
-                    <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                       {postUi.translations}
                     </h2>
                     <ul className="mt-2 space-y-2">
@@ -206,7 +211,7 @@ export default function PostLayout({
                         <li key={post.href}>
                           <Link
                             href={post.href}
-                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                            className="text-primary underline-offset-4 hover:underline"
                           >
                             {post.languageLabel}: {post.title}
                           </Link>
@@ -217,7 +222,7 @@ export default function PostLayout({
                 )}
                 {relatedPosts.length > 0 && (
                   <div className="py-6">
-                    <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                       {postUi.relatedArticles}
                     </h2>
                     <ul className="mt-2 grid gap-2 sm:grid-cols-2">
@@ -225,7 +230,7 @@ export default function PostLayout({
                         <li key={post.slug}>
                           <HoverPrefetchLink
                             href={getPostPath(post)}
-                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                            className="text-primary underline-offset-4 hover:underline"
                           >
                             {post.title}
                           </HoverPrefetchLink>
@@ -238,10 +243,10 @@ export default function PostLayout({
                   <div className="grid gap-6 py-6 sm:grid-cols-2">
                     {prev && (
                       <div>
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                           {postUi.previousArticle}
                         </h2>
-                        <div className="mt-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                        <div className="mt-1 text-primary underline-offset-4 hover:underline">
                           <Link href={getPostPath(frontMatter.locale, prev.slug)}>
                             {prev.title}
                           </Link>
@@ -250,10 +255,10 @@ export default function PostLayout({
                     )}
                     {next && (
                       <div className="sm:text-right">
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                           {postUi.nextArticle}
                         </h2>
-                        <div className="mt-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                        <div className="mt-1 text-primary underline-offset-4 hover:underline">
                           <Link href={getPostPath(frontMatter.locale, next.slug)}>
                             {next.title}
                           </Link>
@@ -263,10 +268,7 @@ export default function PostLayout({
                   </div>
                 )}
                 <div className="flex flex-wrap items-center justify-between gap-4 py-6">
-                  <Link
-                    href={blogPath}
-                    className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                  >
+                  <Link href={blogPath} className="text-primary underline-offset-4 hover:underline">
                     &larr; {postUi.backToBlog}
                   </Link>
                   <Link href={editUrl(fileName)}>{postUi.viewOnGitHub}</Link>

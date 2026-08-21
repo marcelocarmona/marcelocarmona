@@ -94,12 +94,10 @@ export default async function GuidesPage({ locale = 'en' }: { locale?: Locale })
   return (
     <div lang={locale} className="space-y-12">
       <div className="space-y-3 pb-3 pt-6">
-        <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl md:text-6xl">
+        <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
           {copy.title}
         </h1>
-        <p className="max-w-2xl text-lg leading-7 text-gray-500 dark:text-gray-400">
-          {copy.description}
-        </p>
+        <p className="max-w-2xl text-lg leading-7 text-muted-foreground">{copy.description}</p>
       </div>
 
       <div className="grid gap-8 md:grid-cols-2">
@@ -108,21 +106,18 @@ export default async function GuidesPage({ locale = 'en' }: { locale?: Locale })
           const tagPath = getTagPath(locale, kebabCase(cluster.primaryTag))
 
           return (
-            <section
-              key={cluster.id}
-              className="rounded-lg border border-gray-200 p-6 dark:border-gray-700"
-            >
-              <h2 className="text-2xl font-bold leading-8 tracking-tight text-gray-900 dark:text-gray-100">
+            <section key={cluster.id} className="rounded-lg border border-border p-6">
+              <h2 className="font-display text-2xl font-semibold leading-snug tracking-tight text-foreground">
                 {cluster.title}
               </h2>
-              <p className="mt-3 text-gray-600 dark:text-gray-300">{cluster.description}</p>
+              <p className="mt-3 text-muted-foreground">{cluster.description}</p>
 
               <ul className="mt-4 space-y-2">
                 {clusterPosts.map((post) => (
                   <li key={post.slug}>
                     <HoverPrefetchLink
                       href={getPostPath(post)}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                      className="text-primary underline-offset-4 hover:underline"
                     >
                       {post.title}
                     </HoverPrefetchLink>
@@ -134,7 +129,7 @@ export default async function GuidesPage({ locale = 'en' }: { locale?: Locale })
                 <div className="mt-5">
                   <Link
                     href={tagPath}
-                    className="text-sm font-semibold text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                    className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
                   >
                     {copy.viewAll(cluster.title)} &rarr;
                   </Link>

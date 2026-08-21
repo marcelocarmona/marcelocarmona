@@ -10,11 +10,12 @@ export function DisplayTitle({ as: Component = 'div', className, ...props }: Typ
   return <Component className={cn('font-display tracking-tight', className)} {...props} />
 }
 
+/** Small mono label above a title. Carries category, date, reading time. */
 export function Eyebrow({ as: Component = 'p', className, ...props }: TypographyProps) {
   return (
     <Component
       className={cn(
-        'text-xs font-semibold uppercase tracking-[0.24em] text-primary-700 dark:text-primary-300',
+        'font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground',
         className
       )}
       {...props}
@@ -23,32 +24,29 @@ export function Eyebrow({ as: Component = 'p', className, ...props }: Typography
 }
 
 export function MutedText({ as: Component = 'p', className, ...props }: TypographyProps) {
-  return (
-    <Component
-      className={cn('text-muted-foreground dark:text-muted-foreground-dark', className)}
-      {...props}
-    />
-  )
+  return <Component className={cn('text-muted-foreground', className)} {...props} />
 }
 
-export function Prose({ as: Component = 'div', className, ...props }: TypographyProps) {
+type TypesetProps = TypographyProps & {
+  /** `article` for long-form bodies, `note` for summaries and bios. */
+  variant?: 'article' | 'note'
+}
+
+/**
+ * Styles rendered markdown. Rhythm lives in css/typeset.css, driven by
+ * --typeset-size / --typeset-leading / --typeset-flow.
+ */
+export function Typeset({
+  as: Component = 'div',
+  variant = 'article',
+  className,
+  ...props
+}: TypesetProps) {
   return (
     <Component
       className={cn(
-        'prose prose-neutral max-w-none dark:prose-invert',
-        'prose-headings:font-bold prose-headings:tracking-tight prose-h3:font-semibold',
-        'prose-a:text-primary-500 prose-a:transition-colors prose-a:hover:text-primary-600 dark:prose-a:hover:text-primary-400',
-        'prose-pre:bg-gray-800',
-        '[&_:where(code):not(:where(pre_code,.not-prose,.not-prose_*))]:rounded',
-        '[&_:where(code):not(:where(pre_code,.not-prose,.not-prose_*))]:bg-gray-100',
-        '[&_:where(code):not(:where(pre_code,.not-prose,.not-prose_*))]:px-1',
-        '[&_:where(code):not(:where(pre_code,.not-prose,.not-prose_*))]:py-0.5',
-        '[&_:where(code):not(:where(pre_code,.not-prose,.not-prose_*))]:text-pink-500',
-        '[&_:where(a_code):not(:where(.not-prose,.not-prose_*))]:text-primary-400',
-        '[&_:where(code):not(:where(.not-prose,.not-prose_*))]:before:content-none',
-        '[&_:where(code):not(:where(.not-prose,.not-prose_*))]:after:content-none',
-        '[&_ul_li::marker]:text-gray-500 dark:[&_ul_li::marker]:text-gray-400',
-        'dark:[&_:where(code):not(:where(pre_code,.not-prose,.not-prose_*))]:bg-gray-800',
+        'typeset',
+        variant === 'article' ? 'typeset-article' : 'typeset-note',
         className
       )}
       {...props}

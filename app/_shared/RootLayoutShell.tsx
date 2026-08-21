@@ -86,12 +86,12 @@ export default async function RootLayoutShell({
   return (
     <html
       lang={htmlLanguage[resolvedLocale]}
-      className="scroll-smooth bg-background dark:bg-background-dark"
+      className="scroll-smooth bg-background"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body
-        className="min-h-screen bg-background bg-[radial-gradient(circle_at_top_left,rgb(168_208_201_/_0.18),transparent_26%),radial-gradient(circle_at_85%_12%,rgb(244_222_194_/_0.4),transparent_24%)] text-foreground antialiased selection:bg-primary-200 selection:text-primary-950 dark:bg-background-dark dark:bg-[radial-gradient(circle_at_top_left,rgb(20_105_97_/_0.18),transparent_26%),radial-gradient(circle_at_85%_12%,rgb(86_65_41_/_0.4),transparent_24%)] dark:text-foreground-dark dark:selection:bg-primary-700 dark:selection:text-white"
+        className="min-h-screen bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground"
         suppressHydrationWarning
       >
         <SeoSchema data={websiteSchema} />

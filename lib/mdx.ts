@@ -2,16 +2,49 @@ import fs from 'fs'
 import matter from 'gray-matter'
 import path from 'path'
 import readingTime from 'reading-time'
+import vitesseDark from 'shiki/themes/vitesse-dark.mjs'
 import type { ContentFrontMatter, MdxFile, TocHeading } from '@/types/content'
 import { normalizeLocale } from './locales'
 import getAllFilesRecursively from './utils/files'
 import remarkExtractFrontmatter from './remark-extract-frontmatter'
 import remarkTocHeadings from './remark-toc-headings'
-import remarkCodeTitles from './remark-code-title'
 import remarkImgToJsx from './remark-img-to-jsx'
 import { buildVideoFrontMatter } from './video'
 
 const root = process.cwd()
+
+/*
+ * Shiki runs at build time, so no highlighter ships to the browser.
+ *
+ * `defaultColor: false` stops Shiki writing inline colors and emits
+ * `--shiki-light` / `--shiki-dark` per token instead, which hands the palette to
+ * css/shiki.css. `langs` is pinned to what the posts actually use rather than
+ * pulling the full grammar bundle.
+ *
+ * Three vitesse-dark colors fail WCAG AA against the block surface (#121212).
+ * Measured in-browser: comments 3.89:1, punctuation 3.26:1, and the translucent
+ * string variant 2.36:1. `colorReplacements` lifts each one over 4.5:1 while
+ * keeping its hue, so comments still read as recessive.
+ *
+ * Keys must be lowercase: Shiki looks them up with `color.toLowerCase()`, so
+ * the theme's own uppercase hex values would never match.
+ */
+const accessibleVitesseDark = {
+  ...vitesseDark,
+  colorReplacements: {
+    ...vitesseDark.colorReplacements,
+    '#758575dd': '#7e8e7e', // comments       3.89 -> 5.90
+    '#666666': '#8a8a8a', // punctuation    3.26 -> 5.42
+    '#c98a7d77': '#b87f72', // string accents 2.36 -> 5.64
+  },
+}
+
+const rehypePrettyCodeOptions = {
+  theme: { light: 'vitesse-light', dark: accessibleVitesseDark },
+  defaultColor: false as const,
+  keepBackground: false,
+  defaultLang: 'plaintext',
+}
 
 export function getFiles(type: string): string[] {
   const prefixPaths = path.join(root, 'data', type)
@@ -40,7 +73,7 @@ export async function getFileBySlug(type: string, slug: string): Promise<MdxFile
     { default: rehypeSlug },
     { default: rehypeAutolinkHeadings },
     { default: rehypeKatex },
-    { default: rehypePrismPlus },
+    { default: rehypePrettyCode },
   ] = await Promise.all([
     import('mdx-bundler'),
     import('remark-gfm'),
@@ -48,7 +81,7 @@ export async function getFileBySlug(type: string, slug: string): Promise<MdxFile
     import('rehype-slug'),
     import('rehype-autolink-headings'),
     import('rehype-katex'),
-    import('rehype-prism-plus'),
+    import('rehype-pretty-code'),
   ])
 
   const mdxPath = path.join(root, 'data', type, `${slug}.mdx`)
@@ -79,7 +112,6 @@ export async function getFileBySlug(type: string, slug: string): Promise<MdxFile
         remarkExtractFrontmatter,
         [remarkTocHeadings, { exportRef: toc }],
         remarkGfm,
-        remarkCodeTitles,
         remarkMath,
         remarkImgToJsx,
       ]
@@ -88,7 +120,7 @@ export async function getFileBySlug(type: string, slug: string): Promise<MdxFile
         rehypeSlug,
         rehypeAutolinkHeadings,
         rehypeKatex,
-        [rehypePrismPlus, { ignoreMissing: true }],
+        [rehypePrettyCode, rehypePrettyCodeOptions],
       ]
       return options
     },
