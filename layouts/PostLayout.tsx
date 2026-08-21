@@ -1,4 +1,5 @@
 import Link from '@/components/Link'
+import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import Image from '@/components/Image'
@@ -222,12 +223,12 @@ export default function PostLayout({
                     <ul className="mt-2 grid gap-2 sm:grid-cols-2">
                       {relatedPosts.map((post) => (
                         <li key={post.slug}>
-                          <Link
+                          <HoverPrefetchLink
                             href={getPostPath(post)}
                             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                           >
                             {post.title}
-                          </Link>
+                          </HoverPrefetchLink>
                         </li>
                       ))}
                     </ul>

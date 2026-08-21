@@ -26,6 +26,9 @@ const HashRingDemo = dynamic(() => import('./diagrams/HashRingDemo'))
 const QuorumDemo = dynamic(() => import('./diagrams/QuorumDemo'))
 const TailLatencyDemo = dynamic(() => import('./diagrams/TailLatencyDemo'))
 
+// Same idea for the KaTeX stylesheet: only posts that actually render math pay for it.
+const MathStyles = dynamic(() => import('./MathStyles'))
+
 const BaseMDXComponents = {
   CodeSandbox,
   Image,
@@ -38,7 +41,12 @@ const BaseMDXComponents = {
   TailLatencyDemo,
   wrapper: ({ layout, ...rest }: { layout: string; [key: string]: any }) => {
     const Layout = Layouts[layout] || PostLayout
-    return <Layout {...rest} />
+    return (
+      <>
+        {rest.frontMatter?.hasMath && <MathStyles />}
+        <Layout {...rest} />
+      </>
+    )
   },
 }
 

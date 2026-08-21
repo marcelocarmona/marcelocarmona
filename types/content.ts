@@ -32,6 +32,7 @@ export interface ContentFrontMatter {
   canonicalUrl?: string
   translationKey?: string
   video: VideoFrontMatter | null
+  hasMath?: boolean
 }
 
 export interface MdxFile {

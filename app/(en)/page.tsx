@@ -1,4 +1,5 @@
 import Image from '@/components/Image'
+import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import Link from '@/components/Link'
 import NewsletterForm from '@/components/NewsletterForm'
 import Tag from '@/components/Tag'
@@ -12,9 +13,9 @@ import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 
 const MAX_DISPLAY = 5
-const title = 'Marcelo Carmona'
+const title = 'Software Engineer | Frontend, Cloud, AI | Marcelo Carmona'
 const description = siteMetadata.description
-const headline = 'Software engineer building reliable web products and the systems behind them.'
+const headline = 'I build web products and the AI systems inside them.'
 const intro =
   'I work across frontend architecture, cloud infrastructure, and delivery workflows to turn product ideas into maintainable software. I care about clear interfaces, resilient systems, and engineering decisions that help teams move with confidence.'
 
@@ -115,12 +116,12 @@ export default async function HomePage() {
                         <div className="space-y-6">
                           <div>
                             <h2 className="text-2xl font-bold leading-8 tracking-tight">
-                              <Link
+                              <HoverPrefetchLink
                                 href={getPostPath('en', slug)}
                                 className="text-gray-900 dark:text-gray-100"
                               >
                                 {title}
-                              </Link>
+                              </HoverPrefetchLink>
                             </h2>
                             <div className="flex flex-wrap">
                               {(tags || []).map((tag) => (
@@ -131,13 +132,13 @@ export default async function HomePage() {
                           <Prose className="text-gray-500 dark:text-gray-400">{summary}</Prose>
                         </div>
                         <div className="text-base font-medium leading-6">
-                          <Link
+                          <HoverPrefetchLink
                             href={getPostPath('en', slug)}
                             className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                             aria-label={`Read "${title}"`}
                           >
                             Read more &rarr;
-                          </Link>
+                          </HoverPrefetchLink>
                         </div>
                       </div>
                     </div>

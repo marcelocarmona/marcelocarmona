@@ -1,6 +1,6 @@
 'use client'
 
-import Link from '@/components/Link'
+import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import Tag from '@/components/Tag'
 import { Prose } from '@/components/ui/typography'
 import { useState } from 'react'
@@ -98,12 +98,12 @@ export default function ListLayout({
                   <div className="space-y-3 xl:col-span-3">
                     <div>
                       <h3 className="text-2xl font-bold leading-8 tracking-tight">
-                        <Link
+                        <HoverPrefetchLink
                           href={getPostPath(resolvedLocale, slug)}
                           className="text-gray-900 dark:text-gray-100"
                         >
                           {title}
-                        </Link>
+                        </HoverPrefetchLink>
                       </h3>
                       <div className="flex flex-wrap">
                         {(tags || []).map((tag) => (

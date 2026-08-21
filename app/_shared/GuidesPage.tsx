@@ -1,3 +1,4 @@
+import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import Link from '@/components/Link'
 import { getPostPath, getTagPath } from '@/lib/i18n/routes'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
@@ -119,12 +120,12 @@ export default async function GuidesPage({ locale = 'en' }: { locale?: Locale })
               <ul className="mt-4 space-y-2">
                 {clusterPosts.map((post) => (
                   <li key={post.slug}>
-                    <Link
+                    <HoverPrefetchLink
                       href={getPostPath(post)}
                       className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                     >
                       {post.title}
-                    </Link>
+                    </HoverPrefetchLink>
                   </li>
                 ))}
               </ul>

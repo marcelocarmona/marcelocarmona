@@ -103,6 +103,12 @@ export async function getFileBySlug(type: string, slug: string): Promise<MdxFile
 
   const { code, frontmatter } = await bundleMDX(mdxBundleOptions)
 
+  // rehype-katex only emits `katex` class names when remark-math actually matched
+  // math delimiters, so the compiled output is an exact signal for whether this post
+  // needs the KaTeX stylesheet. Checking the source for `$` instead would false-positive
+  // on every shell snippet.
+  const hasMath = code.includes('katex')
+
   return {
     mdxSource: code,
     toc,
@@ -115,6 +121,7 @@ export async function getFileBySlug(type: string, slug: string): Promise<MdxFile
       locale: normalizeLocale(frontmatter.lang),
       date: frontmatter.date ? new Date(frontmatter.date).toISOString() : null,
       video: buildVideoFrontMatter(frontmatter, slug),
+      hasMath,
     } as ContentFrontMatter,
   }
 }
