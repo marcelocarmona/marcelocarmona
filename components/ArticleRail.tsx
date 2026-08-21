@@ -1,7 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TocHeading } from '@/types/content'
+import { cn } from '@/lib/utils/cn'
+
+/** Clearance kept between the rail and anything scrolling past it. */
+const RAIL_GAP = 16
 
 /**
  * Marginalia rail.
@@ -17,6 +21,8 @@ import type { TocHeading } from '@/types/content'
 export default function ArticleRail({ toc, label }: { toc: TocHeading[]; label: string }) {
   const sections = useMemo(() => toc.filter((heading) => heading.depth === 2), [toc])
   const [activeId, setActiveId] = useState<string>('')
+  const [obscured, setObscured] = useState(false)
+  const panelRef = useRef<HTMLDivElement>(null)
 
   /*
    * Keyed on a string, not on `sections`. `toc` arrives as a fresh array on every
@@ -55,6 +61,72 @@ export default function ArticleRail({ toc, label }: { toc: TocHeading[]; label: 
     return () => observer.disconnect()
   }, [idKey])
 
+  /*
+   * Full-bleed figures reach wider than the container and run through the left
+   * gutter, so they pass behind the rail as you scroll. Rather than narrowing
+   * every figure for a rail that is only in the way some of the time, the rail
+   * measures the collision and fades itself out while it lasts.
+   *
+   * Measured against the sticky panel, not the nav: the nav spans the whole
+   * article, so it overlaps every figure at all times.
+   */
+  useEffect(() => {
+    const panel = panelRef.current
+    if (!panel) return
+
+    const figures = Array.from(document.querySelectorAll<HTMLElement>('.viz-figure'))
+    if (figures.length === 0) return
+
+    // The rail only exists above xl; below it there is nothing to hide.
+    const wide = window.matchMedia('(min-width: 80rem)')
+    let frame = 0
+
+    const measure = () => {
+      frame = 0
+
+      if (!wide.matches) {
+        setObscured(false)
+        return
+      }
+
+      const rail = panel.getBoundingClientRect()
+      setObscured(
+        figures.some((figure) => {
+          const box = figure.getBoundingClientRect()
+          return (
+            box.left < rail.right + RAIL_GAP &&
+            box.right > rail.left - RAIL_GAP &&
+            box.top < rail.bottom + RAIL_GAP &&
+            box.bottom > rail.top - RAIL_GAP
+          )
+        })
+      )
+    }
+
+    const schedule = () => {
+      if (frame) return
+      frame = requestAnimationFrame(measure)
+    }
+
+    measure()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    wide.addEventListener('change', schedule)
+
+    // The diagrams size themselves once they hydrate, which moves every figure
+    // below them without a scroll event to announce it.
+    const resize = new ResizeObserver(schedule)
+    figures.forEach((figure) => resize.observe(figure))
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      wide.removeEventListener('change', schedule)
+      resize.disconnect()
+    }
+  }, [idKey])
+
   if (sections.length < 2) return null
 
   const list = (
@@ -87,13 +159,24 @@ export default function ArticleRail({ toc, label }: { toc: TocHeading[]; label: 
 
   return (
     <>
-      {/* Rail. Only where there is a margin wide enough to hold it. */}
+      {/*
+        Rail. Only where there is a margin wide enough to hold it, and only
+        while nothing is passing through that margin.
+
+        `invisible` rather than opacity alone: at zero opacity the links would
+        still take focus and still be read out. Visibility transitions
+        discretely, so it flips back at the end of the fade out and at the very
+        start of the fade in, which is the behaviour we want either way.
+      */}
       <nav
         aria-label={label}
-        className="absolute left-0 top-0 hidden h-full w-44 xl:block"
+        className={cn(
+          'absolute left-0 top-0 hidden h-full w-44 transition-[opacity,visibility] duration-(--duration-ui) ease-(--ease-out-soft) xl:block',
+          obscured && 'invisible opacity-0'
+        )}
         data-article-rail
       >
-        <div className="sticky top-10 pr-6">
+        <div ref={panelRef} className="sticky top-10 pr-6">
           <p className="mb-4 border-b border-border pb-2 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-muted-foreground">
             {label}
           </p>
@@ -101,7 +184,8 @@ export default function ArticleRail({ toc, label }: { toc: TocHeading[]; label: 
         </div>
       </nav>
 
-      {/* Below xl the same index collapses above the article. */}
+      {/* Wherever the rail has no room, the same index collapses above the
+          article instead. */}
       <details className="mx-auto mb-10 max-w-measure border-y border-border xl:hidden">
         <summary className="cursor-pointer py-3 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-muted-foreground marker:text-muted-foreground">
           {label}

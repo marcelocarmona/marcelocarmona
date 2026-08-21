@@ -659,7 +659,11 @@
 
 /* Above the phone breakpoint the figure widens past the reading measure and
  * centres on it, up to the point where the page's own gutters take over. Body
- * text stays on a comfortable measure; the figures get the rest. */
+ * text stays on a comfortable measure; the figures get the rest.
+ *
+ * At xl this runs under the marginalia rail. The figure keeps its width and the
+ * rail steps aside: ArticleRail measures the two boxes on scroll and fades
+ * itself out for as long as a figure is passing behind it. */
 @media (min-width: 40rem) {
   .typeset .viz-figure {
     width: min(62rem, calc(100vw - 3rem));
