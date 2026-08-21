@@ -48,22 +48,21 @@
 .viz-stage {
   display: block;
   width: 100%;
-  min-width: 52rem;
   height: auto;
   background: var(--viz-bg);
   font-family: var(--viz-font-mono);
 }
 
-.viz-stage-scroll {
+/*
+ * The stage measures this element and draws itself at exactly that width, so
+ * there is nothing to scroll. `overflow-x` is a seatbelt for a layout function
+ * that returns a canvas wider than it was given, not a scrolling strategy.
+ */
+.viz-stage-frame {
   width: 100%;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   background: var(--viz-bg);
-}
-
-.viz-stage-scroll:focus-visible {
-  outline: 2px solid var(--viz-accent);
-  outline-offset: -2px;
 }
 
 .viz-caption {
@@ -586,13 +585,75 @@
 @media (max-width: 640px) {
   .viz-controls {
     justify-content: flex-start;
+    gap: 0.5rem 0.6rem;
+    padding: 0.55rem 0.6rem;
+  }
+
+  /* Diagram-specific controls get their own row rather than being squeezed
+   * onto the end of the transport row at three characters wide. */
+  .viz-controls-custom {
+    width: 100%;
+  }
+
+  .viz-slider input[type='range'] {
+    width: 68px;
+  }
+
+  /* The transport buttons already say what speed does; the word is the first
+   * thing to go when the row runs out of room. */
+  .viz-slider-speed > span:first-child {
+    display: none;
   }
 }
 
-/* Keep prose on a comfortable reading measure, but let diagrams expand evenly
- * on both sides of that centered column. This follows the original article
- * layout without introducing a second visual system for the figures. */
-@media (min-width: 64rem) {
+/*
+ * Touch targets. WCAG 2.2 asks for 24px minimum, platform guidance for 44px;
+ * these controls sit under a diagram a reader is actively poking at, so they
+ * get the larger figure on touch devices and stay compact under a mouse.
+ */
+@media (pointer: coarse) {
+  .viz-controls {
+    gap: 0.6rem 0.7rem;
+  }
+
+  .viz-controls button {
+    min-width: 44px;
+    height: 40px;
+  }
+
+  .viz-toggle {
+    min-height: 40px;
+    padding: 0 0.6rem;
+  }
+
+  .viz-slider input[type='range'] {
+    height: 40px;
+  }
+}
+
+/*
+ * Reclaim the page gutters on phones. A diagram explaining a hash ring wants
+ * every pixel; prose does not.
+ *
+ * `calc(50% - 50vw)` reaches the viewport edge from any depth of nested padded
+ * containers, which a fixed negative margin cannot: this article sits inside
+ * two of them. `max-width` has to be released as well, because the typography
+ * plugin caps figures at 100% of the reading column and would otherwise
+ * swallow the extra width.
+ */
+@media (max-width: 39.999rem) {
+  .prose .viz-figure {
+    max-width: none;
+    margin-inline: calc(50% - 50vw);
+    border-inline-width: 0;
+    border-radius: 0;
+  }
+}
+
+/* Above the phone breakpoint the figure widens past the reading measure and
+ * centres on it, up to the point where the page's own gutters take over. Prose
+ * stays on a comfortable measure; the figures get the rest. */
+@media (min-width: 40rem) {
   .prose .viz-figure {
     width: min(62rem, calc(100vw - 3rem));
     max-width: none;
