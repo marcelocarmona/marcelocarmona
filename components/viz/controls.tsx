@@ -12,13 +12,17 @@ import type { Playback } from './usePlayback'
 type ControlsProps = {
   playback: Playback
   totalSteps: number
-  /** Short label for the current step, shown next to the transport buttons. */
-  phaseLabel?: string
+  /**
+   * Short label per step, shown next to the transport buttons. Every label is
+   * rendered so the readout is as wide as the longest one at all times; a
+   * readout that resized per step could rewrap the whole control row.
+   */
+  phaseLabels?: readonly string[]
   /** Diagram-specific controls (toggles, sliders) rendered on the right. */
   children?: ReactNode
 }
 
-export function VizControls({ playback, totalSteps, phaseLabel, children }: ControlsProps) {
+export function VizControls({ playback, totalSteps, phaseLabels, children }: ControlsProps) {
   const { step, playing, speed, toggle, next, prev, reset, setSpeed } = playback
 
   return (
@@ -38,8 +42,14 @@ export function VizControls({ playback, totalSteps, phaseLabel, children }: Cont
         </button>
 
         <span className="viz-step-readout">
-          {phaseLabel ? `${phaseLabel} · ` : ''}
-          {step + 1}/{totalSteps}
+          {/* Counter first: the label column is as wide as the longest label,
+              so anything after it would sit across a gap on the short steps. */}
+          <span>
+            {step + 1}/{totalSteps}
+          </span>
+          {phaseLabels && phaseLabels.length > 0 && (
+            <VizStack active={step} items={phaseLabels.map((label) => `· ${label}`)} />
+          )}
         </span>
 
         <label className="viz-slider viz-slider-speed">
@@ -194,5 +204,56 @@ export function VizFigure({
       {children}
       {caption && <figcaption className="viz-caption">{caption}</figcaption>}
     </figure>
+  )
+}
+
+/**
+ * Renders every variant of a piece of per-step text and reveals only one.
+ *
+ * The alternative — swapping the text — resizes its box on every step and
+ * shoves the rest of the page up or down mid-animation. Here all the variants
+ * share one grid cell, and the inactive ones are merely invisible rather than
+ * removed, so the box always reserves the largest variant *at the current
+ * width*, which a hard-coded size could never track across breakpoints.
+ *
+ * `visibility: hidden` and not `display: none` is the whole trick, and it is
+ * also what keeps the hidden copies out of the accessibility tree, out of a
+ * text selection, and out of `innerText`.
+ *
+ * Any per-step text a diagram renders in HTML should go through here. Text
+ * inside `VizStage` needs no such care: the SVG is sized by its layout, which
+ * is a function of width alone.
+ */
+export function VizStack({ items, active }: { items: readonly ReactNode[]; active: number }) {
+  return (
+    <span className="viz-stack">
+      {items.map((item, i) => (
+        // Index keys: the list is a fixed script of steps, never reordered, and
+        // two steps are allowed to carry identical text.
+        <span key={i} data-active={i === active ? '' : undefined}>
+          {item}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+/** Per-step caption that never changes the height of the figure. */
+export function VizStepCaption({
+  steps,
+  step,
+}: {
+  steps: readonly { readonly label: string; readonly note: string }[]
+  step: number
+}) {
+  return (
+    <VizStack
+      active={step}
+      items={steps.map((s) => (
+        <>
+          <strong>{s.label}.</strong> {s.note}
+        </>
+      ))}
+    />
   )
 }

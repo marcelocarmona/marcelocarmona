@@ -85,6 +85,26 @@
   color: var(--viz-text);
 }
 
+/*
+ * Stepping through a diagram must not move the page. Every variant of a piece
+ * of text (all captions, all phase labels) is rendered into the same grid cell
+ * and the inactive ones are only made invisible, so the box always reserves the
+ * largest variant at the current width and stays that size for every step.
+ */
+.viz-stack {
+  display: grid;
+}
+
+.viz-stack > * {
+  grid-area: 1 / 1;
+  margin: 0;
+  visibility: hidden;
+}
+
+.viz-stack > [data-active] {
+  visibility: visible;
+}
+
 /* ----------------------------------------------------------------- nodes */
 
 .viz-node {
@@ -493,6 +513,9 @@
 }
 
 .viz-step-readout {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
   margin-left: 0.35rem;
   color: var(--viz-muted);
   font-family: var(--viz-font-mono);

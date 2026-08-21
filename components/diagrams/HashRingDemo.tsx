@@ -11,7 +11,14 @@ import {
   type Owner,
   type PanelRow,
 } from '../viz/primitives'
-import { VizButton, VizControls, VizFigure, VizSlider, VizToggle } from '../viz/controls'
+import {
+  VizButton,
+  VizControls,
+  VizFigure,
+  VizSlider,
+  VizStepCaption,
+  VizToggle,
+} from '../viz/controls'
 import { usePlayback } from '../viz/usePlayback'
 import { hashAngle, hash32, pointOnCircle, clamp, type Point } from '../viz/geometry'
 
@@ -180,6 +187,8 @@ const STEPS = [
   },
 ] as const
 
+const STEP_LABELS = STEPS.map((s) => s.label)
+
 export default function HashRingDemo() {
   const [scheme, setScheme] = useState<Scheme>('ring')
   const [nodeCount, setNodeCount] = useState(5)
@@ -187,7 +196,6 @@ export default function HashRingDemo() {
 
   const playback = usePlayback(STEPS.length, 1800)
   const step = Math.min(playback.step, STEPS.length - 1)
-  const current = STEPS[step]!
 
   const model = useMemo(() => {
     const liveBefore = Array.from({ length: nodeCount }, (_, i) => i)
@@ -260,11 +268,7 @@ export default function HashRingDemo() {
   return (
     <VizFigure
       onVisibilityChange={playback.setOnScreen}
-      caption={
-        <>
-          <strong>{current.label}.</strong> {current.note}
-        </>
-      }
+      caption={<VizStepCaption steps={STEPS} step={step} />}
     >
       <VizStage layout={buildLayout} narration={narration}>
         {(L) => {
@@ -383,7 +387,7 @@ export default function HashRingDemo() {
         }}
       </VizStage>
 
-      <VizControls playback={playback} totalSteps={STEPS.length} phaseLabel={current.label}>
+      <VizControls playback={playback} totalSteps={STEPS.length} phaseLabels={STEP_LABELS}>
         <VizToggle
           label="Consistent ring"
           checked={scheme === 'ring'}

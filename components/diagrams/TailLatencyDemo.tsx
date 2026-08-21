@@ -11,7 +11,14 @@ import {
   VizTick,
 } from '../viz/primitives'
 import type { PanelRow } from '../viz/primitives'
-import { VizButton, VizControls, VizFigure, VizSlider, VizToggle } from '../viz/controls'
+import {
+  VizButton,
+  VizControls,
+  VizFigure,
+  VizSlider,
+  VizStepCaption,
+  VizToggle,
+} from '../viz/controls'
 import { usePlayback } from '../viz/usePlayback'
 import { clamp, percentile, rng, type Box, type Point } from '../viz/geometry'
 
@@ -226,6 +233,8 @@ const STEPS = [
   },
 ] as const
 
+const STEP_LABELS = STEPS.map((s) => s.label)
+
 export default function TailLatencyDemo() {
   const [shards, setShards] = useState(32)
   const [slowPct, setSlowPct] = useState(3)
@@ -236,7 +245,6 @@ export default function TailLatencyDemo() {
 
   const playback = usePlayback(STEPS.length, 1700)
   const step = Math.min(playback.step, STEPS.length - 1)
-  const current = STEPS[step]!
 
   const sim = useMemo(
     () => simulate(seed, shards, slowPct / 100, hedge),
@@ -300,11 +308,7 @@ export default function TailLatencyDemo() {
   return (
     <VizFigure
       onVisibilityChange={playback.setOnScreen}
-      caption={
-        <>
-          <strong>{current.label}.</strong> {current.note}
-        </>
-      }
+      caption={<VizStepCaption steps={STEPS} step={step} />}
     >
       <VizStage layout={buildLayout} narration={narration}>
         {(L) => {
@@ -515,7 +519,7 @@ export default function TailLatencyDemo() {
         }}
       </VizStage>
 
-      <VizControls playback={playback} totalSteps={STEPS.length} phaseLabel={current.label}>
+      <VizControls playback={playback} totalSteps={STEPS.length} phaseLabels={STEP_LABELS}>
         <VizSlider label="Shards" value={shards} min={1} max={64} onChange={setShards} />
         <VizSlider
           label="Slow rate"

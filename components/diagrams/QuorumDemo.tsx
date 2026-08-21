@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { VizStage, VizNode, VizEdge, VizBadge, VizLabel, VizPanel } from '../viz/primitives'
 import type { EdgeRoute, PanelRow } from '../viz/primitives'
-import { VizControls, VizFigure, VizSlider, VizToggle } from '../viz/controls'
+import { VizControls, VizFigure, VizSlider, VizStepCaption, VizToggle } from '../viz/controls'
 import { usePlayback } from '../viz/usePlayback'
 import { clamp, type Box, type Point } from '../viz/geometry'
 
@@ -235,6 +235,8 @@ const STEPS = [
   },
 ] as const
 
+const STEP_LABELS = STEPS.map((s) => s.label)
+
 export default function QuorumDemo() {
   const [nodes, setNodes] = useState(5)
   const [writeQuorum, setWriteQuorum] = useState(3)
@@ -244,7 +246,6 @@ export default function QuorumDemo() {
 
   const playback = usePlayback(STEPS.length, 1600)
   const step = Math.min(playback.step, STEPS.length - 1)
-  const current = STEPS[step]!
 
   // The sliders are clamped on read rather than corrected on write, so the
   // component holds no state that contradicts what is on screen.
@@ -346,11 +347,7 @@ export default function QuorumDemo() {
   return (
     <VizFigure
       onVisibilityChange={playback.setOnScreen}
-      caption={
-        <>
-          <strong>{current.label}.</strong> {current.note}
-        </>
-      }
+      caption={<VizStepCaption steps={STEPS} step={step} />}
     >
       <VizStage layout={(width) => buildLayout(width, n)} narration={narration}>
         {(L) => (
@@ -542,7 +539,7 @@ export default function QuorumDemo() {
         )}
       </VizStage>
 
-      <VizControls playback={playback} totalSteps={STEPS.length} phaseLabel={current.label}>
+      <VizControls playback={playback} totalSteps={STEPS.length} phaseLabels={STEP_LABELS}>
         <VizSlider
           label="N"
           value={n}
