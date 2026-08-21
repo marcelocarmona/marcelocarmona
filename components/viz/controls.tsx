@@ -1,10 +1,12 @@
-import type { ReactNode } from 'react'
+import { useCallback, type ReactNode } from 'react'
 import type { Playback } from './usePlayback'
 
 /**
  * Keyboard-operable transport controls shared by every diagram.
  *
- * Real <button> elements, not divs, so tab/enter/space work for free.
+ * Real <button> elements, not divs, so tab/enter/space work for free. Sizing
+ * lives in `viz.css`, which grows every hit target past the 44px thumb target
+ * under `pointer: coarse` without changing anything here.
  */
 
 type ControlsProps = {
@@ -40,7 +42,7 @@ export function VizControls({ playback, totalSteps, phaseLabel, children }: Cont
           {step + 1}/{totalSteps}
         </span>
 
-        <label className="viz-slider">
+        <label className="viz-slider viz-slider-speed">
           <span>Speed</span>
           <input
             type="range"
@@ -161,13 +163,34 @@ export function VizFigure({
   children,
   caption,
   className,
+  onVisibilityChange,
 }: {
   children: ReactNode
   caption?: ReactNode
   className?: string
+  /**
+   * Called when the figure enters or leaves the viewport. Pass
+   * `playback.setOnScreen` to stop the clock while nobody is watching.
+   */
+  onVisibilityChange?: (visible: boolean) => void
 }) {
+  const attach = useCallback(
+    (node: HTMLElement | null) => {
+      if (!node || !onVisibilityChange || typeof IntersectionObserver === 'undefined') return
+      const observer = new IntersectionObserver(
+        ([entry]) => onVisibilityChange(entry?.isIntersecting ?? true),
+        // Any sliver counts as watched: a stacked diagram on a phone may never
+        // be more than half visible.
+        { threshold: 0 }
+      )
+      observer.observe(node)
+      return () => observer.disconnect()
+    },
+    [onVisibilityChange]
+  )
+
   return (
-    <figure className={`not-prose viz-figure${className ? ` ${className}` : ''}`}>
+    <figure ref={attach} className={`not-prose viz-figure${className ? ` ${className}` : ''}`}>
       {children}
       {caption && <figcaption className="viz-caption">{caption}</figcaption>}
     </figure>

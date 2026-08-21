@@ -18,12 +18,21 @@ export type Playback = {
   reset: () => void
   toggle: () => void
   setSpeed: (n: number) => void
+  /**
+   * Told by `VizFigure` whether the diagram is on screen. While it is not, the
+   * clock stops, so a reader scrolling down a long article arrives at step one
+   * instead of at whatever step the diagram reached while nobody was looking.
+   * On a phone, where every figure is off screen most of the time, this is also
+   * the difference between one running timer and six.
+   */
+  setOnScreen: (visible: boolean) => void
 }
 
 export function usePlayback(totalSteps: number, intervalMs = 900): Playback {
   const [step, setStep] = useState(0)
   const [playing, setPlaying] = useState(true)
   const [speed, setSpeed] = useState(1)
+  const [onScreen, setOnScreen] = useState(true)
 
   // Respect the OS-level reduced-motion setting: never autoplay.
   const reduced = usePrefersReducedMotion()
@@ -33,13 +42,13 @@ export function usePlayback(totalSteps: number, intervalMs = 900): Playback {
   }, [reduced])
 
   useEffect(() => {
-    if (!playing || totalSteps <= 0) return
+    if (!playing || !onScreen || totalSteps <= 0) return
     const id = window.setInterval(
       () => setStep((s) => (s + 1) % totalSteps),
       Math.max(80, intervalMs / speed)
     )
     return () => window.clearInterval(id)
-  }, [playing, speed, intervalMs, totalSteps])
+  }, [playing, onScreen, speed, intervalMs, totalSteps])
 
   const next = useCallback(() => {
     setPlaying(false)
@@ -58,7 +67,7 @@ export function usePlayback(totalSteps: number, intervalMs = 900): Playback {
 
   const toggle = useCallback(() => setPlaying((p) => !p), [])
 
-  return { step, playing, speed, setStep, next, prev, reset, toggle, setSpeed }
+  return { step, playing, speed, setStep, next, prev, reset, toggle, setSpeed, setOnScreen }
 }
 
 export function usePrefersReducedMotion(): boolean {

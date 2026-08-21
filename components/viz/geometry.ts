@@ -94,6 +94,50 @@ export function curveControlPoint(a: Point, b: Point, bow: number): Point {
 }
 
 /**
+ * Right-angled connector between two points, with one rounded corner.
+ *
+ * `first` chooses which leg leaves `a`: 'vertical' travels to b's row before
+ * turning, 'horizontal' travels to b's column before turning.
+ *
+ * This is the routing a stacked fan-out needs. A curve between two points that
+ * are far apart vertically but nearly aligned horizontally has nowhere to put
+ * its control points, so a bundle of them collapses into an unreadable tangle.
+ * Straight legs do not have that failure mode: give each edge its own lane and
+ * the long segments provably cannot overlap.
+ */
+export function elbowPath(
+  a: Point,
+  b: Point,
+  first: 'vertical' | 'horizontal',
+  radius = 8
+): string {
+  const dx = b.x - a.x
+  const dy = b.y - a.y
+  // The corner consumes `r` from both legs, so it cannot exceed either of them.
+  const r = Math.min(radius, Math.abs(dx), Math.abs(dy))
+  if (r <= 0) return `M ${r2(a.x)} ${r2(a.y)} L ${r2(b.x)} ${r2(b.y)}`
+
+  const sx = Math.sign(dx)
+  const sy = Math.sign(dy)
+
+  if (first === 'vertical') {
+    return [
+      `M ${r2(a.x)} ${r2(a.y)}`,
+      `L ${r2(a.x)} ${r2(b.y - sy * r)}`,
+      `Q ${r2(a.x)} ${r2(b.y)} ${r2(a.x + sx * r)} ${r2(b.y)}`,
+      `L ${r2(b.x)} ${r2(b.y)}`,
+    ].join(' ')
+  }
+
+  return [
+    `M ${r2(a.x)} ${r2(a.y)}`,
+    `L ${r2(b.x - sx * r)} ${r2(a.y)}`,
+    `Q ${r2(b.x)} ${r2(a.y)} ${r2(b.x)} ${r2(a.y + sy * r)}`,
+    `L ${r2(b.x)} ${r2(b.y)}`,
+  ].join(' ')
+}
+
+/**
  * Point on a circle, with 0° at twelve o'clock and angles increasing clockwise.
  *
  * That orientation is not arbitrary. Hash rings are drawn this way by

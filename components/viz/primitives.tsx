@@ -7,10 +7,12 @@ import {
   clamp,
   curveControlPoint,
   curvePath,
+  elbowPath,
   r2,
   type Box,
   type Point,
 } from './geometry'
+import { useStageWidth, type StageLayout } from './responsive'
 
 /**
  * Presentational SVG primitives shared by every diagram.
@@ -29,10 +31,16 @@ export type Tone = 'default' | 'accent' | 'success' | 'danger' | 'muted'
  */
 export type Owner = 0 | 1 | 2 | 3 | 4 | 5
 
-type StageProps = {
-  /** Coordinate space to author in. Content is scaled to fit any screen. */
-  width: number
-  height: number
+type StageProps<L extends StageLayout> = {
+  /**
+   * Pure function from the width this figure actually has, in CSS pixels, to
+   * the layout to draw at that width.
+   *
+   * Called during render, so it may close over component state — a replica
+   * count, say, that changes how tall the drawing needs to be. It must stay
+   * pure: same width in, same layout out.
+   */
+  layout: (width: number) => L
   /**
    * Full prose narration of what the diagram shows and teaches.
    *
@@ -40,25 +48,43 @@ type StageProps = {
    * the diagram is not yet clear.
    */
   narration: string
-  children: ReactNode
+  /**
+   * Width assumed on the server and for the first client render, before the
+   * stage has measured itself. Set it to the widest layout a reader is likely
+   * to get so the server sends the desktop picture.
+   */
+  initialWidth?: number
+  children: (layout: L) => ReactNode
 }
 
-export function VizStage({ width, height, narration, children }: StageProps) {
+/**
+ * The drawing surface.
+ *
+ * `viewBox` is set to the measured width, so one user unit is one CSS pixel and
+ * text renders at its authored size at every screen width. Diagrams respond by
+ * moving things, not by shrinking them.
+ */
+export function VizStage<L extends StageLayout>({
+  layout,
+  narration,
+  initialWidth = 992,
+  children,
+}: StageProps<L>) {
+  const { ref, width } = useStageWidth(initialWidth)
+  const resolved = layout(width)
+
   return (
-    <div
-      className="viz-stage-scroll"
-      role="region"
-      aria-label="Scrollable diagram canvas"
-      tabIndex={0}
-    >
+    <div className="viz-stage-frame" ref={ref}>
       <svg
         className="viz-stage"
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={`0 0 ${resolved.width} ${resolved.height}`}
+        width={resolved.width}
+        height={resolved.height}
         role="img"
         aria-label={narration}
         preserveAspectRatio="xMidYMid meet"
       >
-        {children}
+        {children(resolved)}
       </svg>
     </div>
   )
@@ -109,14 +135,23 @@ export function VizNode({ box, title, subtitle, tone = 'default', ghost, active 
   )
 }
 
+/**
+ * How an edge travels between its two ports.
+ *
+ * `horizontal` eases across with a curve and suits a left-to-right flow. The
+ * two `elbow` routes turn a right angle instead, and are what a stacked layout
+ * needs: `elbow-v` drops to the target's row before turning into it, `elbow-h`
+ * runs across to the target's column before turning along it.
+ */
+export type EdgeRoute = 'direct' | 'horizontal' | 'elbow-v' | 'elbow-h'
+
 type EdgeProps = {
   from: Box
   to: Box
   /** Fixed connection points, for diagrams whose edges need stable ports. */
   fromPoint?: Point
   toPoint?: Point
-  /** Enter and leave nodes horizontally with a smooth, ordered curve. */
-  route?: 'direct' | 'horizontal'
+  route?: EdgeRoute
   variant?: 'solid' | 'dashed'
   tone?: Tone
   label?: string
@@ -143,8 +178,12 @@ export function VizEdge({
 
   let arrowTangent = bow === 0 ? a : curveControlPoint(a, b, bow)
 
-  if (route === 'horizontal') {
+  // The arrowhead follows whichever leg arrives last, so it has to be aimed
+  // along that leg rather than along the line between the two ports.
+  if (route === 'horizontal' || route === 'elbow-v') {
     arrowTangent = { x: a.x, y: b.y }
+  } else if (route === 'elbow-h') {
+    arrowTangent = { x: b.x, y: a.y }
   }
 
   // The arrow follows the final segment of the path. Using the end-to-end
@@ -162,6 +201,8 @@ export function VizEdge({
   if (route === 'horizontal') {
     const midX = (a.x + pathEnd.x) / 2
     path = `M ${a.x} ${a.y} C ${midX} ${a.y} ${midX} ${pathEnd.y} ${pathEnd.x} ${pathEnd.y}`
+  } else if (route === 'elbow-v' || route === 'elbow-h') {
+    path = elbowPath(a, pathEnd, route === 'elbow-v' ? 'vertical' : 'horizontal')
   } else if (bow !== 0) {
     const control = curveControlPoint(a, b, bow)
     path = `M ${a.x} ${a.y} Q ${control.x} ${control.y} ${pathEnd.x} ${pathEnd.y}`

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { VizStage, VizNode, VizEdge, VizBadge, VizLabel, VizPanel } from '../viz/primitives'
+import type { EdgeRoute, PanelRow } from '../viz/primitives'
 import { VizControls, VizFigure, VizSlider, VizToggle } from '../viz/controls'
 import { usePlayback } from '../viz/usePlayback'
 import { clamp, type Box, type Point } from '../viz/geometry'
@@ -13,46 +14,200 @@ import { clamp, type Box, type Point } from '../viz/geometry'
  * is exactly why the bug survives testing and ships.
  */
 
-const W_STAGE = 1040
-const H_STAGE = 440
+/** Below this the client, coordinator and replicas stop fitting in one row. */
+const STACK_BELOW = 700
+/** Below this the readout no longer fits beside the fan-out, so it drops under it. */
+const PANEL_BESIDE = 940
 
-const CLIENT: Box = { x: 30, y: 197, w: 130, h: 46 }
-const COORD: Box = { x: 210, y: 191, w: 170, h: 58 }
+type Chip = { x: number; w: number; text: string; header: string }
 
-const REPLICA_X = 440
-const REPLICA_W = 150
-const REPLICA_H = 42
-const REPLICA_GAP = 10
-
-/** Left edge and width of the write-set, read-set and intersection chips. */
-const CHIPS = [
-  { x: 604, w: 24, text: 'W', header: 'W' },
-  { x: 634, w: 24, text: 'R', header: 'R' },
-  { x: 664, w: 40, text: 'both', header: 'BOTH' },
-] as const
-
-function replicaBox(index: number, count: number): Box {
-  const columnHeight = count * REPLICA_H + (count - 1) * REPLICA_GAP
-  const top = (H_STAGE - columnHeight) / 2
-  return { x: REPLICA_X, y: top + index * (REPLICA_H + REPLICA_GAP), w: REPLICA_W, h: REPLICA_H }
+type QuorumLayout = {
+  width: number
+  height: number
+  stacked: boolean
+  client: Box
+  coord: Box
+  replica: (index: number) => Box
+  /** Fixed ports keep the fan-out legible at every replica count. */
+  coordPort: (index: number) => Point
+  replicaPort: (index: number) => Point
+  /** How each direction of the fan-out is drawn at this width. */
+  edgeRoute: { toReplica: EdgeRoute; toCoordinator: EdgeRoute }
+  chips: Chip[]
+  chipHeaderY: number
+  chipY: (index: number) => number
+  panel: { x: number; y: number; width: number }
+  panelRows: 'full' | 'essential'
+  resultBadge: { x: number; y: number; width: number }
+  rule: Point
+  /** Column headings are redundant once the boxes stack under each other. */
+  headings: { client: Point; coord: Point; replicas: Point; overlap: Point | null } | null
 }
 
-/**
- * Give every replica its own ordered port on the coordinator. The edges leave
- * the right side without stacking on one point, then enter each replica at the
- * centre of its left edge. This keeps the fan-out legible at every node count.
- */
-function coordinatorPort(index: number, count: number): Point {
-  const padding = 8
-  const available = COORD.h - padding * 2
-  const y =
-    count === 1 ? COORD.y + COORD.h / 2 : COORD.y + padding + (index * available) / (count - 1)
-  return { x: COORD.x + COORD.w + 3, y }
-}
+const PANEL_ROW_COUNT = { full: 9, essential: 6 }
+const panelHeight = (rows: number) => 40 + rows * 22
 
-function replicaPort(index: number, count: number): Point {
-  const box = replicaBox(index, count)
-  return { x: box.x - 3, y: box.y + box.h / 2 }
+function buildLayout(width: number, n: number): QuorumLayout {
+  if (width >= STACK_BELOW) {
+    const margin = 24
+    const chipWidths = [24, 24, 40]
+    const chipSpan = chipWidths.reduce((a, b) => a + b, 0) + 12
+    const beside = width >= PANEL_BESIDE
+
+    // Dropped below the fan-out, the readout is centred and held to a width
+    // where a label and its value still read as one row rather than as two
+    // things at opposite ends of the screen.
+    const panelWidth = beside
+      ? clamp(Math.round(width * 0.28), 250, 300)
+      : clamp(Math.round(width * 0.6), 380, 560)
+    const chipsRight = beside ? width - margin - panelWidth - 16 : width - margin
+    const chipsX = chipsRight - chipSpan
+    const flowRight = chipsX - 12
+
+    const clientW = 122
+    const coordW = 164
+    const replicaW = 146
+    const boxes = clientW + coordW + replicaW
+    const gap = clamp(Math.round((flowRight - margin - boxes) / 2), 24, 76)
+    const flowLeft = margin + Math.max(0, Math.round((flowRight - margin - (boxes + gap * 2)) / 2))
+
+    const clientX = flowLeft
+    const coordX = clientX + clientW + gap
+    const replicaX = coordX + coordW + gap
+
+    const replicaH = 40
+    const replicaStep = 50
+    const bandTop = 46
+    const bandHeight = Math.max(n * replicaStep - 10, 190)
+    const bandBottom = bandTop + bandHeight
+    const replicaTop = bandTop + (bandHeight - (n * replicaStep - 10)) / 2
+
+    const clientH = 44
+    const coordH = 56
+    const panelY = beside ? bandTop : bandBottom + 52
+    const panelX = beside ? width - margin - panelWidth : Math.round((width - panelWidth) / 2)
+    const rows = PANEL_ROW_COUNT.full
+    const ruleY = panelY + panelHeight(rows) + 26
+
+    return {
+      width,
+      height: Math.max(bandBottom + 56, ruleY + 22),
+      stacked: false,
+      client: { x: clientX, y: bandTop + (bandHeight - clientH) / 2, w: clientW, h: clientH },
+      coord: { x: coordX, y: bandTop + (bandHeight - coordH) / 2, w: coordW, h: coordH },
+      replica: (i) => ({
+        x: replicaX,
+        y: replicaTop + i * replicaStep,
+        w: replicaW,
+        h: replicaH,
+      }),
+      coordPort: (i) => {
+        const box = { x: coordX, y: bandTop + (bandHeight - coordH) / 2, h: coordH }
+        const inset = 8
+        const usable = box.h - inset * 2
+        return {
+          x: coordX + coordW + 3,
+          y: n === 1 ? box.y + box.h / 2 : box.y + inset + (i * usable) / (n - 1),
+        }
+      },
+      replicaPort: (i) => ({ x: replicaX - 3, y: replicaTop + i * replicaStep + replicaH / 2 }),
+      edgeRoute: { toReplica: 'horizontal', toCoordinator: 'horizontal' },
+      chips: [
+        { x: chipsX, w: 24, text: 'W', header: 'W' },
+        { x: chipsX + 30, w: 24, text: 'R', header: 'R' },
+        { x: chipsX + 60, w: 40, text: 'both', header: 'BOTH' },
+      ],
+      chipHeaderY: 26,
+      chipY: (i) => replicaTop + i * replicaStep + 11,
+      panel: { x: panelX, y: panelY, width: panelWidth },
+      panelRows: 'full',
+      resultBadge: { x: coordX, y: bandBottom + 16, width: coordW },
+      rule: { x: panelX + panelWidth / 2, y: ruleY },
+      headings: {
+        client: { x: clientX + clientW / 2, y: 26 },
+        coord: { x: coordX + coordW / 2, y: 26 },
+        replicas: { x: replicaX + replicaW / 2, y: 26 },
+        // Only meaningful as a column heading. Once the readout drops below the
+        // fan-out it would land on the result badge, and the rule spelled out
+        // under the panel already says the same thing.
+        overlap: beside ? { x: panelX + panelWidth / 2, y: 26 } : null,
+      },
+    }
+  }
+
+  // Stacked: the request flows down the page instead of across it, which is the
+  // direction a phone has room in.
+  const margin = 12
+  const chipWidths = [22, 22, 36]
+  const chipSpan = chipWidths.reduce((a, b) => a + b, 0) + 8
+
+  /**
+   * A gutter down the left for the fan-out to run in.
+   *
+   * With the replicas stacked, an edge aimed at the fifth one from the middle
+   * of the coordinator would be drawn straight through the four above it. Every
+   * port on both ends therefore sits left of the replica column, and the edges
+   * turn a right angle rather than curving, so the whole fan is confined to
+   * this gutter and never crosses a box.
+   */
+  const gutter = 56
+  const replicaX = margin + gutter
+  const replicaW = width - replicaX - chipSpan - margin - 8
+  const chipsX = replicaX + replicaW + 8
+
+  /**
+   * One vertical lane per replica, so no two long segments ever share an x.
+   *
+   * The order is what keeps the fan free of crossings: the topmost replica gets
+   * the lane nearest the column, so it turns off almost immediately, and each
+   * lane below it runs further left. A lane only descends as far as its own
+   * replica, so no horizontal turn ever meets a lane still in flight. The band
+   * stops short of the column to leave room for the corner and the arrowhead.
+   */
+  const laneRight = replicaX - 26
+  const laneLeft = margin + 2
+  const lane = (i: number) =>
+    n === 1 ? laneRight : laneRight - (i * (laneRight - laneLeft)) / (n - 1)
+
+  const clientBox: Box = { x: margin, y: 6, w: width - margin * 2, h: 38 }
+  const coordBox: Box = { x: margin, y: 80, w: width - margin * 2, h: 46 }
+
+  const replicaH = 38
+  const replicaStep = 46
+  const replicaTop = 156
+  const replicasBottom = replicaTop + n * replicaStep - (replicaStep - replicaH)
+
+  const badgeWidth = Math.min(214, width - margin * 2)
+  const badgeY = replicasBottom + 16
+  const panelY = badgeY + 34
+  const ruleY = panelY + panelHeight(PANEL_ROW_COUNT.essential) + 24
+
+  return {
+    width,
+    height: ruleY + 18,
+    stacked: true,
+    client: clientBox,
+    coord: coordBox,
+    replica: (i) => ({ x: replicaX, y: replicaTop + i * replicaStep, w: replicaW, h: replicaH }),
+    coordPort: (i) => ({ x: lane(i), y: coordBox.y + coordBox.h + 3 }),
+    replicaPort: (i) => ({ x: replicaX - 3, y: replicaTop + i * replicaStep + replicaH / 2 }),
+    // Leaving the coordinator, drop down the lane and turn into the replica.
+    // Coming back, leave the replica sideways and turn up the lane. Either way
+    // the arrowhead arrives square to the box it is pointing at.
+    edgeRoute: { toReplica: 'elbow-v', toCoordinator: 'elbow-h' },
+    chips: [
+      { x: chipsX, w: 22, text: 'W', header: 'W' },
+      { x: chipsX + 26, w: 22, text: 'R', header: 'R' },
+      { x: chipsX + 52, w: 36, text: 'both', header: 'BOTH' },
+    ],
+    chipHeaderY: replicaTop - 8,
+    chipY: (i) => replicaTop + i * replicaStep + 10,
+    panel: { x: margin, y: panelY, width: width - margin * 2 },
+    panelRows: 'essential',
+    resultBadge: { x: (width - badgeWidth) / 2, y: badgeY, width: badgeWidth },
+    rule: { x: width / 2, y: ruleY },
+    headings: null,
+  }
 }
 
 type Result = 'fresh' | 'stale' | 'no-write-quorum' | 'no-read-quorum'
@@ -150,224 +305,240 @@ export default function QuorumDemo() {
   const narration =
     'Animated diagram of a quorum read and write across a set of replicas. A client sends a new version of a key to a coordinator, the coordinator forwards it to every reachable replica, and the write is acknowledged as soon as W replicas confirm. Only those W replicas hold the new version; the rest still hold the old one. A read then arrives, the coordinator queries R replicas, and it returns the newest version among the answers. Chips beside each replica mark which replicas took the write, which ones the read touched, and which are in both sets. When R plus W is greater than the replica count the two sets must share at least one replica, so a read cannot miss an acknowledged write. Sliders let the reader shrink R or W until the sum is no larger than the replica count, at which point a read set exists that avoids the write set completely and the answer comes back stale. A further control switches the read set between a worst-case choice and a naive first-available one, which usually overlaps by luck and hides the flaw. A final slider takes replicas offline until no write quorum can be formed at all.'
 
+  const panelRows: PanelRow[] = [
+    { label: 'replicas, N', value: String(n) },
+    { label: 'write quorum, W', value: String(w) },
+    { label: 'read quorum, R', value: String(r) },
+    {
+      label: 'R + W vs N',
+      value: `${r + w} ${r + w > n ? '>' : '≤'} ${n}`,
+      tone: r + w > n ? 'success' : 'danger',
+    },
+    {
+      label: 'guaranteed overlap',
+      value:
+        model.guaranteed > 0
+          ? `${model.guaranteed} replica${model.guaranteed > 1 ? 's' : ''}`
+          : 'none',
+      tone: model.guaranteed > 0 ? 'success' : 'danger',
+    },
+    {
+      label: 'overlap this run',
+      value: showOverlap ? `${model.overlap} replica${model.overlap === 1 ? '' : 's'}` : '—',
+      tone: showOverlap ? (model.overlap > 0 ? 'success' : 'danger') : 'muted',
+    },
+    { label: 'replicas offline', value: String(down), tone: down > 0 ? 'danger' : 'muted' },
+    {
+      label: 'read set chosen',
+      value: adversarial ? 'worst case' : 'first available',
+      tone: adversarial ? 'default' : 'muted',
+    },
+    {
+      label: 'read returns',
+      value: showOverlap ? returnsText[model.result] : '—',
+      tone: showOverlap ? (model.result === 'fresh' ? 'success' : 'danger') : 'muted',
+    },
+  ]
+
+  /** The six rows that still make the argument when there is no room for nine. */
+  const essentialRows = [0, 1, 2, 3, 5, 8]
+
   return (
     <VizFigure
+      onVisibilityChange={playback.setOnScreen}
       caption={
         <>
           <strong>{current.label}.</strong> {current.note}
         </>
       }
     >
-      <VizStage width={W_STAGE} height={H_STAGE} narration={narration}>
-        <VizLabel at={{ x: 95, y: 26 }} text="CLIENT" />
-        <VizLabel at={{ x: 295, y: 26 }} text="COORDINATOR" />
-        <VizLabel at={{ x: 515, y: 26 }} text="REPLICAS" />
-        {CHIPS.map((chip) => (
-          <VizLabel key={chip.header} at={{ x: chip.x + chip.w / 2, y: 26 }} text={chip.header} />
-        ))}
-        <VizLabel at={{ x: 867, y: 26 }} text="THE OVERLAP RULE" />
-
-        {/* Static topology, dim, under whatever this step is doing. */}
-        <g className="viz-graph-edges">
-          {Array.from({ length: n }, (_, i) => (
-            <VizEdge
-              key={`base-${i}`}
-              from={COORD}
-              to={replicaBox(i, n)}
-              fromPoint={coordinatorPort(i, n)}
-              toPoint={replicaPort(i, n)}
-              route="horizontal"
-              tone="muted"
-              variant="dashed"
-            />
-          ))}
-
-          {/* Only the client edge carries a label. The coordinator sits close
-           * enough to the replica column that a mid-edge label would land on
-           * top of a box at every replica count. */}
-          {step === 0 && <VizEdge from={CLIENT} to={COORD} tone="accent" label="PUT v2" active />}
-
-          {step === 1 &&
-            model.online.map((i) => (
-              <VizEdge
-                key={`out-${i}`}
-                from={COORD}
-                to={replicaBox(i, n)}
-                fromPoint={coordinatorPort(i, n)}
-                toPoint={replicaPort(i, n)}
-                route="horizontal"
-                tone="accent"
-                active
+      <VizStage layout={(width) => buildLayout(width, n)} narration={narration}>
+        {(L) => (
+          <>
+            {L.headings && (
+              <>
+                <VizLabel at={L.headings.client} text="CLIENT" />
+                <VizLabel at={L.headings.coord} text="COORDINATOR" />
+                <VizLabel at={L.headings.replicas} text="REPLICAS" />
+                {L.headings.overlap && <VizLabel at={L.headings.overlap} text="THE OVERLAP RULE" />}
+              </>
+            )}
+            {L.chips.map((chip) => (
+              <VizLabel
+                key={chip.header}
+                at={{ x: chip.x + chip.w / 2, y: L.chipHeaderY }}
+                text={chip.header}
               />
             ))}
 
-          {step === 2 &&
-            model.writeSet.map((i) => (
-              <VizEdge
-                key={`ack-${i}`}
-                from={replicaBox(i, n)}
-                to={COORD}
-                fromPoint={replicaPort(i, n)}
-                toPoint={coordinatorPort(i, n)}
-                route="horizontal"
-                tone="success"
-                active
-              />
-            ))}
-
-          {step === 3 &&
-            model.readSet.map((i) => (
-              <VizEdge
-                key={`get-${i}`}
-                from={COORD}
-                to={replicaBox(i, n)}
-                fromPoint={coordinatorPort(i, n)}
-                toPoint={replicaPort(i, n)}
-                route="horizontal"
-                tone="accent"
-                active
-              />
-            ))}
-
-          {step === 4 && (
-            <>
-              {model.readSet.map((i) => (
+            {/* Static topology, dim, under whatever this step is doing. */}
+            <g className="viz-graph-edges">
+              {Array.from({ length: n }, (_, i) => (
                 <VizEdge
-                  key={`ret-${i}`}
-                  from={replicaBox(i, n)}
-                  to={COORD}
-                  fromPoint={replicaPort(i, n)}
-                  toPoint={coordinatorPort(i, n)}
-                  route="horizontal"
-                  tone={model.result === 'fresh' ? 'success' : 'danger'}
-                  active
+                  key={`base-${i}`}
+                  from={L.coord}
+                  to={L.replica(i)}
+                  fromPoint={L.coordPort(i)}
+                  toPoint={L.replicaPort(i)}
+                  route={L.edgeRoute.toReplica}
+                  tone="muted"
+                  variant="dashed"
                 />
               ))}
-              <VizEdge
-                from={COORD}
-                to={CLIENT}
-                tone={model.result === 'fresh' ? 'success' : 'danger'}
-                label={model.result === 'fresh' ? 'v2' : 'v1'}
-                active
-              />
-            </>
-          )}
-        </g>
 
-        <g className="viz-graph-nodes">
-          <VizNode
-            box={CLIENT}
-            title="client"
-            subtitle="one key, one value"
-            tone="accent"
-            active={step === 0 || step === 4}
-          />
-          <VizNode
-            box={COORD}
-            title="coordinator"
-            subtitle={`W = ${w} · R = ${r} of N = ${n}`}
-            tone={model.result === 'fresh' ? 'success' : 'default'}
-            active={step > 0}
-          />
+              {/* Only the client edge carries a label. The coordinator sits close
+               * enough to the replica column that a mid-edge label would land on
+               * top of a box at every replica count. */}
+              {step === 0 && (
+                <VizEdge from={L.client} to={L.coord} tone="accent" label="PUT v2" active />
+              )}
 
-          {Array.from({ length: n }, (_, i) => {
-            const box = replicaBox(i, n)
-            const dead = isDown(i)
-            return (
-              <VizNode
-                key={`replica-${i}`}
-                box={box}
-                title={`replica ${i + 1}`}
-                subtitle={dead ? 'offline' : hasV2(i) ? 'v2 · current' : 'v1 · stale'}
-                tone={dead ? 'danger' : hasV2(i) ? 'success' : 'muted'}
-                ghost={dead}
-                active={
-                  (step === 1 && !dead) ||
-                  (step === 2 && model.inWrite.has(i)) ||
-                  (step >= 3 && model.readSet.includes(i))
-                }
-              />
-            )
-          })}
-        </g>
-
-        {/* Set membership, spelled out. The third column is the guarantee. */}
-        <g className="viz-set-chips">
-          {Array.from({ length: n }, (_, i) => {
-            const y = replicaBox(i, n).y + 12
-            const member = [
-              showWriteChips && model.inWrite.has(i),
-              showReadChips && model.readSet.includes(i),
-              showOverlap && model.inWrite.has(i) && model.readSet.includes(i),
-            ]
-            return (
-              <g key={`chips-${i}`}>
-                {CHIPS.map((chip, c) => (
-                  <VizBadge
-                    key={chip.header}
-                    at={{ x: chip.x, y }}
-                    width={chip.w}
-                    text={chip.text}
-                    tone={c === 0 ? 'success' : 'accent'}
-                    ghost={!member[c]}
+              {step === 1 &&
+                model.online.map((i) => (
+                  <VizEdge
+                    key={`out-${i}`}
+                    from={L.coord}
+                    to={L.replica(i)}
+                    fromPoint={L.coordPort(i)}
+                    toPoint={L.replicaPort(i)}
+                    route={L.edgeRoute.toReplica}
+                    tone="accent"
+                    active
                   />
                 ))}
-              </g>
-            )
-          })}
-        </g>
 
-        <VizPanel
-          at={{ x: 724, y: 52 }}
-          width={286}
-          title="THIS CONFIGURATION"
-          rows={[
-            { label: 'replicas, N', value: String(n) },
-            { label: 'write quorum, W', value: String(w) },
-            { label: 'read quorum, R', value: String(r) },
-            {
-              label: 'R + W vs N',
-              value: `${r + w} ${r + w > n ? '>' : '≤'} ${n}`,
-              tone: r + w > n ? 'success' : 'danger',
-            },
-            {
-              label: 'guaranteed overlap',
-              value:
-                model.guaranteed > 0
-                  ? `${model.guaranteed} replica${model.guaranteed > 1 ? 's' : ''}`
-                  : 'none',
-              tone: model.guaranteed > 0 ? 'success' : 'danger',
-            },
-            {
-              label: 'overlap this run',
-              value: showOverlap
-                ? `${model.overlap} replica${model.overlap === 1 ? '' : 's'}`
-                : '—',
-              tone: showOverlap ? (model.overlap > 0 ? 'success' : 'danger') : 'muted',
-            },
-            { label: 'replicas offline', value: String(down), tone: down > 0 ? 'danger' : 'muted' },
-            {
-              label: 'read set chosen',
-              value: adversarial ? 'worst case' : 'first available',
-              tone: adversarial ? 'default' : 'muted',
-            },
-            {
-              label: 'read returns',
-              value: showOverlap ? returnsText[model.result] : '—',
-              tone: showOverlap ? (model.result === 'fresh' ? 'success' : 'danger') : 'muted',
-            },
-          ]}
-        />
+              {step === 2 &&
+                model.writeSet.map((i) => (
+                  <VizEdge
+                    key={`ack-${i}`}
+                    from={L.replica(i)}
+                    to={L.coord}
+                    fromPoint={L.replicaPort(i)}
+                    toPoint={L.coordPort(i)}
+                    route={L.edgeRoute.toCoordinator}
+                    tone="success"
+                    active
+                  />
+                ))}
 
-        <VizLabel at={{ x: 867, y: 314 }} text="R + W > N  ⇒  THE TWO SETS MUST TOUCH" />
+              {step === 3 &&
+                model.readSet.map((i) => (
+                  <VizEdge
+                    key={`get-${i}`}
+                    from={L.coord}
+                    to={L.replica(i)}
+                    fromPoint={L.coordPort(i)}
+                    toPoint={L.replicaPort(i)}
+                    route={L.edgeRoute.toReplica}
+                    tone="accent"
+                    active
+                  />
+                ))}
 
-        {step >= 4 && (
-          <VizBadge
-            at={{ x: COORD.x, y: 268 }}
-            width={COORD.w}
-            text={resultText[model.result]}
-            tone={model.result === 'fresh' ? 'success' : 'danger'}
-          />
+              {step === 4 && (
+                <>
+                  {model.readSet.map((i) => (
+                    <VizEdge
+                      key={`ret-${i}`}
+                      from={L.replica(i)}
+                      to={L.coord}
+                      fromPoint={L.replicaPort(i)}
+                      toPoint={L.coordPort(i)}
+                      route={L.edgeRoute.toCoordinator}
+                      tone={model.result === 'fresh' ? 'success' : 'danger'}
+                      active
+                    />
+                  ))}
+                  <VizEdge
+                    from={L.coord}
+                    to={L.client}
+                    tone={model.result === 'fresh' ? 'success' : 'danger'}
+                    label={model.result === 'fresh' ? 'v2' : 'v1'}
+                    active
+                  />
+                </>
+              )}
+            </g>
+
+            <g className="viz-graph-nodes">
+              <VizNode
+                box={L.client}
+                title="client"
+                subtitle="one key, one value"
+                tone="accent"
+                active={step === 0 || step === 4}
+              />
+              <VizNode
+                box={L.coord}
+                title="coordinator"
+                subtitle={`W = ${w} · R = ${r} of N = ${n}`}
+                tone={model.result === 'fresh' ? 'success' : 'default'}
+                active={step > 0}
+              />
+
+              {Array.from({ length: n }, (_, i) => {
+                const dead = isDown(i)
+                return (
+                  <VizNode
+                    key={`replica-${i}`}
+                    box={L.replica(i)}
+                    title={`replica ${i + 1}`}
+                    subtitle={dead ? 'offline' : hasV2(i) ? 'v2 · current' : 'v1 · stale'}
+                    tone={dead ? 'danger' : hasV2(i) ? 'success' : 'muted'}
+                    ghost={dead}
+                    active={
+                      (step === 1 && !dead) ||
+                      (step === 2 && model.inWrite.has(i)) ||
+                      (step >= 3 && model.readSet.includes(i))
+                    }
+                  />
+                )
+              })}
+            </g>
+
+            {/* Set membership, spelled out. The third column is the guarantee. */}
+            <g className="viz-set-chips">
+              {Array.from({ length: n }, (_, i) => {
+                const member = [
+                  showWriteChips && model.inWrite.has(i),
+                  showReadChips && model.readSet.includes(i),
+                  showOverlap && model.inWrite.has(i) && model.readSet.includes(i),
+                ]
+                return (
+                  <g key={`chips-${i}`}>
+                    {L.chips.map((chip, c) => (
+                      <VizBadge
+                        key={chip.header}
+                        at={{ x: chip.x, y: L.chipY(i) }}
+                        width={chip.w}
+                        text={chip.text}
+                        tone={c === 0 ? 'success' : 'accent'}
+                        ghost={!member[c]}
+                      />
+                    ))}
+                  </g>
+                )
+              })}
+            </g>
+
+            <VizPanel
+              at={{ x: L.panel.x, y: L.panel.y }}
+              width={L.panel.width}
+              title="THIS CONFIGURATION"
+              rows={L.panelRows === 'full' ? panelRows : essentialRows.map((i) => panelRows[i]!)}
+            />
+
+            <VizLabel at={L.rule} text="R + W > N  ⇒  THE TWO SETS MUST TOUCH" />
+
+            {step >= 4 && (
+              <VizBadge
+                at={{ x: L.resultBadge.x, y: L.resultBadge.y }}
+                width={L.resultBadge.width}
+                text={resultText[model.result]}
+                tone={model.result === 'fresh' ? 'success' : 'danger'}
+              />
+            )}
+          </>
         )}
       </VizStage>
 
