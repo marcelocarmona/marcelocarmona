@@ -55,6 +55,7 @@ const esUi = {
   scroll: {
     toComment: 'Ir a comentarios',
     toTop: 'Ir arriba',
+    viewAsMarkdown: 'Ver este articulo como Markdown para agentes de IA',
   },
 }
 

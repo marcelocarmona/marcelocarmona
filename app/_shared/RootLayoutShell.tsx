@@ -76,6 +76,8 @@ export default async function RootLayoutShell({
         '@type': 'Person',
         '@id': `${siteMetadata.siteUrl}/#person`,
         name: siteMetadata.author,
+        description: siteMetadata.description,
+        jobTitle: 'Software Engineer',
         url: siteMetadata.siteUrl,
         email: siteMetadata.email,
         sameAs: [siteMetadata.github, siteMetadata.twitter, siteMetadata.linkedin].filter(Boolean),

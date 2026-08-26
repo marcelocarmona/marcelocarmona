@@ -4,6 +4,7 @@ import SectionContainer from '@/components/SectionContainer'
 import { getUiCopy } from '@/lib/i18n/ui'
 import { getPostPath } from '@/lib/i18n/routes'
 import { hasMeaningfulUpdate } from '@/lib/posts'
+import { markdownSiblingPath } from '@/lib/content-negotiation'
 import formatDate from '@/lib/utils/formatDate'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
@@ -28,10 +29,11 @@ export default function PostLayout({
 }: PostSimpleProps) {
   const { date, lastmod, title } = frontMatter
   const { post: postUi } = getUiCopy(frontMatter.locale)
+  const markdownPath = markdownSiblingPath(getPostPath(frontMatter))
 
   return (
     <SectionContainer>
-      <ScrollTopAndComment locale={frontMatter.locale} />
+      <ScrollTopAndComment locale={frontMatter.locale} markdownPath={markdownPath} />
       <article lang={frontMatter.locale || 'en'}>
         <div>
           <header>

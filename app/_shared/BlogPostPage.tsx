@@ -5,6 +5,7 @@ import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import siteMetadata from '@/data/siteMetadata'
 import { getLanguageLabel } from '@/lib/i18n/config'
 import { getPostPath } from '@/lib/i18n/routes'
+import { markdownSiblingPath } from '@/lib/content-negotiation'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug } from '@/lib/mdx'
 import {
   buildLanguageAlternates,
@@ -81,9 +82,17 @@ export async function generateBlogPostMetadata(
   )
   const image = frontMatter.images?.[0] || siteMetadata.socialBanner
   const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
-  const canonicalPath = frontMatter.canonicalUrl || getPostPath(frontMatter)
-  const alternates: { canonical: string; languages?: Record<string, string> } = {
+  const articlePath = getPostPath(frontMatter)
+  const canonicalPath = frontMatter.canonicalUrl || articlePath
+  const alternates: {
+    canonical: string
+    languages?: Record<string, string>
+    types: Record<string, string>
+  } = {
     canonical: canonicalPath,
+    types: {
+      'text/markdown': markdownSiblingPath(articlePath),
+    },
   }
 
   if (Object.keys(languageAlternates).length > 0) {
@@ -103,7 +112,7 @@ export async function generateBlogPostMetadata(
       description: frontMatter.summary || siteMetadata.description,
       type: 'article',
       siteName: siteMetadata.title,
-      url: `${siteMetadata.siteUrl}${getPostPath(frontMatter)}`,
+      url: `${siteMetadata.siteUrl}${articlePath}`,
       images: [imageUrl],
       authors: [`${siteMetadata.siteUrl}/about`],
       tags: frontMatter.topics || frontMatter.tags || [],

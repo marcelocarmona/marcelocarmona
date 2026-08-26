@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { readdirSync } from 'fs'
 import path from 'path'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { createElement } from 'react'
 // Internal Next.js constants: the edge Vary rule below has to stay in sync with
 // the tokens Next.js puts in `Vary` on App Router page responses.
 import {
@@ -13,6 +14,7 @@ import {
 
 import vercelConfig from '../vercel.json'
 import PaginationLinkTags from '../components/PaginationLinkTags'
+import ScrollTopAndComment from '../components/ScrollTopAndComment'
 import {
   appendVaryAccept,
   contentPathFromMarkdownPath,
@@ -157,6 +159,34 @@ describe('Markdown sibling paths', () => {
     expect(isNegotiablePath('/api/markdown')).toBe(false)
     expect(isNegotiablePath('/_next/static/chunk.js')).toBe(false)
     expect(isNegotiablePath('/static/images/marcelo.jpg')).toBe(false)
+  })
+})
+
+describe('visible Markdown discovery', () => {
+  it('renders a crawlable, accessible Markdown alternate in the floating controls', () => {
+    const controls = renderToStaticMarkup(
+      createElement(ScrollTopAndComment, {
+        locale: 'en',
+        markdownPath: '/how-to-comment-in-react-jsx.md',
+      })
+    )
+
+    expect(controls).toContain('href="/how-to-comment-in-react-jsx.md"')
+    expect(controls).toContain('rel="alternate"')
+    expect(controls).toContain('type="text/markdown"')
+    expect(controls).toContain('aria-label="View this article as Markdown for AI agents"')
+    expect(controls).toContain('title="View this article as Markdown for AI agents"')
+  })
+
+  it('localizes the Markdown control for Spanish articles', () => {
+    const controls = renderToStaticMarkup(
+      createElement(ScrollTopAndComment, {
+        locale: 'es',
+        markdownPath: '/es/comentarios-en-jsx.md',
+      })
+    )
+
+    expect(controls).toContain('aria-label="Ver este articulo como Markdown para agentes de IA"')
   })
 })
 

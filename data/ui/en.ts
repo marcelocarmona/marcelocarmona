@@ -55,6 +55,7 @@ const enUi = {
   scroll: {
     toComment: 'Scroll To Comment',
     toTop: 'Scroll To Top',
+    viewAsMarkdown: 'View this article as Markdown for AI agents',
   },
 }
 

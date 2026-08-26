@@ -5,7 +5,16 @@ import { useEffect, useState } from 'react'
 import { getUiCopy } from '@/lib/i18n/ui'
 import type { LocaleInput } from '@/types/content'
 
-const ScrollTopAndComment = ({ locale = 'en' }: { locale?: LocaleInput }) => {
+const controlClassName =
+  'rounded-full bg-muted p-2 text-muted-foreground transition-all hover:bg-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring dark:bg-foreground dark:hover:bg-foreground'
+
+const ScrollTopAndComment = ({
+  locale = 'en',
+  markdownPath,
+}: {
+  locale?: LocaleInput
+  markdownPath: string
+}) => {
   const [show, setShow] = useState(false)
   const { scroll } = getUiCopy(locale)
 
@@ -27,14 +36,36 @@ const ScrollTopAndComment = ({ locale = 'en' }: { locale?: LocaleInput }) => {
   }
   return (
     <div
-      className={`fixed bottom-8 right-8 hidden flex-col gap-3 ${show ? 'md:flex' : 'md:hidden'}`}
+      className={`fixed bottom-8 right-8 z-40 hidden flex-col gap-3 ${show ? 'md:flex' : 'md:hidden'}`}
     >
+      <a
+        aria-label={scroll.viewAsMarkdown}
+        href={markdownPath}
+        rel="alternate"
+        title={scroll.viewAsMarkdown}
+        type="text/markdown"
+        className={controlClassName}
+      >
+        <svg
+          aria-hidden="true"
+          className="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        >
+          <path d="M5.25 2.75h6l3.5 3.5v11H5.25z" />
+          <path d="M11.25 2.75v3.5h3.5M7.75 10h4.5M7.75 13h4.5" />
+        </svg>
+      </a>
       {siteMetadata.comment.provider && (
         <button
           aria-label={scroll.toComment}
           type="button"
           onClick={handleScrollToComment}
-          className="rounded-full bg-muted p-2 text-muted-foreground transition-all hover:bg-border-strong dark:bg-foreground dark:hover:bg-foreground"
+          className={controlClassName}
         >
           <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path
@@ -49,7 +80,7 @@ const ScrollTopAndComment = ({ locale = 'en' }: { locale?: LocaleInput }) => {
         aria-label={scroll.toTop}
         type="button"
         onClick={handleScrollTop}
-        className="rounded-full bg-muted p-2 text-muted-foreground transition-all hover:bg-border-strong dark:bg-foreground dark:hover:bg-foreground"
+        className={controlClassName}
       >
         <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path

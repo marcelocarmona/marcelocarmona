@@ -13,6 +13,7 @@ import VideoPreviewCard from '@/components/VideoPreviewCard'
 import { Typeset } from '@/components/ui/typography'
 import { getBlogPath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
+import { markdownSiblingPath } from '@/lib/content-negotiation'
 import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 import type {
@@ -58,11 +59,13 @@ export default function PostLayout({
   const image = frontMatter.images?.[0] || siteMetadata.socialBanner
   const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
   const blogPath = getBlogPath(frontMatter.locale)
+  const articlePath = getPostPath(frontMatter)
+  const markdownPath = markdownSiblingPath(articlePath)
   const pageUrl = frontMatter.canonicalUrl
     ? frontMatter.canonicalUrl.startsWith('http')
       ? frontMatter.canonicalUrl
       : `${siteMetadata.siteUrl}${frontMatter.canonicalUrl}`
-    : `${siteMetadata.siteUrl}${getPostPath(frontMatter)}`
+    : `${siteMetadata.siteUrl}${articlePath}`
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -116,7 +119,7 @@ export default function PostLayout({
 
   return (
     <SectionContainer>
-      <ScrollTopAndComment locale={frontMatter.locale} />
+      <ScrollTopAndComment locale={frontMatter.locale} markdownPath={markdownPath} />
       <article lang={frontMatter.locale || 'en'}>
         <SeoSchema data={articleSchema} />
         <SeoSchema data={breadcrumbSchema} />
