@@ -1,10 +1,13 @@
 const esUi = {
   footer: {
     bookCall: 'Reservar llamada',
+    contact: 'Contacto',
     eyebrow: 'Ingeniería de software',
+    privacy: 'Privacidad',
     summary:
       'Notas y trabajo práctico sobre arquitectura frontend, infraestructura cloud, flujos de entrega y las decisiones de ingeniería detrás de software mantenible.',
     title: 'Productos web que aguantan en producción.',
+    trustLinksLabel: 'Páginas de confianza y contacto',
   },
   list: {
     noPostsFound: 'No se encontraron articulos.',

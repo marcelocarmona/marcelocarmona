@@ -15,6 +15,11 @@ import {
 import vercelConfig from '../vercel.json'
 import PaginationLinkTags from '../components/PaginationLinkTags'
 import ScrollTopAndComment from '../components/ScrollTopAndComment'
+import TrustPage from '../app/_shared/TrustPage'
+import { aboutCopy } from '../app/_shared/AboutPage'
+import EnglishHomePage from '../app/(en)/page'
+import { buildWebsiteSchema } from '../app/_shared/RootLayoutShell'
+import { FooterTrustLinks } from '../components/Footer'
 import {
   appendVaryAccept,
   contentPathFromMarkdownPath,
@@ -30,6 +35,71 @@ import {
 import { generateLlmsFullTxt, generateLlmsTxt } from '../lib/ai-discovery'
 
 const siteUrl = 'https://marcelocarmona.com'
+
+function renderedText(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+describe('server-rendered agent content', () => {
+  it('renders a substantial homepage with a nested heading structure without client JavaScript', async () => {
+    const html = renderToStaticMarkup(await EnglishHomePage())
+
+    expect(html.match(/<h1/g)).toHaveLength(1)
+    expect((html.match(/<h2/g) || []).length).toBeGreaterThanOrEqual(2)
+    expect((html.match(/<h3/g) || []).length).toBeGreaterThanOrEqual(3)
+    expect(renderedText(html).length).toBeGreaterThan(500)
+    expect(html).toContain('What I work on')
+    expect(html).toContain('Recent technical writing')
+  })
+
+  it.each(['contact', 'privacy'] as const)(
+    'renders the English %s trust page with 500+ characters in raw HTML',
+    (kind) => {
+      const html = renderToStaticMarkup(createElement(TrustPage, { kind, locale: 'en' }))
+
+      expect(html.match(/<h1/g)).toHaveLength(1)
+      expect((html.match(/<h2/g) || []).length).toBeGreaterThanOrEqual(3)
+      expect(renderedText(html).length).toBeGreaterThan(500)
+    }
+  )
+
+  it('keeps the About trust page substantial in raw HTML', () => {
+    const copy = aboutCopy.en
+    const text = [copy.intro, ...copy.body, copy.connect].join(' ')
+
+    expect(text.length).toBeGreaterThan(500)
+  })
+
+  it('links trust pages from the localized footer', () => {
+    const english = renderToStaticMarkup(createElement(FooterTrustLinks, { locale: 'en' }))
+    const spanish = renderToStaticMarkup(createElement(FooterTrustLinks, { locale: 'es' }))
+
+    expect(english).toContain('href="/contact"')
+    expect(english).toContain('href="/privacy"')
+    expect(spanish).toContain('href="/es/contact"')
+    expect(spanish).toContain('href="/es/privacy"')
+  })
+
+  it('keeps the complete Person identity fields in JSON-LD', () => {
+    const schema = buildWebsiteSchema('en')
+    const person = schema['@graph'].find((entry) => entry['@type'] === 'Person')
+
+    expect(person).toMatchObject({
+      name: 'Marcelo Carmona',
+      jobTitle: 'Software Engineer',
+      url: siteUrl,
+    })
+    expect(person?.sameAs).toEqual(
+      expect.arrayContaining([
+        'https://github.com/marcelocarmona',
+        'https://www.linkedin.com/in/carmonamarcelo',
+      ])
+    )
+  })
+})
 
 describe('Accept negotiation', () => {
   it('defaults to HTML when no Accept header is sent', () => {
@@ -241,6 +311,20 @@ describe('Markdown representations', () => {
     const document = await getMarkdownDocument('/es')
     expect(document.status).toBe(200)
     expect(document.body).toContain(`${siteUrl}/es/blog`)
+  })
+
+  it.each([
+    ['/contact', '# Contact', '## What to include'],
+    ['/privacy', '# Privacy', '## Information processed during a visit'],
+    ['/es/contact', '# Contacto', '## Qué información incluir'],
+    ['/es/privacy', '# Privacidad', '## Información procesada durante una visita'],
+  ])('renders substantive trust-page Markdown for %s', async (path, title, section) => {
+    const document = await getMarkdownDocument(path)
+
+    expect(document.status).toBe(200)
+    expect(document.body).toContain(title)
+    expect(document.body).toContain(section)
+    expect(document.body.length).toBeGreaterThan(500)
   })
 
   it('renders an article body from its MDX source', async () => {

@@ -9,7 +9,9 @@ import { getHeaderNavLinks } from '../data/headerNavLinks'
 import {
   getAboutPath,
   getBookPath,
+  getContactPath,
   getGuidesPath,
+  getPrivacyPath,
   getPostPath,
   getWatchPath,
 } from '../lib/i18n/routes'
@@ -29,11 +31,15 @@ describe('localized route helpers', () => {
   it('keeps static page paths localized by locale', () => {
     expect(getAboutPath('en')).toBe('/about')
     expect(getBookPath('en')).toBe('/book')
+    expect(getContactPath('en')).toBe('/contact')
     expect(getGuidesPath('en')).toBe('/guides')
+    expect(getPrivacyPath('en')).toBe('/privacy')
 
     expect(getAboutPath('es')).toBe('/es/about')
     expect(getBookPath('es')).toBe('/es/book')
+    expect(getContactPath('es')).toBe('/es/contact')
     expect(getGuidesPath('es')).toBe('/es/guides')
+    expect(getPrivacyPath('es')).toBe('/es/privacy')
   })
 
   it('keeps Spanish article and watch URLs under /es', () => {
@@ -100,6 +106,10 @@ describe('sitemap', () => {
 
     expect(urls).toContain(`${siteUrl}/es/about`)
     expect(urls).toContain(`${siteUrl}/es/book`)
+    expect(urls).toContain(`${siteUrl}/contact`)
+    expect(urls).toContain(`${siteUrl}/privacy`)
+    expect(urls).toContain(`${siteUrl}/es/contact`)
+    expect(urls).toContain(`${siteUrl}/es/privacy`)
     expect(urls).toContain(`${siteUrl}/es/guides`)
     expect(urls).toContain(`${siteUrl}/es/comentarios-en-jsx`)
     expect(urls).toContain(`${siteUrl}/es/watch/creando-observables-desde-cero`)

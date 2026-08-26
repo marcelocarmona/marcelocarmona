@@ -1,10 +1,13 @@
 const enUi = {
   footer: {
     bookCall: 'Book a call',
+    contact: 'Contact',
     eyebrow: 'Software engineering',
+    privacy: 'Privacy',
     summary:
       'Notes and practical work across frontend architecture, cloud infrastructure, delivery workflows, and the engineering decisions behind maintainable software.',
     title: 'Web products that hold up in production.',
+    trustLinksLabel: 'Trust and contact pages',
   },
   list: {
     noPostsFound: 'No posts found.',

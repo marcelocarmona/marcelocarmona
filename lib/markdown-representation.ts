@@ -3,14 +3,18 @@ import matter from 'gray-matter'
 import path from 'path'
 
 import siteMetadata from '@/data/siteMetadata'
+import { getTrustPageCopy, type TrustPageKind } from '@/data/trustPages'
 import { normalizeContentPath } from '@/lib/content-negotiation'
 import { getLanguageLabel, normalizeLocale, toHreflang } from '@/lib/i18n/config'
 import {
   getBlogPagePath,
   getBlogPath,
+  getBookPath,
+  getContactPath,
   getGuidesPath,
   getHomePath,
   getLocaleFromPathname,
+  getPrivacyPath,
   getPostPath,
   getTagPath,
   getTagsPath,
@@ -267,6 +271,45 @@ function renderStaticPageMarkdown(page: {
   ])
 }
 
+function renderTrustPageMarkdown(kind: TrustPageKind, locale: Locale): string {
+  const page = getTrustPageCopy(kind, locale)
+  const canonicalPath = kind === 'contact' ? getContactPath(locale) : getPrivacyPath(locale)
+  const actionLines =
+    kind === 'contact'
+      ? [
+          `- Email: ${link(siteMetadata.email, `mailto:${siteMetadata.email}`)}`,
+          `- Book a call: ${link(absoluteUrl(getBookPath(locale)), absoluteUrl(getBookPath(locale)))}`,
+        ]
+      : [
+          `- Email: ${link(siteMetadata.email, `mailto:${siteMetadata.email}`)}`,
+          `- Contact page: ${link(
+            absoluteUrl(getContactPath(locale)),
+            absoluteUrl(getContactPath(locale))
+          )}`,
+        ]
+
+  return compact([
+    `# ${page.title}`,
+    '',
+    `> ${page.intro}`,
+    '',
+    `- Canonical URL: ${absoluteUrl(canonicalPath)}`,
+    `- Language: ${getLanguageLabel(locale)} (${toHreflang(locale)})`,
+    '',
+    ...page.sections.flatMap((section) => [
+      `## ${section.title}`,
+      '',
+      ...section.paragraphs.flatMap((paragraph) => [paragraph, '']),
+    ]),
+    '## Contact details',
+    '',
+    ...actionLines,
+    '',
+    ...discoveryFooter(),
+    '',
+  ])
+}
+
 export function renderNotFoundMarkdown(pathname: string): string {
   const discovery = getAiDiscoveryUrls()
   const requested = describeRequestedPath(pathname)
@@ -507,6 +550,14 @@ export async function getMarkdownDocument(pathname: string): Promise<MarkdownDoc
 
   if (normalizedPath === getGuidesPath(locale)) {
     return buildGuidesDocument(locale)
+  }
+
+  if (normalizedPath === getContactPath(locale)) {
+    return { status: 200, body: renderTrustPageMarkdown('contact', normalizeLocale(locale)) }
+  }
+
+  if (normalizedPath === getPrivacyPath(locale)) {
+    return { status: 200, body: renderTrustPageMarkdown('privacy', normalizeLocale(locale)) }
   }
 
   const watchPrefix = getWatchPath(locale, '')

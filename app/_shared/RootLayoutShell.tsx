@@ -47,21 +47,10 @@ export const metadata = {
   manifest: '/static/favicons/site.webmanifest',
 }
 
-export default async function RootLayoutShell({
-  children,
-  locale = 'en',
-}: {
-  children: ReactNode
-  locale?: Locale
-}) {
-  const posts = await getAllFilesFrontMatter('blog')
-  const postLocaleMap = posts.reduce<Record<string, Locale>>((acc, post) => {
-    acc[post.slug] = post.locale
-    return acc
-  }, {})
+export function buildWebsiteSchema(locale: Locale = 'en') {
   const resolvedLocale: Locale = htmlLanguage[locale] ? locale : 'en'
 
-  const websiteSchema = {
+  return {
     '@context': 'https://schema.org',
     '@graph': [
       {
@@ -84,6 +73,23 @@ export default async function RootLayoutShell({
       },
     ],
   }
+}
+
+export default async function RootLayoutShell({
+  children,
+  locale = 'en',
+}: {
+  children: ReactNode
+  locale?: Locale
+}) {
+  const posts = await getAllFilesFrontMatter('blog')
+  const postLocaleMap = posts.reduce<Record<string, Locale>>((acc, post) => {
+    acc[post.slug] = post.locale
+    return acc
+  }, {})
+  const resolvedLocale: Locale = htmlLanguage[locale] ? locale : 'en'
+
+  const websiteSchema = buildWebsiteSchema(resolvedLocale)
 
   return (
     <html

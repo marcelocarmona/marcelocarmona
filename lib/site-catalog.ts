@@ -1,12 +1,15 @@
 import siteMetadata from '@/data/siteMetadata'
+import { getTrustPageCopy } from '@/data/trustPages'
 import { getLanguageLabel, toHreflang } from '@/lib/i18n/config'
 import {
   getAboutPath,
   getBlogPath,
   getBookPath,
+  getContactPath,
   getFeedPath,
   getGuidesPath,
   getHomePath,
+  getPrivacyPath,
   getTagsPath,
 } from '@/lib/i18n/routes'
 import { absoluteUrl } from '@/lib/metadata'
@@ -85,6 +88,30 @@ export const PUBLIC_STATIC_PAGES = [
     locale: 'es',
     path: getAboutPath('es'),
     description: 'Perfil profesional de Marcelo Carmona.',
+  },
+  {
+    title: getTrustPageCopy('contact', 'en').title,
+    locale: 'en',
+    path: getContactPath('en'),
+    description: getTrustPageCopy('contact', 'en').description,
+  },
+  {
+    title: getTrustPageCopy('contact', 'es').title,
+    locale: 'es',
+    path: getContactPath('es'),
+    description: getTrustPageCopy('contact', 'es').description,
+  },
+  {
+    title: getTrustPageCopy('privacy', 'en').title,
+    locale: 'en',
+    path: getPrivacyPath('en'),
+    description: getTrustPageCopy('privacy', 'en').description,
+  },
+  {
+    title: getTrustPageCopy('privacy', 'es').title,
+    locale: 'es',
+    path: getPrivacyPath('es'),
+    description: getTrustPageCopy('privacy', 'es').description,
   },
   {
     title: 'Projects',

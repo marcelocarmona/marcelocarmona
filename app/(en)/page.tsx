@@ -1,4 +1,5 @@
 import Image from '@/components/Image'
+import HomeFocusAreas from '@/components/HomeFocusAreas'
 import HoverPrefetchLink from '@/components/HoverPrefetchLink'
 import Link from '@/components/Link'
 import NewsletterForm from '@/components/NewsletterForm'
@@ -79,6 +80,8 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        <HomeFocusAreas locale="en" />
 
         <section>
           <div className="pb-2">

@@ -2,9 +2,30 @@ import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
 import Link from './Link'
 import { DisplayTitle, Eyebrow, MutedText } from './ui/typography'
-import { getBookPath } from '@/lib/i18n/routes'
+import { getBookPath, getContactPath, getPrivacyPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
 import type { LocaleInput } from '@/types/content'
+
+export function FooterTrustLinks({ locale = 'en' }: { locale?: LocaleInput }) {
+  const { footer } = getUiCopy(locale)
+
+  return (
+    <nav aria-label={footer.trustLinksLabel} className="mb-3 flex gap-4 text-sm">
+      <Link
+        href={getContactPath(locale)}
+        className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+      >
+        {footer.contact}
+      </Link>
+      <Link
+        href={getPrivacyPath(locale)}
+        className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+      >
+        {footer.privacy}
+      </Link>
+    </nav>
+  )
+}
 
 export default function Footer({ locale = 'en' }: { locale?: LocaleInput }) {
   const { footer } = getUiCopy(locale)
@@ -36,6 +57,7 @@ export default function Footer({ locale = 'en' }: { locale?: LocaleInput }) {
               {footer.bookCall}
             </Link>
           </div>
+          <FooterTrustLinks locale={locale} />
           <MutedText as="div" className="mb-2 flex space-x-2 text-sm">
             <div>{`© ${new Date().getFullYear()}`}</div>
             <div>{` • `}</div>

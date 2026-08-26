@@ -6,12 +6,12 @@ import siteMetadata from '@/data/siteMetadata'
 import { getBookPath } from '@/lib/i18n/routes'
 import type { Locale } from '@/types/content'
 
-const aboutCopy: Record<
+export const aboutCopy: Record<
   Locale,
   {
     title: string
     intro: string
-    body: string
+    body: string[]
     connect: string
     cta: string
     occupation: string
@@ -21,7 +21,11 @@ const aboutCopy: Record<
     title: 'About',
     intro:
       'Hello there, I am Marcelo Carmona, a software engineer focused on frontend architecture, React, Next.js, and performance-minded product delivery.',
-    body: 'I enjoy turning complex product problems into maintainable systems, and I like sharing the engineering tradeoffs behind that work through articles and practical guides.',
+    body: [
+      'I enjoy turning complex product problems into maintainable systems. My work connects the interface people use with the infrastructure, delivery workflows, and operational details that keep a product dependable after launch.',
+      'I have particular experience with React and Next.js, web performance, cloud platforms, and the boundaries between application code and delivery systems. I prefer small, observable changes, clear ownership, and technical decisions that a team can explain and maintain later.',
+      'This site is where I publish practical notes, guides, and examples from that work. The goal is to make the tradeoffs visible: what a pattern solves, where it can fail, how to verify it, and when a simpler approach is enough.',
+    ],
     connect:
       'If you are interested in connecting, you can book a call or find me on the channels below.',
     cta: 'Book a call',
@@ -31,7 +35,11 @@ const aboutCopy: Record<
     title: 'Acerca de mi',
     intro:
       'Hola, soy Marcelo Carmona, ingeniero de software enfocado en arquitectura frontend, React, Next.js y rendimiento web.',
-    body: 'Me gusta convertir problemas complejos de producto en sistemas mantenibles, y compartir las decisiones tecnicas detras de ese trabajo en articulos y guias practicas.',
+    body: [
+      'Me gusta convertir problemas complejos de producto en sistemas mantenibles. Mi trabajo conecta la interfaz que usan las personas con la infraestructura, los flujos de entrega y los detalles operativos que mantienen un producto confiable después del lanzamiento.',
+      'Tengo experiencia especial con React y Next.js, rendimiento web, plataformas cloud y los límites entre el código de una aplicación y sus sistemas de entrega. Prefiero cambios pequeños y observables, responsabilidades claras y decisiones técnicas que un equipo pueda explicar y mantener después.',
+      'Este sitio es donde publico notas prácticas, guías y ejemplos de ese trabajo. El objetivo es hacer visibles las decisiones: qué resuelve un patrón, dónde puede fallar, cómo verificarlo y cuándo es suficiente una solución más sencilla.',
+    ],
     connect:
       'Si quieres conversar, puedes reservar una llamada o encontrarme en los canales de abajo.',
     cta: 'Reservar llamada',
@@ -71,7 +79,9 @@ export default function AboutPage({ locale = 'en' }: { locale?: Locale }) {
         </div>
         <Typeset className="pb-8 pt-8 xl:col-span-2">
           <p>{copy.intro}</p>
-          <p>{copy.body}</p>
+          {copy.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
           <p>{copy.connect}</p>
           <p>
             <Link href={getBookPath(locale)}>{copy.cta}</Link>
