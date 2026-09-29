@@ -8,7 +8,6 @@
   "allowScripts": {
     "@sentry/cli@2.58.6": true,
     "esbuild@0.28.2": true,
-    "sharp@0.34.5": true,
     "unrs-resolver@1.11.1": true
   },
   "scripts": {
@@ -53,7 +52,7 @@
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.5",
     "shiki": "^4.4.3",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.2.4",
@@ -84,7 +83,13 @@
     "vitest": "^4.1.10"
   },
   "overrides": {
-    "postcss": "$postcss"
+    "postcss": "$postcss",
+    "mdx-bundler": {
+      "uuid": "^11.1.1"
+    },
+    "remark-mdx-frontmatter": {
+      "toml": "^4.3.0"
+    }
   },
   "lint-staged": {
     "*.+(js|jsx|ts|tsx)": [
