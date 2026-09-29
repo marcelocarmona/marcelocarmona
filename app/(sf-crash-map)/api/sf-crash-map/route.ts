@@ -8,7 +8,7 @@ import {
 export const runtime = 'nodejs'
 export const revalidate = 86400
 
-const DATA_SF_DOMAIN = 'https://data.sfgov.org'
+const DATA_SF_DOMAIN = 'https://data.sf.gov'
 const CRASH_DATASET_ID = 'ubvf-ztfx'
 const CACHE_SECONDS = 60 * 60 * 24
 const periodKeys: SfCrashMapPeriodKey[] = ['last12', 'last3', 'since2020']

@@ -554,7 +554,7 @@ export default function SfCrashMapAtlas() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                 <a
                   className="font-semibold hover:text-white"
-                  href="https://data.sfgov.org/d/ubvf-ztfx"
+                  href="https://data.sf.gov/d/ubvf-ztfx"
                   target="_blank"
                   rel="noreferrer"
                 >
