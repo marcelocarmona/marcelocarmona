@@ -6,8 +6,8 @@
     "node": "24.x"
   },
   "allowScripts": {
-    "@sentry/cli@2.58.5": true,
-    "esbuild@0.28.0": true,
+    "@sentry/cli@2.58.6": true,
+    "esbuild@0.28.2": true,
     "sharp@0.34.5": true,
     "unrs-resolver@1.11.1": true
   },
