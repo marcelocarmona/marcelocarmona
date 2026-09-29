@@ -1,3 +1,7 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import path from 'node:path'
+
 import bundleAnalyzer from '@next/bundle-analyzer'
 import { withSentryConfig } from '@sentry/nextjs/config'
 import type { NextConfig } from 'next'
@@ -5,6 +9,27 @@ import type { NextConfig } from 'next'
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
+
+// maplibre-gl v6 loads its worker by URL, and the worker imports a sibling
+// `maplibre-gl-shared.mjs` that neither Turbopack nor webpack emit. Serve both
+// from public/maplibre (see SfCrashMapAtlas `setWorkerUrl`). Doing it here
+// rather than in an npm pre-script covers every `next dev`/`next build` entry
+// point, including a bare `next build` on Vercel.
+function copyMaplibreWorker() {
+  const requireFromRoot = createRequire(path.join(process.cwd(), 'package.json'))
+  const dist = path.join(path.dirname(requireFromRoot.resolve('maplibre-gl/package.json')), 'dist')
+  const dest = path.join(process.cwd(), 'public', 'maplibre')
+  mkdirSync(dest, { recursive: true })
+
+  for (const file of ['maplibre-gl-worker.mjs', 'maplibre-gl-shared.mjs']) {
+    const source = readFileSync(path.join(dist, file))
+    const target = path.join(dest, file)
+    if (existsSync(target) && readFileSync(target).equals(source)) continue
+    writeFileSync(target, source)
+  }
+}
+
+copyMaplibreWorker()
 
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `

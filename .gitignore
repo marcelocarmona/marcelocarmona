@@ -13,6 +13,8 @@
 /out/
 tsconfig.tsbuildinfo
 public/sitemap.xml
+# maplibre-gl worker, copied from node_modules by next.config.mts
+/public/maplibre/
 .vercel
 
 # production

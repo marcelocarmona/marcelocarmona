@@ -1,6 +1,8 @@
 'use client'
 
-import maplibregl, { type GeoJSONSource, type LngLatBoundsLike, type Map } from 'maplibre-gl'
+import type { FeatureCollection } from 'geojson'
+import * as maplibregl from 'maplibre-gl'
+import type { GeoJSONSource, LngLatBoundsLike, Map } from 'maplibre-gl'
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -25,6 +27,9 @@ const SF_BOUNDS: LngLatBoundsLike = [
 ]
 
 const SF_CENTER: [number, number] = [-122.4305, 37.7677]
+
+// Copied from node_modules by next.config.mts.
+const MAPLIBRE_WORKER_URL = '/maplibre/maplibre-gl-worker.mjs'
 
 const focusOptions: Array<{ key: FocusKey; label: string; mapLabel: string }> = [
   { key: 'overall', label: 'Overall', mapLabel: 'Selected crash records' },
@@ -213,18 +218,26 @@ export default function SfCrashMapAtlas() {
   useEffect(() => {
     if (!atlas || !mapContainerRef.current || mapRef.current) return
 
-    const map = new maplibregl.Map({
-      container: mapContainerRef.current,
-      style: mapStyle as maplibregl.StyleSpecification,
-      center: SF_CENTER,
-      zoom: 11.25,
-      maxBounds: SF_BOUNDS,
-      dragRotate: false,
-      pitchWithRotate: false,
-      attributionControl: {
-        compact: false,
-      },
-    })
+    maplibregl.setWorkerUrl(MAPLIBRE_WORKER_URL)
+    let map: Map
+    try {
+      map = new maplibregl.Map({
+        container: mapContainerRef.current,
+        style: mapStyle as maplibregl.StyleSpecification,
+        center: SF_CENTER,
+        zoom: 11.25,
+        maxBounds: SF_BOUNDS,
+        dragRotate: false,
+        pitchWithRotate: false,
+        attributionControl: {
+          compact: false,
+        },
+      })
+    } catch (error) {
+      // maplibre-gl v6 requires WebGL2 and throws without it; keep the rest of the atlas usable.
+      console.warn('SF Crash Map could not start the map.', error)
+      return
+    }
 
     mapRef.current = map
     const popup = new maplibregl.Popup({
@@ -262,7 +275,7 @@ export default function SfCrashMapAtlas() {
     if (!atlas || !map || !map.isStyleLoaded()) return
 
     const crashSource = map.getSource('crashes') as GeoJSONSource | undefined
-    crashSource?.setData(atlas.crashes as GeoJSON.FeatureCollection)
+    crashSource?.setData(atlas.crashes as FeatureCollection)
     const latest = latestMapStateRef.current
     syncCrashLayerFilters(map, latest.activeFocus, latest.volumeIds, latest.selectedNeighborhoodId)
   }, [atlas])
@@ -619,7 +632,7 @@ export default function SfCrashMapAtlas() {
 function addAtlasLayers(map: Map, atlas: SfCrashMapAtlasData, popup: maplibregl.Popup) {
   map.addSource('crashes', {
     type: 'geojson',
-    data: atlas.crashes as GeoJSON.FeatureCollection,
+    data: atlas.crashes as FeatureCollection,
     promoteId: 'unique_id',
   })
 
