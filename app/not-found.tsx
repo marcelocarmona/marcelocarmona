@@ -69,9 +69,10 @@ export default function NotFoundPage() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             {machineReadableLinks.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className={linkClassName}>
+                {/* Plain anchors: these are files, not app routes, so skip RSC prefetch. */}
+                <a href={item.href} className={linkClassName}>
                   {item.label}
-                </Link>{' '}
+                </a>{' '}
                 &mdash; {item.description}
               </li>
             ))}
