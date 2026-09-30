@@ -138,42 +138,32 @@ const nextConfig: NextConfig = withBundleAnalyzer({
   },
 })
 
-export default (withSentryConfig as any)(
-  nextConfig,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
+export default withSentryConfig(nextConfig, {
+  // For all available options, see:
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/build/
 
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: 'marcelo-carmona',
-    project: 'marcelocarmona',
-  },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+  // Suppresses source map uploading logs during build
+  silent: true,
+  org: 'marcelo-carmona',
+  project: 'marcelocarmona',
 
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
+  widenClientFileUpload: true,
 
-    // Keep the browser SDK modern to avoid shipping IE11 compatibility code.
-    transpileClientSDK: false,
+  // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. (increases server load)
+  // The proxy matcher excludes this route so client-side error reporting keeps working.
+  tunnelRoute: '/monitoring',
 
-    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. (increases server load)
-    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting client-side
-    // error reporting will fail.
-    tunnelRoute: '/monitoring',
-
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
+  webpack: {
+    // Tree-shakes Sentry SDK logger statements from the bundle
+    treeshake: {
+      removeDebugLogging: true,
+    },
 
     // Enables automatic instrumentation of Vercel Cron Monitors.
     // See the following for more information:
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-  }
-)
+  },
+})

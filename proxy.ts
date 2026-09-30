@@ -16,7 +16,7 @@ const MARKDOWN_ROUTE_PREFIX = '/api/markdown'
  * `Vary: Accept` is set here for route-handler and self-hosted responses, but
  * Next.js overwrites `Vary` on App Router *page* responses with its own RSC
  * token list (`res.setHeader('Vary', ...)` in the compiled app-page template),
- * so neither middleware nor `next.config` headers survive there. The edge rule
+ * so neither proxy nor `next.config` headers survive there. The edge rule
  * in vercel.json restores `Accept` on those responses; `tests/agent-readiness`
  * fails if that rule ever drifts from the tokens Next.js emits.
  */
@@ -30,7 +30,7 @@ function markdownAlternateLink(request: NextRequest, pathname: string): string {
   return `<${url.toString()}>; rel="alternate"; type="text/markdown"`
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Only GET/HEAD have a representation to negotiate. Server Actions and form
@@ -58,7 +58,7 @@ export function middleware(request: NextRequest) {
   // React Server Component payload requests send `Accept: */*`, which resolves
   // to `text/html` below and falls through to the app router untouched. Next.js
   // strips both the `RSC` header and the `_rsc` query parameter before
-  // middleware runs, so there is nothing more specific to branch on here.
+  // proxy runs, so there is nothing more specific to branch on here.
   const acceptHeader = request.headers.get('accept')
   const chosen = preferredType(acceptHeader)
 

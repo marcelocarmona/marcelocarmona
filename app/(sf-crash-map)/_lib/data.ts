@@ -304,9 +304,10 @@ export function getLatestCollisionDate(
   const crashFeatures = Array.isArray(crashes.features) ? crashes.features : []
   return crashFeatures
     .filter((feature) => isRecentCrash(feature.properties, recentCrashesSinceYear))
-    .reduce<
-      string | null
-    >((latest, feature) => maxIsoDate(latest, feature.properties.collision_date), null)
+    .reduce<string | null>(
+      (latest, feature) => maxIsoDate(latest, feature.properties.collision_date),
+      null
+    )
 }
 
 export function getSfCrashMapPeriodOptions(

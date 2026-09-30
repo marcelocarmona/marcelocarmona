@@ -1,7 +1,7 @@
 /**
  * HTTP content negotiation helpers for the acceptmarkdown.com convention.
  *
- * Kept dependency free so it can run in the middleware (Edge) runtime.
+ * Kept dependency free so it can run in the proxy (Node.js) or Edge runtime.
  * Reference: RFC 9110 section 12.5.1 and https://acceptmarkdown.com/recipes/nextjs
  */
 
