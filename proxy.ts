@@ -13,12 +13,14 @@ const MARKDOWN_ROUTE_PREFIX = '/api/markdown'
 /**
  * Markdown content negotiation, per https://acceptmarkdown.com.
  *
- * `Vary: Accept` is set here for route-handler and self-hosted responses, but
- * Next.js overwrites `Vary` on App Router *page* responses with its own RSC
- * token list (`res.setHeader('Vary', ...)` in the compiled app-page template),
- * so neither proxy nor `next.config` headers survive there. The edge rule
- * in vercel.json restores `Accept` on those responses; `tests/agent-readiness`
- * fails if that rule ever drifts from the tokens Next.js emits.
+ * `Vary: Accept` is set on the Markdown rewrites and the 406. On App Router
+ * *page* responses Next.js (self-hosted) and the Vercel builder (prerendered
+ * pages) replace `Vary` with a fixed RSC token list, so `Accept` never
+ * survives there and no header config can restore it. On Vercel that is safe:
+ * this proxy runs before the CDN cache and rewrites Markdown requests to a
+ * separate route whose response carries `Vary: Accept`, and HTML pages are
+ * served with `max-age=0, must-revalidate`. A self-hosted deployment behind a
+ * shared cache has to include `Accept` in that cache's key.
  */
 
 function toMarkdownRoute(pathname: string): string {

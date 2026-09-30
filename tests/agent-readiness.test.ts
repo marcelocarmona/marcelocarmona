@@ -1,18 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { readdirSync } from 'fs'
-import path from 'path'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createElement } from 'react'
-// Internal Next.js constants: the edge Vary rule below has to stay in sync with
-// the tokens Next.js puts in `Vary` on App Router page responses.
-import {
-  NEXT_ROUTER_PREFETCH_HEADER,
-  NEXT_ROUTER_SEGMENT_PREFETCH_HEADER,
-  NEXT_ROUTER_STATE_TREE_HEADER,
-  RSC_HEADER,
-} from 'next/dist/client/components/app-router-headers'
 
-import vercelConfig from '../vercel.json'
+import { GET as getMarkdownRoute } from '../app/api/markdown/[[...slug]]/route'
 import PaginationLinkTags from '../components/PaginationLinkTags'
 import ScrollTopAndComment from '../components/ScrollTopAndComment'
 import TrustPage from '../app/_shared/TrustPage'
@@ -162,45 +152,19 @@ describe('Vary: Accept', () => {
     expect(headers.get('Vary')).toBe('rsc, Accept')
   })
 
-  it('restores Accept at the edge without dropping any Next.js RSC token', () => {
-    const rule = vercelConfig.headers.find((entry) =>
-      entry.headers.some((header) => header.key === 'Vary')
-    )
-    expect(rule).toBeDefined()
-
-    const vary = rule!.headers.find((header) => header.key === 'Vary')!.value
-    const tokens = vary.split(',').map((token) => token.trim().toLowerCase())
-
-    expect(tokens).toContain('accept')
-    expect(tokens).toContain('accept-encoding')
-    // If a Next.js upgrade adds a token, this fails instead of silently
-    // shipping an edge rule that breaks RSC cache separation.
-    ;[
-      RSC_HEADER,
-      NEXT_ROUTER_STATE_TREE_HEADER,
-      NEXT_ROUTER_PREFETCH_HEADER,
-      NEXT_ROUTER_SEGMENT_PREFETCH_HEADER,
-    ].forEach((token) => {
-      expect(tokens).toContain(token.toLowerCase())
+  it('sends Vary: Accept on the Markdown representation', async () => {
+    // HTML page responses cannot carry `Accept` in Vary: Next.js and the Vercel
+    // builder both set Vary on App Router pages to a fixed RSC token list. That
+    // is safe on Vercel because the proxy negotiates before the CDN cache and
+    // rewrites Markdown requests to this route, so the Markdown variant must
+    // say so.
+    const response = await getMarkdownRoute(new Request(`${siteUrl}/api/markdown/blog`), {
+      params: Promise.resolve({ slug: ['blog'] }),
     })
-  })
 
-  it('leaves immutable build assets out of the edge Vary rule', () => {
-    const rule = vercelConfig.headers.find((entry) =>
-      entry.headers.some((header) => header.key === 'Vary')
-    )!
-    expect(rule.source).toContain('_next/static')
-  })
-
-  it('has no interception routes, which would need Next-URL in the edge Vary rule', () => {
-    const appDirectories = readdirSync(path.join(process.cwd(), 'app'), {
-      recursive: true,
-      withFileTypes: true,
-    }).filter((entry) => entry.isDirectory())
-
-    const interceptionRoutes = appDirectories.filter((entry) => /^\(\.{1,3}\)/.test(entry.name))
-
-    expect(interceptionRoutes).toEqual([])
+    expect(response.status).toBe(200)
+    expect(response.headers.get('Content-Type')).toBe('text/markdown; charset=utf-8')
+    expect(response.headers.get('Vary')).toBe('Accept')
   })
 })
 
