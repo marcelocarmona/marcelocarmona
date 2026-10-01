@@ -113,7 +113,7 @@ Pueden ver el proyecto en <a href="https://github.com/clessg/progress-bar-webpac
 
 # webpack progress plugin
 
-Y por último, si se quiere tener algo aún más simple o más custom, podemos usar el <a href="https://webpack.js.org/plugins/progress-plugin/" target="_blank">ProgressPlugin provisto por webpack</a>.
+Y por último, si se quiere tener algo aún más simple o más custom, podemos usar el <a href="https://webpack.js.org/plugins/progress-plugin/" target="_blank" rel="noopener">ProgressPlugin provisto por webpack</a>.
 
 Este básicamente se inserta como un plugin más en nuestro archivo de configuración de webpack.
 
