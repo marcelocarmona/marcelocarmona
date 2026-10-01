@@ -133,12 +133,15 @@ export async function generateWatchMetadata(
     alternates.languages = languageAlternates
   }
 
+  // Distinguish the watch page from the article it embeds, which shares video.title.
+  const pageTitle = `${video.title} (${getUiCopy(frontMatter.locale).video.watchPageLabel})`
+
   return {
-    title: video.title,
+    title: pageTitle,
     description: video.description || frontMatter.summary || siteMetadata.description,
     alternates,
     openGraph: {
-      title: video.title,
+      title: pageTitle,
       description: video.description || frontMatter.summary || siteMetadata.description,
       type: 'video.other',
       url: pageUrl,
@@ -152,7 +155,7 @@ export async function generateWatchMetadata(
     } as any,
     twitter: {
       card: 'summary_large_image',
-      title: video.title,
+      title: pageTitle,
       description: video.description || frontMatter.summary || siteMetadata.description,
       images: [video.thumbnailUrl],
     },
