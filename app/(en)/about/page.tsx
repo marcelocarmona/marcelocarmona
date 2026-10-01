@@ -4,7 +4,7 @@ import { buildPageMetadata } from '@/lib/metadata'
 import AboutPage from '../../_shared/AboutPage'
 
 const title = 'About'
-const description = `About me - ${siteMetadata.author}`
+const description = `${siteMetadata.author} is a software engineer focused on frontend architecture, React, Next.js, and performance-minded product delivery.`
 
 export const metadata = {
   ...buildPageMetadata({
