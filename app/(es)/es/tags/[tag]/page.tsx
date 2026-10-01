@@ -16,6 +16,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: TagPageProps) {
   const { tag } = await params
+  const spanishTags = await getAllTags('blog', { locale: 'es' })
   const englishTags = await getAllTags('blog', { locale: 'en' })
   const hasEnglishVersion = Object.prototype.hasOwnProperty.call(englishTags, tag)
   const languageAlternates: Record<string, string> = {
@@ -27,7 +28,8 @@ export async function generateMetadata({ params }: TagPageProps) {
     languageAlternates['x-default'] = getTagPath('en', tag)
   }
   const title = tag
-  const description = `Artículos etiquetados con ${tag} por ${siteMetadata.author}`
+  const postCount = spanishTags[tag] ?? 0
+  const description = `Explora ${postCount} ${postCount === 1 ? 'artículo etiquetado' : 'artículos etiquetados'} con ${tag} por ${siteMetadata.author}.`
 
   return {
     ...buildPageMetadata({
