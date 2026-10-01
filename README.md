@@ -100,11 +100,11 @@ Notes:
 To scaffold a new post:
 
 ```bash
-node ./scripts/compose.js
+node ./scripts/compose.mts
 ```
 
 ## Deployment
 
 This repository is set up for Vercel.
 
-If you add new third-party scripts or providers, review `next.config.js` and update the Content Security Policy as needed.
+If you add new third-party scripts or providers, review `next.config.mts` and update the Content Security Policy as needed.

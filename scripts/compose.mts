@@ -1,7 +1,7 @@
-const fs = require('fs')
-const path = require('path')
-const inquirer = require('inquirer')
-const dedent = require('dedent')
+import fs from 'node:fs'
+import path from 'node:path'
+import dedent from 'dedent'
+import inquirer from 'inquirer'
 
 const root = process.cwd()
 
@@ -62,7 +62,7 @@ inquirer
     {
       name: 'extension',
       message: 'Choose post extension:',
-      type: 'list',
+      type: 'select',
       choices: ['mdx', 'md'],
     },
     {
@@ -79,7 +79,7 @@ inquirer
     {
       name: 'draft',
       message: 'Set post as draft?',
-      type: 'list',
+      type: 'select',
       choices: ['yes', 'no'],
     },
     {
@@ -90,7 +90,7 @@ inquirer
     {
       name: 'layout',
       message: 'Select layout',
-      type: 'list',
+      type: 'select',
       choices: getLayouts,
     },
     {
@@ -120,11 +120,7 @@ inquirer
     })
   })
   .catch((error: any) => {
-    if (error.isTtyError) {
-      console.log("Prompt couldn't be rendered in the current environment")
-    } else {
-      console.log('Something went wrong, sorry!')
-    }
+    if (error.name === 'ExitPromptError') return
+    console.error('Something went wrong, sorry!', error.message)
+    process.exitCode = 1
   })
-
-export {}
