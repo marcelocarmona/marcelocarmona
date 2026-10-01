@@ -141,7 +141,7 @@ function giveMeSomeData(nextCb, errorCb, completeCb) {
 giveMeSomeData(nextCallback, errorCallback, completeCallback)
 ```
 
-Spoiler: es la misma idea que `fromPromise` de RxJS: http://reactivex.io/rxjs/file/es6/observable/PromiseObservable.js.html#lineNumber58
+Spoiler: es la misma idea que `fromPromise` de RxJS: https://github.com/ReactiveX/rxjs/blob/5.5.12/src/observable/PromiseObservable.ts#L50
 
 ```javascript
 const observable = {
