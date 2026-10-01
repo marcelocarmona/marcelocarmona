@@ -11,7 +11,7 @@ Cuando utilizamos webpack para generar nuestros bundles, en muchos casos, en nue
 Las opciones que tenemos actualmente para mostrar esta información se implementan por medio de plugins para webpack.
 Voy a dar tres alternativas simples para mostrar este tipo de información.
 
-# webpack-dashboard
+## webpack-dashboard
 
 Este <a href="https://github.com/FormidableLabs/webpack-dashboard" target="_blank" rel="noopener">dashboard</a> fue creado por la gente de <a href="https://formidable.com/" target="_blank" rel="noopener">formidable.com</a>, una muy buena opción que muestra información sobre:
 
@@ -85,7 +85,7 @@ Acá dejo algunos tweets que se escribieron en el momento de su lanzamiento:
 
 <br /><br />
 
-# webpack progressBar plugin
+## webpack progressBar plugin
 
 Esta es otra opción bastante simple, pero cuando se trabaja en un proyecto grande y el tiempo de building aumenta, incluso mostrar una barra de progreso mejora bastante la experiencia del desarrollador.
 <img src="/static/images/blog/webpack-progressbar-plugin.gif" alt="webpack progressbar plugin" />
@@ -111,7 +111,7 @@ plugins: [
 
 Pueden ver el proyecto en <a href="https://github.com/clessg/progress-bar-webpack-plugin" target="_blank" rel="noopener">GitHub</a> para ver más opciones de configuración.
 
-# webpack progress plugin
+## webpack progress plugin
 
 Y por último, si se quiere tener algo aún más simple o más custom, podemos usar el <a href="https://webpack.js.org/plugins/progress-plugin/" target="_blank" rel="noopener">ProgressPlugin provisto por webpack</a>.
 

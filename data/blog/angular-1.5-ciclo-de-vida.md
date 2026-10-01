@@ -9,7 +9,7 @@ tags: ['Angularjs', 'JavaScript']
 En Angular 1.5, los componentes tienen un ciclo de vida bien definido. Por medio de los lifecycle hooks, podemos enganchar funciones que ayudan a modificar su comportamiento. Vamos a ver qué rol tiene cada uno de estos hooks y por qué deberías usarlos. Es importante entenderlos si estás pensando en una aplicación basada en componentes.
 Los ejemplos los voy a escribir en ES6, así que si todavía no empezaste a usar AngularJS con ES6, te recomiendo este repo que puede servir como boilerplate: [https://github.com/angularclass/NG6-starter](https://github.com/angularclass/NG6-starter)
 
-# $onInit
+## $onInit
 
 Es una propiedad predefinida por Angular que se expone en el controlador del componente, a la cual le podemos asignar una función.
 
@@ -26,7 +26,7 @@ Se utiliza para código de inicialización del controller.
 Esta función se llama solo una vez, después de que se establecen todos los bindings del componente y antes de que se establezcan en sus hijos.
 Angular 2 tiene el método `ngOnInit`, el cual nos servirá para la transición de Angular 1.x.
 
-## require
+### require
 
 Anteriormente, con las directivas, usábamos "require" para heredar métodos de otras directivas, y su sintaxis nos permitía usar un string o un array (puedes buscarlo en la documentación de la API: [https://docs.angularjs.org/api/ng/service/\$compile](https://docs.angularjs.org/api/ng/service/$compile)).
 Con el uso de componentes vamos a poder utilizar "require" usando un string.
@@ -101,7 +101,7 @@ class myItemController {
 export default myItemController
 ```
 
-# $postLink
+## $postLink
 
 Llamado después de que el elemento de este controlador y sus hijos hayan sido enlazados.
 De forma similar a la función post-link, este hook se puede usar para configurar handlers de eventos del DOM y manipular el DOM.
@@ -117,7 +117,7 @@ class myComponente {
 export default myComponente;
 ```
 
-# $onChanges
+## $onChanges
 
 Este hook es el más importante porque nos permite usar una arquitectura de one-way data flow con Angular 1.5.x.
 Lo que hay que tener en cuenta es que este método se va a ejecutar cada vez que se modifique un input del componente. Es decir, el input está definido en `bindings: {...}`.
@@ -150,7 +150,7 @@ class myComponente {
 export default myComponente
 ```
 
-# $onDestroy
+## $onDestroy
 
 Básicamente sirve para hacer algo cuando el scope del componente es destruido. Antes usábamos algo como esto:
 

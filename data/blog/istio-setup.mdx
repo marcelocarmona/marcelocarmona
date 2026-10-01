@@ -10,7 +10,7 @@ draft: false
 
 Istio is an open-source service mesh that layers transparently onto existing distributed applications. Istio's powerful features provide a uniform and more efficient way to secure, connect, and monitor services. https://istio.io
 
-# Install Istio (macOS)
+## Install Istio (macOS)
 
 Check Kubernetes namespaces with `kubectl get ns`.
 
@@ -48,7 +48,7 @@ Istio is a very feature-rich service mesh that includes the following capabiliti
 - Observability: Implemented in the sidecar proxy.
 - Security and Authentication: The Citadel component does key and certificate management.
 
-# Run an example in Kubernetes
+## Run an example in Kubernetes
 
 I'm going to use this example: [microservices-demo](https://github.com/GoogleCloudPlatform/microservices-demo.git).
 
@@ -101,7 +101,7 @@ You can now see the proxy inside any pod with `kubectl describe pod <a-pod-name>
 
 <img src="/static/images/blog/istio-setup-13.png" alt="see the Istio container inside the pod" />
 
-# Install Istio integrations for visualization and monitoring (Kiali, Grafana, Prometheus, and Jaeger)
+## Install Istio integrations for visualization and monitoring (Kiali, Grafana, Prometheus, and Jaeger)
 
 We are going to use these [add-ons](https://github.com/istio/istio/tree/master/samples/addons).
 

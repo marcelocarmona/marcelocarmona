@@ -7,13 +7,13 @@ summary: "$parsers and $formatters are used in AngularJS's ngModel directive to 
 draft: false
 ---
 
-# $parsers
+## $parsers
 
 It is an array of functions to execute. These functions run in order, like a pipeline, every time the control reads a DOM value. The functions are called in array order, the result of each function becomes the input for the next function, and the final return value is sent to the `$validators` collection.
 
 If the parser returns `undefined`, it means an error occurred. `$validators` will not be executed, and `ngModel` will be set to `undefined` unless `ngModelOptions.allowInvalid` is set to `true`. The parse error is stored in `ngModel.$error.parse`.
 
-# $formatters
+## $formatters
 
 It is an array of functions that are executed in the pipeline when `ngModel` changes. The functions are called in reverse order, and each one passes its value back to the next.
 The last returned value is used as the DOM value.
