@@ -1,5 +1,6 @@
 ---
 title: Evitar re-renders innecesarios con React.memo
+summary: 'Evita re-renders innecesarios de componentes en React con React.memo, PureComponent y shouldComponentUpdate.'
 lang: es
 date: '2019-11-21'
 translationKey: react-memo

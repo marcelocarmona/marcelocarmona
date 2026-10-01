@@ -1,5 +1,6 @@
 ---
 title: Parseo y formateo en AngularJS
+summary: 'Cómo $parsers y $formatters convierten datos entre la vista y el modelo en la directiva ngModel de AngularJS.'
 lang: es
 date: '2015-10-16'
 translationKey: angular-parsers-formatters

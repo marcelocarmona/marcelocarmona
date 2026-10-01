@@ -1,5 +1,6 @@
 ---
 title: Angular 1.5 métodos del ciclo de vida
+summary: 'Cómo usar los métodos del ciclo de vida de los componentes en Angular 1.5: $onInit, $postLink, $onChanges y $onDestroy.'
 lang: es
 date: '2016-08-08'
 translationKey: angular-lifecycle-hooks

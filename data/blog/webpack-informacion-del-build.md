@@ -1,5 +1,6 @@
 ---
 title: Información del progreso de build en Webpack
+summary: 'Tres alternativas simples, basadas en plugins, para mostrar en desarrollo el progreso del build de webpack y el tamaño de módulos y bundles.'
 lang: es
 date: 2016-09-05
 translationKey: webpack-progress

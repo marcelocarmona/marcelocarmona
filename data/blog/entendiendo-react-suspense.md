@@ -1,5 +1,6 @@
 ---
 title: Entendiendo React.Suspense
+summary: 'React Suspense permite pausar un render hasta que termine una tarea, como cargar datos desde una API, mostrando un estado de carga mientras tanto.'
 author: Marcelo Carmona
 lang: es
 date: '2018-12-04'
