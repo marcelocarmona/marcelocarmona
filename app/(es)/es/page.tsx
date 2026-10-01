@@ -29,6 +29,8 @@ export const metadata = {
     locale: 'es',
     alternateLocales: ['en'],
   }),
+  // Nested under the (es) layout, so the "%s - Marcelo Carmona" template would apply.
+  title: { absolute: title },
   alternates: {
     canonical: getHomePath('es'),
     languages: {
