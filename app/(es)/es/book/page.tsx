@@ -4,7 +4,7 @@ import { buildPageMetadata } from '@/lib/metadata'
 import BookPage from '../../../_shared/BookPage'
 
 const title = 'Reservar llamada'
-const description = `Reserva una llamada con ${siteMetadata.author}`
+const description = `Reserva una llamada con ${siteMetadata.author}. Elige un horario que funcione para ti y la reunión se confirma automáticamente.`
 
 export const metadata = {
   ...buildPageMetadata({

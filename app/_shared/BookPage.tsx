@@ -10,7 +10,7 @@ const bookCopy: Record<Locale, { title: string; description: string }> = {
   },
   es: {
     title: 'Reservar llamada',
-    description: 'Elige un horario que funcione para ti y la confirmacion se hara automaticamente.',
+    description: 'Elige un horario que funcione para ti y la confirmación se hará automáticamente.',
   },
 }
 
