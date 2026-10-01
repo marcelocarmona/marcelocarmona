@@ -7,7 +7,7 @@ tags: ['Angularjs', 'JavaScript']
 ---
 
 En Angular 1.5, los componentes tienen un ciclo de vida bien definido. Por medio de los lifecycle hooks, podemos enganchar funciones que ayudan a modificar su comportamiento. Vamos a ver qué rol tiene cada uno de estos hooks y por qué deberías usarlos. Es importante entenderlos si estás pensando en una aplicación basada en componentes.
-Los ejemplos los voy a escribir en ES6, así que si todavía no empezaste a usar AngularJS con ES6, te recomiendo este repo que puede servir como boilerplate: <a href="https://github.com/angularclass/NG6-starter" target="_blank" rel="noopener"> https://github.com/angularclass/NG6-starter</a>
+Los ejemplos los voy a escribir en ES6, así que si todavía no empezaste a usar AngularJS con ES6, te recomiendo este repo que puede servir como boilerplate: [https://github.com/angularclass/NG6-starter](https://github.com/angularclass/NG6-starter)
 
 # $onInit
 
@@ -28,7 +28,7 @@ Angular 2 tiene el método `ngOnInit`, el cual nos servirá para la transición 
 
 ## require
 
-Anteriormente, con las directivas, usábamos "require" para heredar métodos de otras directivas, y su sintaxis nos permitía usar un string o un array (puedes buscarlo en la documentación de la API: <a href="https://docs.angularjs.org/api/ng/service/$compile" target="_blank" rel="noopener">https://docs.angularjs.org/api/ng/service/$compile</a>).
+Anteriormente, con las directivas, usábamos "require" para heredar métodos de otras directivas, y su sintaxis nos permitía usar un string o un array (puedes buscarlo en la documentación de la API: [https://docs.angularjs.org/api/ng/service/\$compile](https://docs.angularjs.org/api/ng/service/$compile)).
 Con el uso de componentes vamos a poder utilizar "require" usando un string.
 
 ```javascript
