@@ -18,4 +18,7 @@ Es un array de funciones que se ejecutan en pipeline cuando el `ngModel` cambia.
 
 En la siguiente imagen, se puede observar que los parsers se utilizan para transformar los datos de la vista al modelo, y los formatters, del modelo a la vista.
 
-<img src="/static/images/blog/ng-model-flow.png" />
+<img
+  src="/static/images/blog/ng-model-flow.png"
+  alt="Flujo de datos de ngModel: los parsers transforman valores de la vista al modelo y los formatters del modelo a la vista"
+/>
