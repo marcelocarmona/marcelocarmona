@@ -6,7 +6,8 @@ import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
 const title = 'Tags en español'
-const description = 'Temas sobre los que escribo en español'
+const description =
+  'Explora los artículos en español por tema: React, TypeScript, JavaScript, RxJS, webpack y AngularJS.'
 
 export const metadata = {
   ...buildPageMetadata({

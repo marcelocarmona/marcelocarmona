@@ -6,7 +6,8 @@ import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
 const title = 'Tags'
-const description = 'Things I blog about'
+const description =
+  'Browse articles by topic: React, Next.js, TypeScript, AWS, Kubernetes, distributed systems, and more.'
 
 export const metadata = {
   ...buildPageMetadata({
