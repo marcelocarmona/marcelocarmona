@@ -46,6 +46,14 @@ npm run serve
 
 The app runs at `http://localhost:3000`.
 
+Run the checks used in CI:
+
+```bash
+npm run lint:check
+npm test
+npm run build
+```
+
 ## Environment variables
 
 Use `.env.example` as a starting point for `.env.local`.
@@ -60,11 +68,11 @@ If you are only editing content, layout, or styles, you can usually leave them u
 
 ## Where to edit
 
-- `data/siteMetadata.js`: site metadata, social links, analytics, comments, newsletter settings
+- `data/siteMetadata.ts`: site metadata, social links, analytics, comments, newsletter settings
 - `data/blog/`: blog posts in `.md` or `.mdx`
 - `data/authors/default.md`: author profile
-- `data/projectsData.js`: projects page data
-- `data/headerNavLinks.js`: navigation links
+- `data/projectsData.ts`: projects page data
+- `data/headerNavLinks.ts`: navigation links
 - `data/ui/`: localized UI copy
 - `app/`: routes, metadata, feeds, robots, sitemap
 - `components/`: shared UI, embeds, analytics, and comments
