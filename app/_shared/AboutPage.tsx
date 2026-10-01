@@ -32,7 +32,7 @@ export const aboutCopy: Record<
     occupation: 'Software engineer',
   },
   es: {
-    title: 'Acerca de mi',
+    title: 'Acerca de mí',
     intro:
       'Hola, soy Marcelo Carmona, ingeniero de software enfocado en arquitectura frontend, React, Next.js y rendimiento web.',
     body: [

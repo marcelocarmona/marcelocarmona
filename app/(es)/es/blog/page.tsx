@@ -6,8 +6,8 @@ import { buildPageMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
-const title = 'Blog en espanol'
-const description = `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
+const title = 'Blog en español'
+const description = `Artículos en español de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
 
 export const metadata = {
   ...buildPageMetadata({
@@ -50,7 +50,7 @@ export default async function SpanishBlogPage() {
         initialDisplayPosts={initialDisplayPosts}
         locale="es"
         pagination={pagination}
-        title="Todos los Articulos"
+        title="Todos los Artículos"
       />
     </>
   )

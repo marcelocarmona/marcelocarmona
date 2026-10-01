@@ -14,7 +14,7 @@ export async function GET(_request: Request, { params }: TagPageProps) {
   )
   const rss = generateRss(posts, `es/tags/${tag}/feed.xml`, {
     title: `${siteMetadata.title} - ${tag} (ES)`,
-    description: `Articulos en espanol sobre ${tag}.`,
+    description: `Artículos en español sobre ${tag}.`,
     language: 'es-es',
     link: `${siteMetadata.siteUrl}/es/tags/${tag}`,
   })

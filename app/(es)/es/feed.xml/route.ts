@@ -8,7 +8,7 @@ export async function GET() {
   const posts = await getAllFilesFrontMatter('blog', { locale: 'es' })
   const rss = generateRss(posts, 'es/feed.xml', {
     title: `${siteMetadata.title} - ES`,
-    description: 'Articulos en espanol sobre desarrollo web y software.',
+    description: 'Artículos en español sobre desarrollo web y software.',
     language: 'es-es',
     link: `${siteMetadata.siteUrl}/es/blog`,
   })

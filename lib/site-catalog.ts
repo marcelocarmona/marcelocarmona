@@ -27,7 +27,7 @@ export const PUBLIC_STATIC_PAGES = [
     title: 'Inicio',
     locale: 'es',
     path: getHomePath('es'),
-    description: 'Articulos en espanol sobre React, Next.js, rendimiento web y arquitectura.',
+    description: 'Artículos en español sobre React, Next.js, rendimiento web y arquitectura.',
   },
   {
     title: 'Blog',
@@ -39,7 +39,7 @@ export const PUBLIC_STATIC_PAGES = [
     title: 'Blog',
     locale: 'es',
     path: getBlogPath('es'),
-    description: 'Articulos tecnicos en espanol por Marcelo Carmona.',
+    description: 'Artículos técnicos en español por Marcelo Carmona.',
   },
   {
     title: 'Guides',
@@ -48,7 +48,7 @@ export const PUBLIC_STATIC_PAGES = [
     description: 'Clustered learning paths by topic.',
   },
   {
-    title: 'Guias',
+    title: 'Guías',
     locale: 'es',
     path: getGuidesPath('es'),
     description: 'Rutas de aprendizaje agrupadas por tema.',
@@ -63,7 +63,7 @@ export const PUBLIC_STATIC_PAGES = [
     title: 'Etiquetas',
     locale: 'es',
     path: getTagsPath('es'),
-    description: 'Explora articulos en espanol por etiqueta.',
+    description: 'Explora artículos en español por etiqueta.',
   },
   {
     title: 'Book a Call',

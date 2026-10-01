@@ -2,7 +2,7 @@ import { getGuidesPath } from '@/lib/i18n/routes'
 import { buildPageMetadata } from '@/lib/metadata'
 import GuidesPage from '../../../_shared/GuidesPage'
 
-const title = 'Guias'
+const title = 'Guías'
 const description = 'Rutas de aprendizaje sobre React, arquitectura frontend y rendimiento web.'
 
 export const metadata = {

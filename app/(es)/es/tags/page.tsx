@@ -5,8 +5,8 @@ import { buildPageMetadata } from '@/lib/metadata'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
-const title = 'Tags en espanol'
-const description = 'Temas sobre los que escribo en espanol'
+const title = 'Tags en español'
+const description = 'Temas sobre los que escribo en español'
 
 export const metadata = {
   ...buildPageMetadata({

@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: PageNumberProps) {
   const pageNumber = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage
   const canonicalPath = getBlogPagePath('es', pageNumber)
   const englishPath = getBlogPagePath('en', pageNumber)
-  const title = `Blog en espanol - Pagina ${pageNumber}`
-  const description = `Articulos en espanol de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
+  const title = `Blog en español - Página ${pageNumber}`
+  const description = `Artículos en español de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
 
   return {
     ...buildPageMetadata({
@@ -79,7 +79,7 @@ export default async function SpanishBlogPaginationPage({ params }: PageNumberPr
         initialDisplayPosts={initialDisplayPosts}
         locale="es"
         pagination={pagination}
-        title="Todos los Articulos"
+        title="Todos los Artículos"
       />
     </>
   )

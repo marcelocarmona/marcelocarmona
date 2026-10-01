@@ -3,7 +3,7 @@ import Link from '@/components/Link'
 const recoveryLinks = [
   { href: '/', label: 'Home', description: 'Latest technical writing and site overview.' },
   { href: '/blog', label: 'Blog index', description: 'Every English article, paginated.' },
-  { href: '/es', label: 'Inicio (Espanol)', description: 'Spanish home and articles.' },
+  { href: '/es', label: 'Inicio (Español)', description: 'Spanish home and articles.' },
   { href: '/guides', label: 'Guides', description: 'Clustered learning paths by topic.' },
   { href: '/tags', label: 'Tags', description: 'Browse articles by topic tag.' },
 ]

@@ -21,7 +21,7 @@ export const LOCALE_DETAILS: Record<
   es: {
     dateLocale: 'es-ES',
     hrefLang: 'es-ES',
-    label: 'Espanol',
+    label: 'Español',
     prefix: '/es',
   },
 }

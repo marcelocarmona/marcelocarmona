@@ -220,7 +220,7 @@ describe('visible Markdown discovery', () => {
       })
     )
 
-    expect(controls).toContain('aria-label="Ver este articulo como Markdown para agentes de IA"')
+    expect(controls).toContain('aria-label="Ver este artículo como Markdown para agentes de IA"')
   })
 })
 

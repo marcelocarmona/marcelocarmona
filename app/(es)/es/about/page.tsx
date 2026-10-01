@@ -3,7 +3,7 @@ import { getAboutPath } from '@/lib/i18n/routes'
 import { buildPageMetadata } from '@/lib/metadata'
 import AboutPage from '../../../_shared/AboutPage'
 
-const title = 'Acerca de mi'
+const title = 'Acerca de mí'
 const description = `Acerca de ${siteMetadata.author}`
 
 export const metadata = {

@@ -371,8 +371,8 @@ async function buildHomeDocument(locale: Locale): Promise<MarkdownDocument> {
       posts: posts.slice(0, POSTS_PER_PAGE),
       extraLines: [
         `- Language: ${getLanguageLabel(locale)} (${toHreflang(locale)})`,
-        `- ${link(isSpanish ? 'Todos los articulos' : 'All articles', absoluteUrl(getBlogPath(locale)))}`,
-        `- ${link(isSpanish ? 'Guias' : 'Guides', absoluteUrl(getGuidesPath(locale)))}`,
+        `- ${link(isSpanish ? 'Todos los artículos' : 'All articles', absoluteUrl(getBlogPath(locale)))}`,
+        `- ${link(isSpanish ? 'Guías' : 'Guides', absoluteUrl(getGuidesPath(locale)))}`,
         `- ${link(isSpanish ? 'Etiquetas' : 'Tags', absoluteUrl(getTagsPath(locale)))}`,
       ],
     }),
@@ -398,7 +398,7 @@ async function buildBlogDocument(locale: Locale, page: number): Promise<Markdown
   return {
     status: 200,
     body: renderListingMarkdown({
-      title: locale === 'es' ? 'Todos los articulos' : 'All Posts',
+      title: locale === 'es' ? 'Todos los artículos' : 'All Posts',
       intro: siteMetadata.description,
       canonicalPath: getBlogPagePath(locale, page),
       posts: pagePosts,
@@ -416,7 +416,7 @@ async function buildTagsIndexDocument(locale: Locale): Promise<MarkdownDocument>
     body: compact([
       `# ${locale === 'es' ? 'Etiquetas' : 'Tags'}`,
       '',
-      `> ${locale === 'es' ? 'Explora articulos por etiqueta.' : 'Browse articles by topic tag.'}`,
+      `> ${locale === 'es' ? 'Explora artículos por etiqueta.' : 'Browse articles by topic tag.'}`,
       '',
       `- Canonical URL: ${absoluteUrl(getTagsPath(locale))}`,
       `- Language: ${getLanguageLabel(locale)} (${toHreflang(locale)})`,
@@ -466,7 +466,7 @@ async function buildGuidesDocument(locale: Locale): Promise<MarkdownDocument> {
   return {
     status: 200,
     body: renderListingMarkdown({
-      title: locale === 'es' ? 'Guias' : 'Guides',
+      title: locale === 'es' ? 'Guías' : 'Guides',
       intro:
         locale === 'es'
           ? 'Rutas de aprendizaje agrupadas por tema.'

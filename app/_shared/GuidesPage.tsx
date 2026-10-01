@@ -55,9 +55,9 @@ const guideCopy: Record<
     ],
   },
   es: {
-    title: 'Guias',
-    description: 'Explora rutas de aprendizaje por tema y profundiza con articulos relacionados.',
-    viewAll: (title: string) => `Ver todos los articulos de ${title}`,
+    title: 'Guías',
+    description: 'Explora rutas de aprendizaje por tema y profundiza con artículos relacionados.',
+    viewAll: (title: string) => `Ver todos los artículos de ${title}`,
     clusters: [
       {
         id: 'react-performance',

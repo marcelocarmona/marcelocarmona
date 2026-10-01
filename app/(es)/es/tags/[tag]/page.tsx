@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: TagPageProps) {
     languageAlternates['x-default'] = getTagPath('en', tag)
   }
   const title = tag
-  const description = `Articulos etiquetados con ${tag} por ${siteMetadata.author}`
+  const description = `Artículos etiquetados con ${tag} por ${siteMetadata.author}`
 
   return {
     ...buildPageMetadata({
