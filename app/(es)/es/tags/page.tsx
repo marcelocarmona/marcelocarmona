@@ -5,7 +5,7 @@ import { buildPageMetadata } from '@/lib/metadata'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
-const title = 'Tags en español'
+const title = 'Etiquetas'
 const description =
   'Explora los artículos en español por tema: React, TypeScript, JavaScript, RxJS, webpack y AngularJS.'
 
@@ -38,11 +38,11 @@ export default async function SpanishTagsPage() {
     >
       <div className="space-x-2 pb-8 pt-6 md:space-y-5">
         <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:border-r md:border-border md:px-6 md:text-5xl">
-          Tags
+          {title}
         </h1>
       </div>
       <div className="flex max-w-lg flex-wrap">
-        {Object.keys(tags).length === 0 && 'No tags found.'}
+        {Object.keys(tags).length === 0 && 'No se encontraron etiquetas.'}
         {sortedTags.map((tag) => (
           <div key={tag} className="mb-2 mr-5 mt-2">
             <Tag locale="es" text={tag} />
