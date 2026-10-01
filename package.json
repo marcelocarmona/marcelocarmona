@@ -63,7 +63,7 @@
     "@next/bundle-analyzer": "^16.3.8",
     "@svgr/webpack": "^8.1.0",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^25.7.0",
+    "@types/node": "^24.19.0",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "cross-env": "^10.1.0",
