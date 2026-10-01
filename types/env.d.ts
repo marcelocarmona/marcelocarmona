@@ -17,8 +17,6 @@ declare namespace NodeJS {
     CONVERTKIT_FORM_ID?: string
     KLAVIYO_API_KEY?: string
     KLAVIYO_LIST_ID?: string
-    REVUE_API_URL?: string
-    REVUE_API_KEY?: string
     EMAILOCTOPUS_API_URL?: string
     EMAILOCTOPUS_API_KEY?: string
     EMAILOCTOPUS_LIST_ID?: string

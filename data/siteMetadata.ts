@@ -34,7 +34,7 @@ const siteMetadata: SiteMetadata = {
     vercelSpeedInsights: true, // true or false
   },
   newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
+    // supports mailchimp, buttondown, convertkit, klaviyo, emailoctopus
     // Please add your .env file and modify it according to your selection
     provider: '',
   },
