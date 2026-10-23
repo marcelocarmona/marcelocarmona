@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation'
 
 import ListLayout from '@/layouts/ListLayout'
-import siteMetadata from '@/data/siteMetadata'
-import { getTagPath } from '@/lib/i18n/routes'
-import { buildPageMetadata } from '@/lib/metadata'
+import { SUPPORTED_LOCALES } from '@/lib/i18n/config'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
@@ -16,36 +15,18 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: TagPageProps) {
   const { tag } = await params
-  const englishTags = await getAllTags('blog', { locale: 'en' })
-  const spanishTags = await getAllTags('blog', { locale: 'es' })
-  const hasSpanishVersion = Object.prototype.hasOwnProperty.call(spanishTags, tag)
-  const languageAlternates: Record<string, string> = {
-    'en-US': getTagPath('en', tag),
-    'x-default': getTagPath('en', tag),
+  const tagsByLocale = {
+    en: await getAllTags('blog', { locale: 'en' }),
+    es: await getAllTags('blog', { locale: 'es' }),
   }
-  if (hasSpanishVersion) {
-    languageAlternates['es-ES'] = getTagPath('es', tag)
-  }
-  const title = tag
-  const postCount = englishTags[tag] ?? 0
-  const description = `Browse ${postCount} ${postCount === 1 ? 'post' : 'posts'} tagged ${tag} by ${siteMetadata.author}.`
 
-  return {
-    ...buildPageMetadata({
-      title,
-      description,
-      path: getTagPath('en', tag),
-      locale: 'en',
-      alternateLocales: hasSpanishVersion ? ['es'] : [],
-    }),
-    alternates: {
-      canonical: getTagPath('en', tag),
-      languages: languageAlternates,
-      types: {
-        'application/rss+xml': `${getTagPath('en', tag)}/feed.xml`,
-      },
-    },
-  }
+  return localizedMetadata({
+    kind: 'tag',
+    locale: 'en',
+    tag,
+    postCount: tagsByLocale.en[tag] ?? 0,
+    availableLocales: SUPPORTED_LOCALES.filter((locale) => tag in tagsByLocale[locale]),
+  })
 }
 
 export default async function TagPage({ params }: TagPageProps) {

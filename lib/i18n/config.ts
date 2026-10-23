@@ -9,6 +9,7 @@ export const LOCALE_DETAILS: Record<
     dateLocale: string
     hrefLang: string
     label: string
+    openGraphLocale: string
     prefix: string
   }
 > = {
@@ -16,12 +17,14 @@ export const LOCALE_DETAILS: Record<
     dateLocale: 'en-US',
     hrefLang: 'en-US',
     label: 'English',
+    openGraphLocale: 'en_US',
     prefix: '',
   },
   es: {
     dateLocale: 'es-ES',
     hrefLang: 'es-ES',
     label: 'Español',
+    openGraphLocale: 'es_ES',
     prefix: '/es',
   },
 }
@@ -57,4 +60,8 @@ export function getLanguageLabel(locale: LocaleInput): string {
 
 export function toHreflang(locale: LocaleInput): string {
   return getLocaleConfig(locale).hrefLang
+}
+
+export function toOpenGraphLocale(locale: LocaleInput): string {
+  return getLocaleConfig(locale).openGraphLocale
 }

@@ -1,34 +1,10 @@
 import ListLayout from '@/layouts/ListLayout'
 import PaginationLinkTags from '@/components/PaginationLinkTags'
-import siteMetadata from '@/data/siteMetadata'
-import { getBlogPath, getFeedPath } from '@/lib/i18n/routes'
-import { buildPageMetadata } from '@/lib/metadata'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 
-const title = 'Blog en español'
-const description = `Artículos en español de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
-
-export const metadata = {
-  ...buildPageMetadata({
-    title,
-    description,
-    path: getBlogPath('es'),
-    locale: 'es',
-    alternateLocales: ['en'],
-  }),
-  alternates: {
-    canonical: getBlogPath('es'),
-    languages: {
-      'en-US': getBlogPath('en'),
-      'es-ES': getBlogPath('es'),
-      'x-default': getBlogPath('en'),
-    },
-    types: {
-      'application/rss+xml': getFeedPath('es'),
-    },
-  },
-}
+export const metadata = localizedMetadata({ kind: 'blog', locale: 'es' })
 
 export default async function SpanishBlogPage() {
   const posts = await getAllFilesFrontMatter('blog', { locale: 'es' })

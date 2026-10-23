@@ -2,16 +2,11 @@ import { notFound, permanentRedirect } from 'next/navigation'
 
 import PageTitle from '@/components/PageTitle'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
-import siteMetadata from '@/data/siteMetadata'
 import { getLanguageLabel } from '@/lib/i18n/config'
 import { getPostPath } from '@/lib/i18n/routes'
-import { markdownSiblingPath } from '@/lib/content-negotiation'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug } from '@/lib/mdx'
-import {
-  buildLanguageAlternates,
-  getRelatedPosts,
-  getTranslationsForPost,
-} from '@/lib/post-relations'
+import { localizedMetadata } from '@/lib/metadata'
+import { getRelatedPosts, getTranslationsForPost } from '@/lib/post-relations'
 import type { AuthorFrontMatter, ContentFrontMatter, Locale } from '@/types/content'
 import type { SlugPageProps } from '@/types/next'
 import type { Metadata } from 'next'
@@ -61,73 +56,17 @@ export async function generateBlogPostMetadata(
   }
 
   if (postSummary.locale !== locale) {
-    return {
-      alternates: {
-        canonical: getPostPath(postSummary),
-      },
-      robots: {
-        index: false,
-        follow: true,
-      },
-    }
+    return localizedMetadata({ kind: 'post', locale, post: postSummary, translations: [] })
   }
 
-  const post = await getFileBySlug('blog', slug)
-  const frontMatter = post.frontMatter
-  const languageAlternates = buildLanguageAlternates(allPosts, frontMatter)
-  const translatedPosts = getTranslationsForPost(allPosts, frontMatter)
-  const openGraphLocale = frontMatter.locale === 'es' ? 'es_ES' : 'en_US'
-  const openGraphAlternateLocales = translatedPosts.map((translatedPost) =>
-    translatedPost.locale === 'es' ? 'es_ES' : 'en_US'
-  )
-  const image = frontMatter.images?.[0] || siteMetadata.socialBanner
-  const imageUrl = image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`
-  const articlePath = getPostPath(frontMatter)
-  const canonicalPath = frontMatter.canonicalUrl || articlePath
-  const alternates: {
-    canonical: string
-    languages?: Record<string, string>
-    types: Record<string, string>
-  } = {
-    canonical: canonicalPath,
-    types: {
-      'text/markdown': markdownSiblingPath(articlePath),
-    },
-  }
+  const { frontMatter } = await getFileBySlug('blog', slug)
 
-  if (Object.keys(languageAlternates).length > 0) {
-    alternates.languages = languageAlternates
-  }
-
-  return {
-    title: frontMatter.title,
-    description: frontMatter.summary || siteMetadata.description,
-    authors: [{ name: siteMetadata.author, url: `${siteMetadata.siteUrl}/about` }],
-    creator: siteMetadata.author,
-    publisher: siteMetadata.author,
-    category: frontMatter.tags?.[0],
-    alternates,
-    openGraph: {
-      title: frontMatter.title,
-      description: frontMatter.summary || siteMetadata.description,
-      type: 'article',
-      siteName: siteMetadata.title,
-      url: `${siteMetadata.siteUrl}${articlePath}`,
-      images: [imageUrl],
-      authors: [`${siteMetadata.siteUrl}/about`],
-      tags: frontMatter.topics || frontMatter.tags || [],
-      locale: openGraphLocale,
-      alternateLocale: openGraphAlternateLocales,
-      publishedTime: frontMatter.date || undefined,
-      modifiedTime: frontMatter.lastmod || frontMatter.date || undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: frontMatter.title,
-      description: frontMatter.summary || siteMetadata.description,
-      images: [imageUrl],
-    },
-  }
+  return localizedMetadata({
+    kind: 'post',
+    locale,
+    post: frontMatter,
+    translations: getTranslationsForPost(allPosts, frontMatter),
+  })
 }
 
 export default async function BlogPostPage({

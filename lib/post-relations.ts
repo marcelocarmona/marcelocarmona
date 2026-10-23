@@ -1,5 +1,3 @@
-import { toHreflang } from './locales'
-import { getPostPath } from './i18n/routes'
 import type { ContentFrontMatter } from '@/types/content'
 
 export function getTranslationsForPost(
@@ -16,27 +14,6 @@ export function getTranslationsForPost(
       post.translationKey === frontMatter.translationKey &&
       post.slug !== frontMatter.slug
   )
-}
-
-export function buildLanguageAlternates(
-  posts: ContentFrontMatter[],
-  frontMatter: ContentFrontMatter
-): Record<string, string> {
-  const translations = [frontMatter, ...getTranslationsForPost(posts, frontMatter)]
-  if (translations.length <= 1) {
-    return {}
-  }
-
-  const languageAlternates: Record<string, string> = {}
-  translations.forEach((post) => {
-    languageAlternates[toHreflang(post.locale)] = getPostPath(post)
-  })
-
-  if (languageAlternates['en-US']) {
-    languageAlternates['x-default'] = languageAlternates['en-US']
-  }
-
-  return languageAlternates
 }
 
 export function getRelatedPosts(

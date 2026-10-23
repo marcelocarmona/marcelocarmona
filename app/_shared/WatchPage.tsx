@@ -9,6 +9,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { getLanguageLabel } from '@/lib/i18n/config'
 import { getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
+import { localizedMetadata } from '@/lib/metadata'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug } from '@/lib/mdx'
 import { getTranslationsForPost } from '@/lib/post-relations'
 import { getVideoPosts } from '@/lib/video'
@@ -28,33 +29,6 @@ const postDateTemplate: Intl.DateTimeFormatOptions = {
 
 function hasVideo(post: ContentFrontMatter): post is VideoPost {
   return Boolean(post.video?.watchPagePath)
-}
-
-function buildWatchAlternates(
-  posts: ContentFrontMatter[],
-  frontMatter: ContentFrontMatter
-): Record<string, string> {
-  const translations = [frontMatter, ...getTranslationsForPost(posts, frontMatter)].filter(hasVideo)
-
-  if (translations.length <= 1) {
-    return {}
-  }
-
-  const alternates: Record<string, string> = {}
-
-  translations.forEach((post) => {
-    alternates[post.locale === 'es' ? 'es-ES' : 'en-US'] = post.video.watchPagePath
-  })
-
-  if (alternates['en-US']) {
-    alternates['x-default'] = alternates['en-US']
-  }
-
-  return alternates
-}
-
-function toOpenGraphLocale(locale: Locale): string {
-  return locale === 'es' ? 'es_ES' : 'en_US'
 }
 
 function getSlugFromParts(slugParts: string[] | undefined): string | null {
@@ -106,60 +80,20 @@ export async function generateWatchMetadata(
   }
 
   if (post.locale !== locale) {
-    return {
-      alternates: {
-        canonical: post.video.watchPagePath,
-      },
-      robots: {
-        index: false,
-        follow: true,
-      },
-    }
+    return localizedMetadata({ kind: 'watch', locale, post, translations: [] })
   }
 
-  const frontMatter = (await getFileBySlug('blog', post.slug)).frontMatter
-  const video = frontMatter.video
-  if (!video) {
+  const { frontMatter } = await getFileBySlug('blog', post.slug)
+  if (!hasVideo(frontMatter)) {
     return {}
   }
-  const pageUrl = `${siteMetadata.siteUrl}${video.watchPagePath}`
-  const alternates: { canonical: string; languages?: Record<string, string> } = {
-    canonical: video.watchPagePath,
-  }
-  const languageAlternates = buildWatchAlternates(allPosts, frontMatter)
-  const translatedPosts = getTranslationsForPost(allPosts, frontMatter).filter(hasVideo)
 
-  if (Object.keys(languageAlternates).length > 0) {
-    alternates.languages = languageAlternates
-  }
-
-  // Distinguish the watch page from the article it embeds, which shares video.title.
-  const pageTitle = `${video.title} (${getUiCopy(frontMatter.locale).video.watchPageLabel})`
-
-  return {
-    title: pageTitle,
-    description: video.description || frontMatter.summary || siteMetadata.description,
-    alternates,
-    openGraph: {
-      title: pageTitle,
-      description: video.description || frontMatter.summary || siteMetadata.description,
-      type: 'video.other',
-      url: pageUrl,
-      images: [video.thumbnailUrl],
-      locale: toOpenGraphLocale(frontMatter.locale),
-      alternateLocale: translatedPosts.map((translatedPost) =>
-        toOpenGraphLocale(translatedPost.locale)
-      ),
-      publishedTime: video.uploadDate || frontMatter.date || undefined,
-      modifiedTime: frontMatter.lastmod || video.uploadDate || frontMatter.date || undefined,
-    } as any,
-    twitter: {
-      card: 'summary_large_image',
-      title: pageTitle,
-      description: video.description || frontMatter.summary || siteMetadata.description,
-      images: [video.thumbnailUrl],
-    },
-  }
+  return localizedMetadata({
+    kind: 'watch',
+    locale,
+    post: frontMatter,
+    translations: getTranslationsForPost(allPosts, frontMatter),
+  })
 }
 
 export default async function WatchPage({

@@ -6,40 +6,19 @@ import NewsletterForm from '@/components/NewsletterForm'
 import Tag from '@/components/Tag'
 import { DisplayTitle, Typeset } from '@/components/ui/typography'
 import siteMetadata from '@/data/siteMetadata'
-import { getBlogPath, getFeedPath, getHomePath, getPostPath } from '@/lib/i18n/routes'
+import { getBlogPath, getPostPath } from '@/lib/i18n/routes'
 import { getUiCopy } from '@/lib/i18n/ui'
-import { buildPageMetadata } from '@/lib/metadata'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { hasMeaningfulUpdate } from '@/lib/posts'
 import formatDate from '@/lib/utils/formatDate'
 
 const MAX_DISPLAY = 5
-const title = 'Software Engineer | Frontend, Cloud, AI | Marcelo Carmona'
-const description = siteMetadata.description
 const headline = 'I build web products, cloud infrastructure, and AI tooling.'
 const intro =
   'I work across frontend architecture, cloud infrastructure, and delivery workflows to turn product ideas into maintainable software. I care about clear interfaces, resilient systems, and engineering decisions that help teams move with confidence.'
 
-export const metadata = {
-  ...buildPageMetadata({
-    title,
-    description,
-    path: getHomePath('en'),
-    locale: 'en',
-    alternateLocales: ['es'],
-  }),
-  alternates: {
-    canonical: getHomePath('en'),
-    languages: {
-      'en-US': getHomePath('en'),
-      'es-ES': getHomePath('es'),
-      'x-default': getHomePath('en'),
-    },
-    types: {
-      'application/rss+xml': getFeedPath('en'),
-    },
-  },
-}
+export const metadata = localizedMetadata({ kind: 'home', locale: 'en' })
 
 export default async function HomePage() {
   const posts = await getAllFilesFrontMatter('blog', { locale: 'en' })

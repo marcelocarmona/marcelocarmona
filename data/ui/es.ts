@@ -1,4 +1,42 @@
+import siteMetadata from '@/data/siteMetadata'
+
 const esUi = {
+  meta: {
+    home: {
+      title: 'Ingeniero de Software | Frontend, Cloud, IA | Marcelo Carmona',
+      description:
+        'Notas de ingeniería de software sobre productos web, arquitectura frontend, infraestructura cloud y entrega mantenible por Marcelo Carmona.',
+    },
+    blog: {
+      title: 'Blog en español',
+      description: `Artículos en español de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`,
+    },
+    blogPage: (pageNumber: number) => ({
+      title: `Blog en español - Página ${pageNumber}`,
+      description: `Artículos en español de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`,
+    }),
+    tags: {
+      title: 'Etiquetas',
+      description:
+        'Explora los artículos en español por tema: React, TypeScript, JavaScript, RxJS, webpack y AngularJS.',
+    },
+    tag: (tag: string, postCount: number) => ({
+      title: tag,
+      description: `Explora ${postCount} ${postCount === 1 ? 'artículo etiquetado' : 'artículos etiquetados'} con ${tag} por ${siteMetadata.author}.`,
+    }),
+    about: {
+      title: 'Acerca de mí',
+      description: `${siteMetadata.author} es ingeniero de software enfocado en arquitectura frontend, React, Next.js y rendimiento web.`,
+    },
+    book: {
+      title: 'Reservar llamada',
+      description: `Reserva una llamada con ${siteMetadata.author}. Elige un horario que funcione para ti y la reunión se confirma automáticamente.`,
+    },
+    guides: {
+      title: 'Guías',
+      description: 'Rutas de aprendizaje sobre React, arquitectura frontend y rendimiento web.',
+    },
+  },
   footer: {
     bookCall: 'Reservar llamada',
     contact: 'Contacto',

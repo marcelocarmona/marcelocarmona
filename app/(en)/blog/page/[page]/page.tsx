@@ -2,9 +2,7 @@ import { notFound } from 'next/navigation'
 
 import ListLayout from '@/layouts/ListLayout'
 import PaginationLinkTags from '@/components/PaginationLinkTags'
-import siteMetadata from '@/data/siteMetadata'
-import { getBlogPagePath } from '@/lib/i18n/routes'
-import { buildPageMetadata } from '@/lib/metadata'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 import type { PageNumberProps } from '@/types/next'
@@ -13,28 +11,8 @@ export async function generateMetadata({ params }: PageNumberProps) {
   const { page } = await params
   const parsedPage = parseInt(page, 10)
   const pageNumber = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage
-  const canonicalPath = getBlogPagePath('en', pageNumber)
-  const spanishPath = getBlogPagePath('es', pageNumber)
-  const title = `Blog Page ${pageNumber}`
-  const description = siteMetadata.description
 
-  return {
-    ...buildPageMetadata({
-      title,
-      description,
-      path: canonicalPath,
-      locale: 'en',
-      alternateLocales: ['es'],
-    }),
-    alternates: {
-      canonical: canonicalPath,
-      languages: {
-        'en-US': canonicalPath,
-        'es-ES': spanishPath,
-        'x-default': canonicalPath,
-      },
-    },
-  }
+  return localizedMetadata({ kind: 'blog', locale: 'en', page: pageNumber })
 }
 
 export async function generateStaticParams() {

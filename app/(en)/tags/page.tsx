@@ -1,31 +1,11 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import { getTagsPath } from '@/lib/i18n/routes'
-import { buildPageMetadata } from '@/lib/metadata'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
-const title = 'Tags'
-const description =
-  'Browse articles by topic: React, Next.js, TypeScript, AWS, Kubernetes, distributed systems, and more.'
-
-export const metadata = {
-  ...buildPageMetadata({
-    title,
-    description,
-    path: getTagsPath('en'),
-    locale: 'en',
-    alternateLocales: ['es'],
-  }),
-  alternates: {
-    canonical: getTagsPath('en'),
-    languages: {
-      'en-US': getTagsPath('en'),
-      'es-ES': getTagsPath('es'),
-      'x-default': getTagsPath('en'),
-    },
-  },
-}
+export const metadata = localizedMetadata({ kind: 'tags', locale: 'en' })
 
 export default async function TagsPage() {
   const tags = await getAllTags('blog', { locale: 'en' })

@@ -1,22 +1,17 @@
 import Card from '@/components/Card'
 import { DisplayTitle } from '@/components/ui/typography'
 import projectsData from '@/data/projectsData'
-import { buildPageMetadata } from '@/lib/metadata'
+import { localizedMetadata } from '@/lib/metadata'
 
 const title = 'Projects'
 const description = 'Public projects and technical work by Marcelo Carmona.'
 
-export const metadata = {
-  ...buildPageMetadata({
-    title,
-    description,
-    path: '/projects',
-    locale: 'en',
-  }),
-  alternates: {
-    canonical: '/projects',
-  },
-}
+export const metadata = localizedMetadata({
+  kind: 'standalone',
+  path: '/projects',
+  title,
+  description,
+})
 
 export default function ProjectsPage() {
   return (

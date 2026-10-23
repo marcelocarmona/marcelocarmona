@@ -1,31 +1,13 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import { getTagsPath } from '@/lib/i18n/routes'
-import { buildPageMetadata } from '@/lib/metadata'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 
 const title = 'Etiquetas'
-const description =
-  'Explora los artículos en español por tema: React, TypeScript, JavaScript, RxJS, webpack y AngularJS.'
 
-export const metadata = {
-  ...buildPageMetadata({
-    title,
-    description,
-    path: getTagsPath('es'),
-    locale: 'es',
-    alternateLocales: ['en'],
-  }),
-  alternates: {
-    canonical: getTagsPath('es'),
-    languages: {
-      'en-US': getTagsPath('en'),
-      'es-ES': getTagsPath('es'),
-      'x-default': getTagsPath('en'),
-    },
-  },
-}
+export const metadata = localizedMetadata({ kind: 'tags', locale: 'es' })
 
 export default async function SpanishTagsPage() {
   const tags = await getAllTags('blog', { locale: 'es' })

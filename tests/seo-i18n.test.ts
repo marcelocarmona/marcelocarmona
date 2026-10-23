@@ -17,9 +17,8 @@ import {
 } from '../lib/i18n/routes'
 import generateRss from '../lib/generate-rss'
 import { generateAiIndex, generateLlmsFullTxt, generateLlmsTxt } from '../lib/ai-discovery'
-import { absoluteUrl, buildPageMetadata } from '../lib/metadata'
+import { absoluteUrl, localizedMetadata, type PageReference } from '../lib/metadata'
 import { getAllFilesFrontMatter } from '../lib/mdx'
-import { buildLanguageAlternates } from '../lib/post-relations'
 import { hasMeaningfulUpdate } from '../lib/posts'
 import { AI_DISCOVERY_PATHS, getPublicStaticPages } from '../lib/site-catalog'
 import formatDate from '../lib/utils/formatDate'
@@ -66,32 +65,148 @@ describe('localized route helpers', () => {
 })
 
 describe('localized alternates', () => {
-  it('builds reciprocal hreflang paths with Spanish URLs under /es', () => {
-    const posts: ContentFrontMatter[] = [
-      {
-        locale: 'en',
-        lang: 'en',
-        slug: 'how-to-comment-in-react-jsx',
-        fileName: 'how-to-comment-in-react-jsx.mdx',
-        date: null,
-        video: null,
-        translationKey: 'react-jsx-comments',
-      },
-      {
-        locale: 'es',
-        lang: 'es',
-        slug: 'comentarios-en-jsx',
-        fileName: 'comentarios-en-jsx.md',
-        date: null,
-        video: null,
-        translationKey: 'react-jsx-comments',
-      },
-    ]
+  const posts: ContentFrontMatter[] = [
+    {
+      title: 'How to comment in React JSX',
+      locale: 'en',
+      lang: 'en',
+      slug: 'how-to-comment-in-react-jsx',
+      fileName: 'how-to-comment-in-react-jsx.mdx',
+      date: null,
+      video: null,
+      translationKey: 'react-jsx-comments',
+    },
+    {
+      title: 'Comentarios en JSX',
+      locale: 'es',
+      lang: 'es',
+      slug: 'comentarios-en-jsx',
+      fileName: 'comentarios-en-jsx.md',
+      date: null,
+      video: null,
+      translationKey: 'react-jsx-comments',
+    },
+  ]
 
-    expect(buildLanguageAlternates(posts, posts[0])).toEqual({
+  it('builds reciprocal hreflang paths with Spanish URLs under /es', () => {
+    const metadata = localizedMetadata({
+      kind: 'post',
+      locale: 'en',
+      post: posts[0],
+      translations: [posts[1]],
+    })
+
+    expect(metadata.alternates?.languages).toEqual({
       'en-US': '/how-to-comment-in-react-jsx',
       'es-ES': '/es/comentarios-en-jsx',
       'x-default': '/how-to-comment-in-react-jsx',
+    })
+    expect(metadata.alternates?.types).toEqual({
+      'text/markdown': '/how-to-comment-in-react-jsx.md',
+    })
+    expect(metadata.openGraph).toMatchObject({ locale: 'en_US', alternateLocale: ['es_ES'] })
+  })
+
+  it('omits hreflang languages for a post without translations', () => {
+    const metadata = localizedMetadata({
+      kind: 'post',
+      locale: 'es',
+      post: posts[1],
+      translations: [],
+    })
+
+    expect(metadata.alternates?.languages).toBeUndefined()
+    expect((metadata.openGraph as any).alternateLocale).toBeUndefined()
+  })
+
+  it('noindexes a post requested under the wrong locale and points to its canonical', () => {
+    expect(
+      localizedMetadata({ kind: 'post', locale: 'en', post: posts[1], translations: [] })
+    ).toEqual({
+      alternates: { canonical: '/es/comentarios-en-jsx' },
+      robots: { index: false, follow: true },
+    })
+  })
+})
+
+describe('localized metadata for every page kind', () => {
+  const pages: Array<[PageReference, string, string]> = [
+    [{ kind: 'home', locale: 'en' }, '/', '/es'],
+    [{ kind: 'blog', locale: 'en' }, '/blog', '/es/blog'],
+    [{ kind: 'blog', locale: 'en', page: 2 }, '/blog/page/2', '/es/blog/page/2'],
+    [{ kind: 'tags', locale: 'en' }, '/tags', '/es/tags'],
+    [{ kind: 'about', locale: 'en' }, '/about', '/es/about'],
+    [{ kind: 'book', locale: 'en' }, '/book', '/es/book'],
+    [{ kind: 'guides', locale: 'en' }, '/guides', '/es/guides'],
+    [{ kind: 'contact', locale: 'en' }, '/contact', '/es/contact'],
+    [{ kind: 'privacy', locale: 'en' }, '/privacy', '/es/privacy'],
+  ]
+
+  describe.each(pages)('%o', (page, enPath, esPath) => {
+    it.each(['en', 'es'] as const)('in %s', (locale) => {
+      const metadata = localizedMetadata({ ...page, locale } as PageReference)
+      const canonical = locale === 'en' ? enPath : esPath
+
+      expect(metadata.alternates?.canonical).toBe(canonical)
+      expect(metadata.alternates?.languages).toEqual({
+        'en-US': enPath,
+        'es-ES': esPath,
+        'x-default': enPath,
+      })
+      expect(metadata.title).toBeTruthy()
+      expect(metadata.description).toBeTruthy()
+      expect(metadata.openGraph).toMatchObject({
+        url: absoluteUrl(canonical),
+        locale: locale === 'en' ? 'en_US' : 'es_ES',
+        alternateLocale: [locale === 'en' ? 'es_ES' : 'en_US'],
+        type: 'website',
+      })
+    })
+  })
+
+  it('uses an absolute home title so the layout template does not append the site name', () => {
+    expect(localizedMetadata({ kind: 'home', locale: 'es' }).title).toHaveProperty('absolute')
+    expect(localizedMetadata({ kind: 'home', locale: 'en' }).title).toHaveProperty('absolute')
+  })
+
+  it('links the locale feed from the home and blog index pages', () => {
+    for (const kind of ['home', 'blog'] as const) {
+      expect(localizedMetadata({ kind, locale: 'en' }).alternates?.types).toEqual({
+        'application/rss+xml': '/feed.xml',
+      })
+      expect(localizedMetadata({ kind, locale: 'es' }).alternates?.types).toEqual({
+        'application/rss+xml': '/es/feed.xml',
+      })
+    }
+  })
+
+  it('omits hreflang languages for a tag that exists in only one locale', () => {
+    const metadata = localizedMetadata({
+      kind: 'tag',
+      locale: 'es',
+      tag: 'rxjs',
+      postCount: 2,
+      availableLocales: ['es'],
+    })
+
+    expect(metadata.alternates?.canonical).toBe('/es/tags/rxjs')
+    expect(metadata.alternates?.languages).toBeUndefined()
+    expect((metadata.openGraph as any).alternateLocale).toBeUndefined()
+  })
+
+  it('links a tag available in both locales', () => {
+    const metadata = localizedMetadata({
+      kind: 'tag',
+      locale: 'en',
+      tag: 'react',
+      postCount: 3,
+      availableLocales: ['en', 'es'],
+    })
+
+    expect(metadata.alternates?.languages).toEqual({
+      'en-US': '/tags/react',
+      'es-ES': '/es/tags/react',
+      'x-default': '/tags/react',
     })
   })
 })
@@ -242,18 +357,14 @@ describe('projects data', () => {
 
 describe('page metadata', () => {
   it('builds absolute Open Graph and Twitter metadata for static pages', () => {
-    const metadata = buildPageMetadata({
-      title: 'Projects',
-      description: 'Public projects and technical work by Marcelo Carmona.',
-      path: '/projects',
-      locale: 'en',
-      alternateLocales: ['es'],
-    })
+    const metadata = localizedMetadata({ kind: 'about', locale: 'en' })
+    const title = metadata.title as string
+    const description = metadata.description as string
 
     expect(metadata.openGraph).toMatchObject({
-      title: 'Projects',
-      description: 'Public projects and technical work by Marcelo Carmona.',
-      url: `${siteUrl}/projects`,
+      title,
+      description,
+      url: `${siteUrl}/about`,
       siteName: 'Marcelo Carmona',
       locale: 'en_US',
       alternateLocale: ['es_ES'],
@@ -268,8 +379,8 @@ describe('page metadata', () => {
     })
     expect(metadata.twitter).toEqual({
       card: 'summary_large_image',
-      title: 'Projects',
-      description: 'Public projects and technical work by Marcelo Carmona.',
+      title,
+      description,
       images: [`${siteUrl}/static/images/twitter-card.png`],
     })
   })
@@ -280,14 +391,15 @@ describe('page metadata', () => {
     expect(absoluteUrl('https://example.com/image.png')).toBe('https://example.com/image.png')
   })
 
-  it('omits Open Graph alternate locales unless a page provides them', () => {
-    const metadata = buildPageMetadata({
+  it('omits alternate locales and hreflang for standalone single-locale pages', () => {
+    const metadata = localizedMetadata({
+      kind: 'standalone',
       title: 'Projects',
       description: 'Public projects and technical work by Marcelo Carmona.',
       path: '/projects',
-      locale: 'en',
     })
 
+    expect(metadata.alternates).toEqual({ canonical: '/projects' })
     expect((metadata.openGraph as any).alternateLocale).toBeUndefined()
   })
 })

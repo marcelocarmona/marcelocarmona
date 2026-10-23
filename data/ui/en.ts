@@ -1,4 +1,41 @@
+import siteMetadata from '@/data/siteMetadata'
+
 const enUi = {
+  meta: {
+    home: {
+      title: 'Software Engineer | Frontend, Cloud, AI | Marcelo Carmona',
+      description: siteMetadata.description,
+    },
+    blog: {
+      title: 'Blog',
+      description: siteMetadata.description,
+    },
+    blogPage: (pageNumber: number) => ({
+      title: `Blog Page ${pageNumber}`,
+      description: siteMetadata.description,
+    }),
+    tags: {
+      title: 'Tags',
+      description:
+        'Browse articles by topic: React, Next.js, TypeScript, AWS, Kubernetes, distributed systems, and more.',
+    },
+    tag: (tag: string, postCount: number) => ({
+      title: tag,
+      description: `Browse ${postCount} ${postCount === 1 ? 'post' : 'posts'} tagged ${tag} by ${siteMetadata.author}.`,
+    }),
+    about: {
+      title: 'About',
+      description: `${siteMetadata.author} is a software engineer focused on frontend architecture, React, Next.js, and performance-minded product delivery.`,
+    },
+    book: {
+      title: 'Book a Call',
+      description: `Book a call with ${siteMetadata.author}. Pick a time that works for you and the meeting is confirmed automatically.`,
+    },
+    guides: {
+      title: 'Guides',
+      description: 'Topic hubs for React, frontend architecture, and platform engineering.',
+    },
+  },
   footer: {
     bookCall: 'Book a call',
     contact: 'Contact',

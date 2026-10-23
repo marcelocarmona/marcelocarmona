@@ -2,9 +2,7 @@ import { notFound } from 'next/navigation'
 
 import ListLayout from '@/layouts/ListLayout'
 import PaginationLinkTags from '@/components/PaginationLinkTags'
-import siteMetadata from '@/data/siteMetadata'
-import { getBlogPagePath } from '@/lib/i18n/routes'
-import { buildPageMetadata } from '@/lib/metadata'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { POSTS_PER_PAGE } from '@/lib/posts'
 import type { PageNumberProps } from '@/types/next'
@@ -13,28 +11,8 @@ export async function generateMetadata({ params }: PageNumberProps) {
   const { page } = await params
   const parsedPage = parseInt(page, 10)
   const pageNumber = Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage
-  const canonicalPath = getBlogPagePath('es', pageNumber)
-  const englishPath = getBlogPagePath('en', pageNumber)
-  const title = `Blog en español - Página ${pageNumber}`
-  const description = `Artículos en español de ${siteMetadata.author} sobre React, Next.js, rendimiento web y arquitectura frontend.`
 
-  return {
-    ...buildPageMetadata({
-      title,
-      description,
-      path: canonicalPath,
-      locale: 'es',
-      alternateLocales: ['en'],
-    }),
-    alternates: {
-      canonical: canonicalPath,
-      languages: {
-        'en-US': englishPath,
-        'es-ES': canonicalPath,
-        'x-default': englishPath,
-      },
-    },
-  }
+  return localizedMetadata({ kind: 'blog', locale: 'es', page: pageNumber })
 }
 
 export async function generateStaticParams() {

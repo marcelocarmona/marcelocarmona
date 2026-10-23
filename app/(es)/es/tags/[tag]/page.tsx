@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation'
 
 import ListLayout from '@/layouts/ListLayout'
-import siteMetadata from '@/data/siteMetadata'
-import { getTagPath } from '@/lib/i18n/routes'
-import { buildPageMetadata } from '@/lib/metadata'
+import { SUPPORTED_LOCALES } from '@/lib/i18n/config'
+import { localizedMetadata } from '@/lib/metadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
@@ -16,37 +15,18 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: TagPageProps) {
   const { tag } = await params
-  const spanishTags = await getAllTags('blog', { locale: 'es' })
-  const englishTags = await getAllTags('blog', { locale: 'en' })
-  const hasEnglishVersion = Object.prototype.hasOwnProperty.call(englishTags, tag)
-  const languageAlternates: Record<string, string> = {
-    'es-ES': getTagPath('es', tag),
-    'x-default': getTagPath('es', tag),
+  const tagsByLocale = {
+    en: await getAllTags('blog', { locale: 'en' }),
+    es: await getAllTags('blog', { locale: 'es' }),
   }
-  if (hasEnglishVersion) {
-    languageAlternates['en-US'] = getTagPath('en', tag)
-    languageAlternates['x-default'] = getTagPath('en', tag)
-  }
-  const title = tag
-  const postCount = spanishTags[tag] ?? 0
-  const description = `Explora ${postCount} ${postCount === 1 ? 'artículo etiquetado' : 'artículos etiquetados'} con ${tag} por ${siteMetadata.author}.`
 
-  return {
-    ...buildPageMetadata({
-      title,
-      description,
-      path: getTagPath('es', tag),
-      locale: 'es',
-      alternateLocales: hasEnglishVersion ? ['en'] : [],
-    }),
-    alternates: {
-      canonical: getTagPath('es', tag),
-      languages: languageAlternates,
-      types: {
-        'application/rss+xml': `${getTagPath('es', tag)}/feed.xml`,
-      },
-    },
-  }
+  return localizedMetadata({
+    kind: 'tag',
+    locale: 'es',
+    tag,
+    postCount: tagsByLocale.es[tag] ?? 0,
+    availableLocales: SUPPORTED_LOCALES.filter((locale) => tag in tagsByLocale[locale]),
+  })
 }
 
 export default async function SpanishTagPage({ params }: TagPageProps) {
