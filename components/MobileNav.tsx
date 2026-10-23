@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from './Link'
+import { cn } from '@/lib/utils/cn'
 import { getHeaderNavLinks } from '@/data/headerNavLinks'
 import type { LocaleInput } from '@/types/content'
 
@@ -25,7 +26,7 @@ const MobileNav = ({ locale = 'en' }: { locale?: LocaleInput }) => {
     <div className="sm:hidden">
       <button
         type="button"
-        className="ml-1 mr-1 h-8 w-8 rounded-sm py-1"
+        className="ml-1 mr-1 size-8 rounded-sm py-1"
         aria-label="Toggle Menu"
         onClick={onToggleNav}
       >
@@ -43,14 +44,15 @@ const MobileNav = ({ locale = 'en' }: { locale?: LocaleInput }) => {
         </svg>
       </button>
       <div
-        className={`fixed left-0 top-0 z-10 h-full w-full transform bg-muted opacity-95 duration-300 ease-in-out  ${
+        className={cn(
+          'fixed left-0 top-0 z-10 size-full transform bg-muted opacity-95 duration-300 ease-in-out',
           navShow ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        )}
       >
         <div className="flex justify-end">
           <button
             type="button"
-            className="mr-5 mt-11 h-8 w-8 rounded-sm"
+            className="mr-5 mt-11 size-8 rounded-sm"
             aria-label="Toggle Menu"
             onClick={onToggleNav}
           >

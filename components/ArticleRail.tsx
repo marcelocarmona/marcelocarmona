@@ -130,7 +130,7 @@ export default function ArticleRail({ toc, label }: { toc: TocHeading[]; label: 
   if (sections.length < 2) return null
 
   const list = (
-    <ol className="space-y-2.5">
+    <ol className="flex flex-col gap-2.5">
       {sections.map((section, index) => {
         const id = section.url.replace('#', '')
         const isActive = id === activeId

@@ -5,6 +5,7 @@ import type { FormEvent } from 'react'
 
 import siteMetadata from '@/data/siteMetadata'
 import type { NewsletterResponse } from '@/types/content'
+import { cn } from '@/lib/utils/cn'
 
 const NewsletterForm = ({ title = 'Subscribe to the newsletter' }: { title?: string }) => {
   const inputEl = useRef<HTMLInputElement>(null)
@@ -63,9 +64,10 @@ const NewsletterForm = ({ title = 'Subscribe to the newsletter' }: { title?: str
         </div>
         <div className="mt-2 flex w-full rounded-md shadow-xs sm:ml-3 sm:mt-0">
           <button
-            className={`w-full rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground sm:py-0 ${
-              subscribed ? 'cursor-default' : 'hover:bg-primary dark:hover:bg-primary'
-            } focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:ring-offset-black`}
+            className={cn(
+              'w-full rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background sm:py-0',
+              subscribed ? 'cursor-default' : 'hover:bg-primary/90'
+            )}
             type="submit"
             disabled={subscribed}
           >

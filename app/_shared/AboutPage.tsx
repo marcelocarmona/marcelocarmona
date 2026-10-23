@@ -52,25 +52,25 @@ export default function AboutPage({ locale = 'en' }: { locale?: Locale }) {
 
   return (
     <div lang={locale} className="divide-y divide-border">
-      <div className="space-y-2 pb-8 pt-6 md:space-y-5">
+      <div className="flex flex-col gap-2 pb-8 pt-6 md:gap-5">
         <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
           {copy.title}
         </h1>
       </div>
-      <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0">
+      <div className="flex flex-col gap-2 xl:grid xl:grid-cols-3 xl:items-start xl:gap-x-8 xl:gap-y-0">
         <div className="flex flex-col items-center pt-8">
           <Image
             src="/static/images/marcelo.jpg"
             alt="Marcelo Carmona"
             width={192}
             height={192}
-            className="h-48 w-48 rounded-full"
+            className="size-48 rounded-full"
           />
           <h2 className="pb-1 pt-4 font-display text-2xl font-semibold leading-snug tracking-tight">
             {siteMetadata.author}
           </h2>
           <p className="text-sm text-muted-foreground">{copy.occupation}</p>
-          <div className="flex space-x-3 pt-6">
+          <div className="flex gap-3 pt-6">
             <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} />
             <SocialIcon kind="github" href={siteMetadata.github} />
             <SocialIcon kind="linkedin" href={siteMetadata.linkedin} />

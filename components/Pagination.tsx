@@ -19,7 +19,7 @@ export default function Pagination({
   const linkClassName = 'text-primary underline-offset-4 hover:underline'
 
   return (
-    <div className="space-y-2 pb-8 pt-6 md:space-y-5">
+    <div className="flex flex-col gap-2 pb-8 pt-6 md:gap-5">
       <nav
         className="flex justify-between"
         aria-label={list.paginationStatus(currentPage, totalPages)}

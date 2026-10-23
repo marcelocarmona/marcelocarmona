@@ -27,9 +27,9 @@ const linkClassName = 'font-medium text-primary underline-offset-4 hover:underli
 
 export default function NotFoundPage() {
   return (
-    <div className="space-y-10">
-      <div className="flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6">
-        <div className="space-x-2 pb-8 pt-6 md:space-y-5">
+    <div className="flex flex-col gap-10">
+      <div className="flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:gap-x-6">
+        <div className="pb-8 pt-6">
           <h1 className="font-display text-6xl font-semibold leading-none tracking-tight text-foreground md:border-r md:border-border md:px-6 md:text-7xl">
             404
           </h1>
@@ -52,7 +52,7 @@ export default function NotFoundPage() {
       <div className="grid gap-8 border-t border-border pt-8 md:grid-cols-2">
         <section>
           <h2 className="mb-3 text-lg font-bold text-foreground">Where to look next</h2>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+          <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
             {recoveryLinks.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className={linkClassName}>
@@ -66,7 +66,7 @@ export default function NotFoundPage() {
 
         <section>
           <h2 className="mb-3 text-lg font-bold text-foreground">Machine-readable indexes</h2>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+          <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
             {machineReadableLinks.map((item) => (
               <li key={item.href}>
                 {/* Plain anchors: these are files, not app routes, so skip RSC prefetch. */}

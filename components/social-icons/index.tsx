@@ -4,6 +4,7 @@ import Facebook from './facebook.svg'
 import Youtube from './youtube.svg'
 import Linkedin from './linkedin.svg'
 import Twitter from './twitter.svg'
+import { cn } from '@/lib/utils/cn'
 
 // Icons taken from: https://simpleicons.org/
 
@@ -46,7 +47,10 @@ const SocialIcon = ({
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg
-        className={`fill-current text-muted-foreground transition-colors duration-(--duration-ui) ease-(--ease-out-soft) hover:text-primary ${sizeClassName}`}
+        className={cn(
+          'fill-current text-muted-foreground transition-colors duration-(--duration-ui) ease-(--ease-out-soft) hover:text-primary',
+          sizeClassName
+        )}
       />
     </a>
   )

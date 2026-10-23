@@ -1,11 +1,12 @@
 import Image from './Image'
 import Link from './Link'
 import type { ProjectData } from '@/types/site'
+import { cn } from '@/lib/utils/cn'
 
 const Card = ({ title, description, imgSrc, href }: ProjectData) => (
   <div className="p-4 md:w-1/2" style={{ maxWidth: '544px' }}>
     <div
-      className={`${imgSrc && 'h-full'} overflow-hidden rounded-lg border border-border bg-card`}
+      className={cn('overflow-hidden rounded-lg border border-border bg-card', imgSrc && 'h-full')}
     >
       {imgSrc &&
         (href ? (

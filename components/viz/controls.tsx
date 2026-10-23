@@ -1,5 +1,6 @@
 import { useCallback, type ReactNode } from 'react'
 import type { Playback } from './usePlayback'
+import { cn } from '@/lib/utils/cn'
 
 /**
  * Keyboard-operable transport controls shared by every diagram.
@@ -200,7 +201,7 @@ export function VizFigure({
   )
 
   return (
-    <figure ref={attach} className={`not-typeset viz-figure${className ? ` ${className}` : ''}`}>
+    <figure ref={attach} className={cn('not-typeset viz-figure', className)}>
       {children}
       {caption && <figcaption className="viz-caption">{caption}</figcaption>}
     </figure>

@@ -27,10 +27,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <div className="space-y-14">
+      <div className="flex flex-col gap-14">
         <section className="border-b border-border pb-12 pt-8">
           <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_12rem] md:items-start md:gap-10">
-            <div className="max-w-3xl space-y-5 text-center md:text-left">
+            <div className="flex flex-col gap-5 max-w-3xl text-center md:text-left">
               <p className="text-sm font-semibold uppercase text-muted-foreground">
                 Software engineering
               </p>
@@ -52,7 +52,7 @@ export default async function HomePage() {
                   alt="Marcelo Carmona"
                   width={192}
                   height={192}
-                  className="h-32 w-32 rounded-full object-cover sm:h-36 sm:w-36 md:h-44 md:w-44"
+                  className="size-32 rounded-full object-cover sm:size-36 md:size-44"
                   priority
                 />
               </div>
@@ -76,8 +76,8 @@ export default async function HomePage() {
               return (
                 <li key={slug} className="py-12">
                   <article>
-                    <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                      <dl className="space-y-1">
+                    <div className="flex flex-col gap-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:gap-0">
+                      <dl className="flex flex-col gap-1">
                         <dt className="sr-only">{list.publishedOn}</dt>
                         <dd className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                           <time dateTime={date || undefined}>{formatDate(date, 'en')}</time>
@@ -94,8 +94,8 @@ export default async function HomePage() {
                           </>
                         )}
                       </dl>
-                      <div className="space-y-5 xl:col-span-3">
-                        <div className="space-y-6">
+                      <div className="flex flex-col gap-5 xl:col-span-3">
+                        <div className="flex flex-col gap-6">
                           <div>
                             <h3 className="font-display text-2xl font-semibold leading-snug tracking-tight">
                               <HoverPrefetchLink

@@ -59,7 +59,7 @@ export default function HomeFocusAreas({ locale = 'en' }: { locale?: Locale }) {
 
   return (
     <section aria-labelledby={`${locale}-focus-heading`}>
-      <div className="max-w-3xl space-y-3">
+      <div className="flex flex-col gap-3 max-w-3xl">
         <h2
           id={`${locale}-focus-heading`}
           className="font-display text-2xl font-semibold leading-snug tracking-tight text-foreground"

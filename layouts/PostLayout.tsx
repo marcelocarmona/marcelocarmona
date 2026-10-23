@@ -209,7 +209,7 @@ export default function PostLayout({
                     <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                       {postUi.translations}
                     </h2>
-                    <ul className="mt-2 space-y-2">
+                    <ul className="flex flex-col gap-2 mt-2">
                       {languageVersions.map((post) => (
                         <li key={post.href}>
                           <Link

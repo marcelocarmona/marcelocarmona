@@ -92,8 +92,8 @@ export default async function GuidesPage({ locale = 'en' }: { locale?: Locale })
   const posts = await getAllFilesFrontMatter('blog', { locale })
 
   return (
-    <div lang={locale} className="space-y-12">
-      <div className="space-y-3 pb-3 pt-6">
+    <div lang={locale} className="flex flex-col gap-12">
+      <div className="flex flex-col gap-3 pb-3 pt-6">
         <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
           {copy.title}
         </h1>
@@ -112,7 +112,7 @@ export default async function GuidesPage({ locale = 'en' }: { locale?: Locale })
               </h2>
               <p className="mt-3 text-muted-foreground">{cluster.description}</p>
 
-              <ul className="mt-4 space-y-2">
+              <ul className="flex flex-col gap-2 mt-4">
                 {clusterPosts.map((post) => (
                   <li key={post.slug}>
                     <HoverPrefetchLink

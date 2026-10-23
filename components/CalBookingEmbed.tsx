@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import siteMetadata from '@/data/siteMetadata'
 import { logEvent } from '@/components/analytics/GoogleAnalytics'
 import Link from '@/components/Link'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { mountCalInline, normalizeCalLink } from '@/lib/integrations/cal'
 
 const CAL_CONTAINER_ID = 'cal-booking-inline'
@@ -46,7 +47,7 @@ export default function CalBookingEmbed({ calUrl = siteMetadata.calCom }: { calU
   const showFallback = hasEmbedError || !calLink
 
   return (
-    <section className="space-y-4">
+    <section className="flex flex-col gap-4">
       <div id={CAL_CONTAINER_ID} className="w-full overflow-hidden" />
 
       <p className="text-sm text-muted-foreground">
@@ -62,9 +63,11 @@ export default function CalBookingEmbed({ calUrl = siteMetadata.calCom }: { calU
       </p>
 
       {showFallback && (
-        <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-200">
-          The inline scheduler could not load in this browser. Use the hosted booking link above.
-        </div>
+        <Alert>
+          <AlertDescription>
+            The inline scheduler could not load in this browser. Use the hosted booking link above.
+          </AlertDescription>
+        </Alert>
       )}
     </section>
   )

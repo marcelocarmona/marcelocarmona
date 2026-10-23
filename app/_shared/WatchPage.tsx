@@ -183,15 +183,15 @@ export default async function WatchPage({
       <article lang={frontMatter.locale || 'en'} className="mx-auto max-w-4xl py-10">
         <SeoSchema data={videoSchema} />
         <SeoSchema data={breadcrumbSchema} />
-        <div className="space-y-8">
-          <div className="space-y-4">
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
             <Link
               href={articlePath}
               className="text-sm font-medium text-primary underline-offset-4 hover:underline"
             >
               &larr; {videoUi.backToArticle}
             </Link>
-            <div className="space-y-4 text-center">
+            <div className="flex flex-col gap-4 text-center">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 {videoUi.watchPageLabel}
               </p>
@@ -214,7 +214,7 @@ export default async function WatchPage({
             </div>
           </div>
 
-          <YouTubePlayer youTubeId={video.youTubeId} title={video.title} />
+          <YouTubePlayer youTubeId={video.youTubeId} title={video.title} className="my-0" />
 
           <div className="flex flex-wrap gap-3">
             <Link
@@ -225,7 +225,7 @@ export default async function WatchPage({
             </Link>
             <Link
               href={video.watchUrl}
-              className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-muted-foreground hover:border-primary hover:text-primary dark:hover:border-primary"
+              className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-muted-foreground hover:border-primary hover:text-primary"
             >
               {videoUi.watchOnYouTube}
             </Link>
@@ -236,7 +236,7 @@ export default async function WatchPage({
               <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                 {videoUi.translations}
               </h2>
-              <ul className="mt-3 space-y-2">
+              <ul className="flex flex-col gap-2 mt-3">
                 {languageVersions.map((translatedPost) => (
                   <li key={translatedPost.href}>
                     <Link

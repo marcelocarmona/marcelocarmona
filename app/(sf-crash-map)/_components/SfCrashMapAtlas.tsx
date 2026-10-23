@@ -6,6 +6,7 @@ import type { GeoJSONSource, LngLatBoundsLike, Map } from 'maplibre-gl'
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils/cn'
 import type {
   SfCrashMapCrashProperties,
@@ -506,12 +507,9 @@ export default function SfCrashMapAtlas() {
                   </button>
                 </div>
               ) : loadState !== 'ready' ? (
-                <div className="space-y-1 p-2">
+                <div className="flex flex-col gap-1 p-2">
                   {Array.from({ length: 10 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="h-16 animate-pulse rounded-md bg-neutral-100 dark:bg-white/10"
-                    />
+                    <Skeleton key={index} className="h-16 bg-neutral-100 dark:bg-white/10" />
                   ))}
                 </div>
               ) : focusedNeighborhoods.length === 0 ? (
@@ -537,7 +535,7 @@ export default function SfCrashMapAtlas() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span
-                            className="h-3 w-3 flex-none rounded-sm bg-red-500"
+                            className="size-3 flex-none rounded-sm bg-red-500"
                             aria-hidden="true"
                           />
                           <span className="truncate text-base font-semibold tracking-tight text-neutral-950 dark:text-white">
@@ -586,7 +584,7 @@ export default function SfCrashMapAtlas() {
 
         <aside className="order-1 bg-neutral-950 lg:sticky lg:top-0 lg:order-2 lg:h-dvh lg:self-start">
           <div className="relative h-[420px] lg:h-full">
-            <div ref={mapContainerRef} className="sf-crash-map-map h-full w-full" />
+            <div ref={mapContainerRef} className="sf-crash-map-map size-full" />
 
             <div className="pointer-events-none absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-neutral-950/90 px-3 py-2 text-xs text-white shadow-lg ring-1 ring-white/10 backdrop-blur">
               <div className="font-semibold">Map focus</div>
@@ -613,7 +611,7 @@ export default function SfCrashMapAtlas() {
                   ? selectedNeighborhood.neighborhoodName
                   : activePeriodOption.label}
               </div>
-              <div className="mt-3 space-y-2">
+              <div className="flex flex-col gap-2 mt-3">
                 {activeFocus !== 'ped-bike' ? (
                   <LegendRow color="#f43f5e" label="Severe or fatal record" round />
                 ) : null}
@@ -794,7 +792,7 @@ function StatTile({
   return (
     <div className="flex min-h-36 flex-col bg-white p-4 dark:bg-neutral-950">
       <div className="flex min-h-8 items-start gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">
-        <span className={cn('h-2.5 w-2.5 rounded-sm', tones[tone])} aria-hidden="true" />
+        <span className={cn('size-2.5 rounded-sm', tones[tone])} aria-hidden="true" />
         <span className="leading-4">{label}</span>
       </div>
       <div className="mt-3 min-h-9 text-3xl font-bold leading-none tracking-tight text-neutral-950 tabular-nums dark:text-white">
@@ -830,7 +828,7 @@ function LegendRow({
   return (
     <div className="flex items-center gap-2 text-neutral-300">
       <span
-        className={cn('h-2.5 w-2.5 flex-none', round ? 'rounded-full' : 'rounded-sm')}
+        className={cn('size-2.5 flex-none', round ? 'rounded-full' : 'rounded-sm')}
         style={{ backgroundColor: color }}
         aria-hidden="true"
       />

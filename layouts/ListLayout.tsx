@@ -43,7 +43,7 @@ export default function ListLayout({
   return (
     <>
       <div lang={resolvedLocale} className="divide-y divide-border">
-        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
+        <div className="flex flex-col gap-2 pb-8 pt-6 md:gap-5">
           <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
             {title}
           </h1>
@@ -56,7 +56,7 @@ export default function ListLayout({
               className="block w-full rounded-md border border-border bg-card px-4 py-2 text-foreground focus:border-primary focus:ring-ring"
             />
             <svg
-              className="absolute right-3 top-3 h-5 w-5 text-muted-foreground"
+              className="absolute right-3 top-3 size-5 text-muted-foreground"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -77,8 +77,8 @@ export default function ListLayout({
             const { slug, date, lastmod, title, summary, tags } = frontMatter
             return (
               <li key={slug} className="py-4">
-                <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                  <dl className="space-y-1">
+                <article className="flex flex-col gap-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:gap-0">
+                  <dl className="flex flex-col gap-1">
                     <dt className="sr-only">{list.publishedOn}</dt>
                     <dd className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                       <time dateTime={date || undefined}>{formatDate(date, resolvedLocale)}</time>
@@ -95,7 +95,7 @@ export default function ListLayout({
                       </>
                     )}
                   </dl>
-                  <div className="space-y-3 xl:col-span-3">
+                  <div className="flex flex-col gap-3 xl:col-span-3">
                     <div>
                       <h3 className="font-display text-2xl font-semibold leading-snug tracking-tight">
                         <HoverPrefetchLink

@@ -35,7 +35,7 @@ export default function TrustPage({
 
   return (
     <article lang={locale} className="divide-y divide-border">
-      <header className="space-y-5 pb-10 pt-6">
+      <header className="flex flex-col gap-5 pb-10 pt-6">
         <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
           {copy.title}
         </h1>

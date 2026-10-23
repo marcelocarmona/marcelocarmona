@@ -1,24 +1,27 @@
 import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils/cn'
 
 export const MDXEmbedProvider = ({ children }: { children: ReactNode }) => children
 
 export const YouTubePlayer = ({
   youTubeId,
   title = 'YouTube video',
+  className,
 }: {
   youTubeId?: string
   title?: string
+  className?: string
 }) => {
   if (!youTubeId) return null
 
   const embedUrl = `https://www.youtube.com/embed/${youTubeId}`
 
   return (
-    <div className="relative my-6 aspect-video overflow-hidden rounded-lg">
+    <div className={cn('relative my-6 aspect-video overflow-hidden rounded-lg', className)}>
       <iframe
         title={title}
         src={embedUrl}
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 size-full"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
       />

@@ -28,12 +28,6 @@
     text-wrap: pretty;
   }
 
-  /* Opt out. Covers the element and everything inside it. */
-  .typeset :where(.not-typeset, .not-typeset *),
-  .typeset :where([data-not-typeset], [data-not-typeset] *) {
-    all: revert-layer;
-  }
-
   /* ---- Flow ------------------------------------------------------------- */
 
   .typeset :where(p, ul, ol, blockquote, pre, table, hr, figure, dl, details) {
@@ -272,5 +266,15 @@
   /* Dark surfaces need slightly looser leading to read the same. */
   .dark .typeset {
     --typeset-leading: 1.75;
+  }
+
+  /*
+   * Opt out. Covers the element and everything inside it.
+   * Kept last: it shares specificity with the element rules above, so source
+   * order is what lets it win.
+   */
+  .typeset :where(.not-typeset, .not-typeset *),
+  .typeset :where([data-not-typeset], [data-not-typeset] *) {
+    all: revert-layer;
   }
 }

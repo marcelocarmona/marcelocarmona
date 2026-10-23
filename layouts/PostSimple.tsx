@@ -37,7 +37,7 @@ export default function PostLayout({
       <article lang={frontMatter.locale || 'en'}>
         <div>
           <header>
-            <div className="space-y-1 border-b border-border pb-10 text-center">
+            <div className="flex flex-col gap-1 border-b border-border pb-10 text-center">
               <dl>
                 <div>
                   <dt className="sr-only">{postUi.publishedOn}</dt>

@@ -19,7 +19,7 @@ export default function BookPage({ locale = 'en' }: { locale?: Locale }) {
 
   return (
     <div lang={locale} className="divide-y divide-border">
-      <div className="space-y-2 pb-8 pt-6 md:space-y-5">
+      <div className="flex flex-col gap-2 pb-8 pt-6 md:gap-5">
         <DisplayTitle
           as="h1"
           className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl"

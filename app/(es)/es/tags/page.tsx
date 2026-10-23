@@ -16,9 +16,9 @@ export default async function SpanishTagsPage() {
   return (
     <div
       lang="es"
-      className="flex flex-col items-start justify-start divide-y divide-border md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0"
+      className="flex flex-col items-start justify-start divide-y divide-border md:mt-24 md:flex-row md:items-center md:justify-center md:gap-x-6 md:divide-y-0"
     >
-      <div className="space-x-2 pb-8 pt-6 md:space-y-5">
+      <div className="pb-8 pt-6">
         <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:border-r md:border-border md:px-6 md:text-5xl">
           {title}
         </h1>
