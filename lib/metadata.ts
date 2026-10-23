@@ -241,9 +241,13 @@ function videoMetadata({
     return wrongLocale(video.watchPagePath)
   }
 
-  // Distinguish the watch page from the article it embeds, which shares video.title.
-  const title = `${video.title} (${getUiCopy(locale).video.watchPageLabel})`
-  const description = video.description || post.summary || siteMetadata.description
+  // The watch page embeds its article, so its title and description must not duplicate it.
+  const copy = getUiCopy(locale).meta.watch
+  const title = copy.title(video.title)
+  const hasOwnDescription = video.description && video.description !== post.summary
+  const description = hasOwnDescription
+    ? (video.description as string)
+    : copy.description(post.summary || siteMetadata.description)
   const translations = postTranslations(
     post,
     translatedPosts.filter((translation) => translation.video?.watchPagePath),

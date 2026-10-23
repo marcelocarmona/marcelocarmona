@@ -35,6 +35,12 @@ const enUi = {
       title: 'Guides',
       description: 'Topic hubs for React, frontend architecture, and platform engineering.',
     },
+    watch: {
+      // lib/video.ts falls back to "Video" for untitled videos; don't render "Video (Video)".
+      title: (videoTitle: string) =>
+        videoTitle === 'Video' ? videoTitle : `${videoTitle} (Video)`,
+      description: (summary: string) => `Watch the video: ${summary}`,
+    },
   },
   footer: {
     bookCall: 'Book a call',

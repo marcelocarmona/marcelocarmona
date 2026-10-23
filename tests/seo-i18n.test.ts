@@ -129,6 +129,62 @@ describe('localized alternates', () => {
   })
 })
 
+describe('watch page metadata', () => {
+  const video = {
+    type: 'youtube' as const,
+    youTubeId: 'abc123',
+    title: 'Creating observables from scratch',
+    description: 'Build a tiny RxJS.',
+    uploadDate: null,
+    embedUrl: 'https://www.youtube.com/embed/abc123',
+    watchUrl: 'https://www.youtube.com/watch?v=abc123',
+    thumbnailUrl: 'https://i.ytimg.com/vi/abc123/hqdefault.jpg',
+    watchPagePath: '/watch/creating-observable-from-scratch',
+  }
+  const post = {
+    title: 'Creating observables from scratch',
+    summary: 'Build a tiny RxJS.',
+    locale: 'en' as const,
+    lang: 'en' as const,
+    slug: 'creating-observable-from-scratch',
+    fileName: 'creating-observable-from-scratch.mdx',
+    date: null,
+    video,
+  }
+
+  it('gives the watch page a title and description distinct from its article', () => {
+    const watch = localizedMetadata({ kind: 'watch', locale: 'en', post, translations: [] })
+    const article = localizedMetadata({ kind: 'post', locale: 'en', post, translations: [] })
+
+    expect(watch.title).toBe('Creating observables from scratch (Video)')
+    expect(watch.description).toBe('Watch the video: Build a tiny RxJS.')
+    expect(watch.title).not.toBe(article.title)
+    expect(watch.description).not.toBe(article.description)
+  })
+
+  it('keeps an authored video description as is', () => {
+    const watch = localizedMetadata({
+      kind: 'watch',
+      locale: 'en',
+      post: { ...post, video: { ...video, description: 'A live-coded walkthrough.' } },
+      translations: [],
+    })
+
+    expect(watch.description).toBe('A live-coded walkthrough.')
+  })
+
+  it('does not double the suffix for an untitled video', () => {
+    const watch = localizedMetadata({
+      kind: 'watch',
+      locale: 'es',
+      post: { ...post, locale: 'es', lang: 'es', video: { ...video, title: 'Video' } },
+      translations: [],
+    })
+
+    expect(watch.title).toBe('Video')
+  })
+})
+
 describe('localized metadata for every page kind', () => {
   const pages: Array<[PageReference, string, string]> = [
     [{ kind: 'home', locale: 'en' }, '/', '/es'],

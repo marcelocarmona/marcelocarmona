@@ -36,6 +36,12 @@ const esUi = {
       title: 'Guías',
       description: 'Rutas de aprendizaje sobre React, arquitectura frontend y rendimiento web.',
     },
+    watch: {
+      // lib/video.ts falls back to "Video" for untitled videos; don't render "Video (Video)".
+      title: (videoTitle: string) =>
+        videoTitle === 'Video' ? videoTitle : `${videoTitle} (Video)`,
+      description: (summary: string) => `Mira el video: ${summary}`,
+    },
   },
   footer: {
     bookCall: 'Reservar llamada',
